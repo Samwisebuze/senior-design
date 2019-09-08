@@ -3,7 +3,6 @@
 ## Contact Info
 
 ### Samuel Buzas
-- **Cell**: 330-506-8157
 - **Email**: hello@samuelbuzas.com
 
 ## Work Experience
