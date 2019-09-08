@@ -12,16 +12,16 @@
 
 ### Project Problem Statement
 
-> Primary school educators want to teach networking and security fundamentals to students in their classrooms. However, there is no practical way to emulate networks and their interactions.
+> Primary school educators want to teach networking and security fundamentals to students in their classrooms. However, there is no practical way to emulate networks and the interactions between network nodes.
 
 ### Project Background Description
 
-Teachers would currently need to use virtual box or other VM software. These tools have a large capital investment, resource allocation issue, and a large learning curve to basic literacy. These issues are prohibitive to teaching using local hardware. An alternative could be to use cloud VMs from cloud provides like AWS. This is not feasible for a classroom scale due to the cost of running multiple VMs small scale computing. 
+Teachers currently need to use VirtualBox or other VM software. These tools require a large capital investment, create resource allocation issues, and impose a large learning curve to basic literacy. These issues are prohibitive to teaching using local hardware. One alternative is use cloud VMs from cloud providers like AWS, but this kind of solution is not feasible at a classroom scale due to the cost of running multiple VMs via small scale computing. 
 
 
 ### Inadequacy of Current Solutions
 
-Limited solution exist today that are easily accessible to educators. Current tooling is uses outdated technology, highly complex user interfaces, and non-web based solutions.
+Limited solutions exist today that are easily accessible to educators. Current tooling uses outdated technology, highly complex user interfaces, and non-web based solutions.
 
 ### Background Skills and Interest
 
@@ -49,6 +49,6 @@ Limited solution exist today that are easily accessible to educators. Current to
 
 ### Problem Approach
 
-We will create a unified web-based user interface that allows teachers and students to manage virtual networks. The back-end will run on commodity hardware commonly available to schools using containerization for nodes. We will design an API to connect these systems and utilizes an orchestration system to manage the containers.
+We will create a unified web-based user interface that allows teachers and students to manage virtual networks. The back-end will run on commodity hardware commonly available to schools using containerization for nodes. We will design an API to connect these systems and provide an orchestration system to manage the containers.
 
 
