@@ -1,0 +1,59 @@
+version: "3"
+
+volumes:
+  redisData:
+  mongoData:
+  postgresData:
+  rabbitmqData:
+
+services:
+  web:
+    image: rooknj/prysmalight-web:1.1.0
+    container_name: web
+    restart: always
+    ports:
+      - "80:80"   
+  apiGateway:
+    image: rooknj/prysmalight-web:1.1.0
+    container_name: apiGateway
+    restart: always
+    ports:
+      - "4001:4001"   
+  backend:
+    image: rooknj/prysmalight-web:1.1.0
+    container_name: backend
+    restart: always
+    ports:
+      - "4002:4002" 
+  redis:
+    image: redis:latest
+    container_name: redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redisData:/data
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    volumes:
+      - redisData:/data
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongoData:/data
+  rabbitmq:
+    image: rabbitmq:latest
+    container_name: rabbitmq
+    restart: always
+    ports:
+      - "1883:1883"
+    volumes:
+      - /rabbitmq/data
