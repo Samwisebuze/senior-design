@@ -51,4 +51,6 @@ I’m excited to participate in this senior project for two core reasons. Firstl
 
 In designing a solution, our project has three core components: an interactive, front-end web app, a back-end orchestrator for creating virtual machines (backed by containerization), and a back-end API for tracking state and bridging the gap between the web app and the back-end orchestrator. Our expected result is for high school students to engage and learn using our platform. Once all components of our design have been fully implemented + integrated and a demo is ready for use by real educators and high school students, we will know that our project is nearing completion. By having real educators and high school students interact with our software, we can take their feedback to create an even better platform. We will know whether or not we have done a good job based on the reactions and feedback from our users.
 
+---
+
 [⭠ Previous Page](06-ppt-slideshow.md) | [Next Page ⭢](08-professional-biographies.md)

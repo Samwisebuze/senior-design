@@ -12,4 +12,6 @@
 
 ![Effort Matrix](effort-matrix.png)
 
+---
+
 [⭠ Previous Page](03-user-stories-and-design-diagrams.md) | [Next Page ⭢](06-ppt-slideshow.md)

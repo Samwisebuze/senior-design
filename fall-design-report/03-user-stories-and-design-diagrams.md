@@ -56,4 +56,6 @@ Our back-end design is services-based:
 
 All services will run as Docker containers in a simple Docker Compose file.
 
+---
+
 [⭠ Previous Page](02-project-description.md) | [Next Page ⭢](04-project-tasks-and-timeline.md)

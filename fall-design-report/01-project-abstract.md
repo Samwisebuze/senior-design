@@ -12,4 +12,6 @@ Abstract: Virtuoso is an interactive web platform to teach high school students 
 - Samuel Buzas (buzassg@mail.uc.edu)
 - Advisor: Dr. John Franco (franco@uc.mail.edu)
 
+---
+
 [Next page ⭢](02-project-description.md)
