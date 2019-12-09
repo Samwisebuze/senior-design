@@ -24,8 +24,6 @@
 
 ![Front End Design Diagram](03-design-front-end.jpg)
 
-![]
-
 For the front end, we are creating a single page web app written in [React](https://reactjs.org). The layout of our app will consist of four main pages: the Login page, Network Visualization Page, Settings Page, and Analytics Page:
 
 - From the Network Visualization Page, you can view each network node at an individual level to get more detailed information.
@@ -33,6 +31,10 @@ For the front end, we are creating a single page web app written in [React](http
 - The front-end will be Dockerized so it can be deployed alongside the back-end services.
 
 - The front-end will communicate with our GraphQL backend through the Apollo Client library.
+
+Front-end visual wireframe for end users:
+
+![Front End Wireframe](03-front-end-wireframe.png)
 
 ### Back-end Design
 
