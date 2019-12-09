@@ -9,7 +9,7 @@
 | Document | Link |
 | -------- | ---- |
 | Abstract |   [Abstract](fall-design-report/01-project-abstract.md)   |
-|Project Description| |
+|Project Description| [Description](fall-design-report/02-project-description.md)|
 |Design Diagrams| [Diagrams]()|
 |User Stories| [Stories]()|
 |Tasks and Timeline| [EffortMatrix](fall-design-report/04-project-tasks-and-timeline.md) --- [TimeLine](fall-design-report/04-project-tasks-and-timeline.md) --- [Task List](fall-design-report/04-project-tasks-and-timeline.md)|
