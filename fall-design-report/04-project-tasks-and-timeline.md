@@ -2,7 +2,7 @@
 
 ## Tasks
 
-[Link to Task List](fall-task-list.pdf)
+[Link to Task List](fall-tasks-list.pdf)
 
 ## Timeline
 
