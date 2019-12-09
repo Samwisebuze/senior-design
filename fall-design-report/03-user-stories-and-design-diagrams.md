@@ -24,6 +24,8 @@
 
 ![Front End Design Diagram](03-design-front-end.jpg)
 
+![]
+
 For the front end, we are creating a single page web app written in [React](https://reactjs.org). The layout of our app will consist of four main pages: the Login page, Network Visualization Page, Settings Page, and Analytics Page:
 
 - From the Network Visualization Page, you can view each network node at an individual level to get more detailed information.
@@ -48,9 +50,10 @@ Our back-end design is services-based:
 
 - Software: The Software service is responsible for maintaining the set of images available to the system.
 
-- Message Bus: a RabbitMQ instance to send events and commands service-to-service (ensures at-least-once delivery)
-Backing store: a PostgreSQL instance and MongoDB instance to store user and service data.
+- Message Bus: a RabbitMQ instance to send events and commands service-to-service (ensures at-least-once delivery).
+
+- Backing store: a MongoDB instance (NoSQL) to store user and service data.
 
 All services will run as Docker containers in a simple Docker Compose file.
 
-[Previous Page](02-project-description.md) | [Next Page](04-project-tasks-and-timeline.md)
+[⭠ Previous Page](02-project-description.md) | [Next Page ⭢](04-project-tasks-and-timeline.md)

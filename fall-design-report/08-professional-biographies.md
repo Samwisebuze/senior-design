@@ -125,4 +125,4 @@ I want to join in a project that deals with music, data visualization, or new te
 A project to solve a problem while including multiple computing diciplines (e.g. cloud computing, mobile development, and big data). I would prefer a project that serves a non-profit or similar cause.
 
 
-[Previous Page](07-self-assessment-essays.md) | [Next Page](09-budget.md)
+[⭠ Previous Page](07-self-assessment-essays.md) | [Next Page ⭢](09-budget.md)
