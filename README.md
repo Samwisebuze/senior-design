@@ -5,11 +5,7 @@
 - [Development guide](services/README.md)
 
 ## Table of Contents
-<style>
-table {
-    width:100%;
-}
-</style> 
+
 | Document | Link |
 | -------- | ---- |
 | Abstract |      |
