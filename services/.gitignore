@@ -1,4 +1,5 @@
 _docker_compose_volumes
+dist/
 
 
 ### Node ###
