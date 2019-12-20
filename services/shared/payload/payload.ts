@@ -1,6 +1,7 @@
 const uuidv1 = require('uuid/v4');
 
 interface RabbitPayload {
+    version: number, // sequentual numebering system for payload API version
     id: string,
     sender: string,
     type: string, // Event
@@ -9,9 +10,10 @@ interface RabbitPayload {
 }
 
 export class Event implements RabbitPayload  {
-    id: string = uuidv1()
+    readonly version: number = 1 // sequentual numebering system
+    readonly id: string = uuidv1()
     sender: string
-    type: string = 'Event'
+    readonly type: string = 'Event'
     name: string
     data: object
 
@@ -28,9 +30,10 @@ export class Event implements RabbitPayload  {
 }
 
 export class Command implements RabbitPayload  {
-    id: string = uuidv1()
+    readonly version: number = 1 // sequentual numebering system
+    readonly id: string = uuidv1()
     sender: string
-    type: string = 'Command'
+    readonly type: string = 'Command'
     name: string
     data: object
 
