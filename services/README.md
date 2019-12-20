@@ -11,5 +11,8 @@
 
 ```sh
 $ docker-compose up
+# (use ^c to stop)
 ```
+
+- Exploring the RabbitMQ management UI: Visit [http://localhost:15672/](http://localhost:15672/) with user/pass `guest`/`guest`
 

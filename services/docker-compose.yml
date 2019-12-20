@@ -1,59 +1,42 @@
 version: "3"
 
-volumes:
-  redisData:
-  mongoData:
-  postgresData:
-  rabbitmqData:
-
 services:
-  web:
-    image: rooknj/prysmalight-web:1.1.0
-    container_name: web
-    restart: always
-    ports:
-      - "80:80"   
-  apiGateway:
-    image: rooknj/prysmalight-web:1.1.0
-    container_name: apiGateway
-    restart: always
-    ports:
-      - "4001:4001"   
-  backend:
-    image: rooknj/prysmalight-web:1.1.0
-    container_name: backend
-    restart: always
-    ports:
-      - "4002:4002" 
-  redis:
-    image: redis:latest
-    container_name: redis
-    restart: always
-    ports:
-      - "6379:6379"
-    volumes:
-      - redisData:/data
-  postgres:
-    image: postgres:latest
-    container_name: postgres
-    restart: always
-    ports:
-      - "5432:5432"
-    volumes:
-      - redisData:/data
   mongo:
-    image: mongo:latest
+    image: mongo:4.2.2-bionic # MongoDB on Ubuntu Bionic
     container_name: mongo
     restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+      MONGO_INITDB_DATABASE: test
     ports:
       - "27017:27017"
     volumes:
-      - mongoData:/data
+      - ./_docker_compose_volumes/mongoData:/data/db
   rabbitmq:
-    image: rabbitmq:latest
+    image: rabbitmq:3.8.2-management-alpine # RabbitMQ on alpine with dashboard UI
     container_name: rabbitmq
     restart: always
     ports:
-      - "1883:1883"
+      - "5672:5672" # AMQP port
+      - "15672:15672" # dashboard UI port (http://localhost:15672/) - default user/pass is guest/guest
     volumes:
-      - /rabbitmq/data
+      - ./_docker_compose_volumes/rabbitmqData:/var/lib/rabbitmq
+  # web:
+  #   image: rooknj/prysmalight-web:1.1.0
+  #   container_name: web
+  #   restart: always
+  #   ports:
+  #     - "80:80"   
+  # apiGateway:
+  #   image: rooknj/prysmalight-web:1.1.0
+  #   container_name: apiGateway
+  #   restart: always
+  #   ports:
+  #     - "4001:4001"   
+  # backend:
+  #   image: rooknj/prysmalight-web:1.1.0
+  #   container_name: backend
+  #   restart: always
+  #   ports:
+  #     - "4002:4002" 
