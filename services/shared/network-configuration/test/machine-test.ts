@@ -9,7 +9,7 @@ describe('Machine', () => {
         assert.equal(machine.address, '1.2.3.4')
         assert.equal(machine.imageName, 'ubuntu')
         assert.deepEqual(machine.openPorts, [22, 80])
-        assert.equal(machine.getAdjacentMachines().size, 0)
+        assert.equal(machine.getAdjacentMachines().length, 0)
     })
 
     it('should add adjacent machines', () => {
@@ -19,9 +19,9 @@ describe('Machine', () => {
         firstMachine.addAdjacentMachine(secondMachine)
 
         assert.isTrue(firstMachine.hasLink(secondMachine))
-        assert.equal(firstMachine.getAdjacentMachines().size, 1)
+        assert.equal(firstMachine.getAdjacentMachines().length, 1)
         assert.isFalse(secondMachine.hasLink(firstMachine))
-        assert.equal(secondMachine.getAdjacentMachines().size, 0)
+        assert.equal(secondMachine.getAdjacentMachines().length, 0)
     })
 
     it('should add adjacent machines in both directions', () => {
@@ -32,8 +32,8 @@ describe('Machine', () => {
         secondMachine.addAdjacentMachine(firstMachine)
 
         assert.isTrue(firstMachine.hasLink(secondMachine))
-        assert.equal(firstMachine.getAdjacentMachines().size, 1)
+        assert.equal(firstMachine.getAdjacentMachines().length, 1)
         assert.isTrue(secondMachine.hasLink(firstMachine))
-        assert.equal(secondMachine.getAdjacentMachines().size, 1)
+        assert.equal(secondMachine.getAdjacentMachines().length, 1)
     })
 })

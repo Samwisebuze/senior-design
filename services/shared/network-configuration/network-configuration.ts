@@ -24,28 +24,34 @@ export class Machine {
     /**
      * Set of machines that are directly accessible from this machine
      */
-    private adjacentMachines: Set<Machine>
+    private adjacentMachines: Map<string, Machine>
 
     constructor(address: string, imageName: string, openPorts: number[]) {
         this.address = address
         this.imageName = imageName
         this.openPorts = openPorts
-        this.adjacentMachines = new Set<Machine>()
+        this.adjacentMachines = new Map<string, Machine>()
     }
 
     addAdjacentMachine(machine: Machine): void {
-        this.adjacentMachines.add(machine)
+        const machineId = machine.machineId
+        this.adjacentMachines.set(machineId, machine)
     }
 
     removeAdjacentMachine(machine: Machine): void {
-        this.adjacentMachines.delete(machine)
+        const machineId = machine.machineId
+        this.removeAdjacentMachineById(machineId)
+    }
+
+    removeAdjacentMachineById(machineId: string): void {
+        this.adjacentMachines.delete(machineId)
     }
 
     /**
-     * @returns Set<Machine>
+     * @returns Array<Machine>
      */
-    getAdjacentMachines(): Set<Machine> {
-        return this.adjacentMachines
+    getAdjacentMachines(): Machine[] {
+        return Array.from(this.adjacentMachines.values())
     }
 
     /**
@@ -56,7 +62,19 @@ export class Machine {
      * @returns Boolean
      */
     hasLink(otherMachine: Machine): Boolean {
-        return this.adjacentMachines.has(otherMachine)
+        const otherMachineId = otherMachine.machineId
+        return this.hasLinkById(otherMachineId)
+    }
+
+    /**
+     * Check if a link exists between this machine and
+     * another machines given
+     * 
+     * @param otherMachineId
+     * @returns Boolean
+     */
+    hasLinkById(otherMachineId: string): Boolean {
+        return this.adjacentMachines.has(otherMachineId)
     }
 }
 
@@ -78,12 +96,12 @@ export class Network {
     /**
      * Set of all machines in the network
      */
-    private machines: Set<Machine>
+    private machines: Map<string, Machine>
 
     constructor(owner: string, networkName: string) {
         this.owner = owner
         this.networkName = networkName
-        this.machines = new Set<Machine>()
+        this.machines = new Map<string, Machine>()
 
         const now = new Date()
         this.createdAt = now
@@ -94,7 +112,7 @@ export class Network {
      * Retrieve all machines in the network
      */
     getAllMachines(): Machine[] {
-        return Array.from(this.machines)
+        return Array.from(this.machines.values())
     }
 
     /**
@@ -104,7 +122,8 @@ export class Network {
      * @param machine
      */
     addMachine(machine: Machine): void {
-        this.machines.add(machine)
+        const machineId = machine.machineId
+        this.machines.set(machineId, machine)
         this.updatedAt = new Date()
     }
 
@@ -116,15 +135,17 @@ export class Network {
      * @param machine 
      */
     removeMachine(machine: Machine): void {
-        const adjacentMachines = Array.from(machine.getAdjacentMachines())
+        const adjacentMachines = machine.getAdjacentMachines()
 
-        this.machines.delete(machine)
+        const machineId = machine.machineId
+        this.machines.delete(machineId)
 
         // Remove links between machine and other machines
         for (const adjacent of adjacentMachines) {
             // If the adjacent machine exists in the network,
             // remove `machine` as being adjacent to it
-            if (this.machines.has(adjacent)) {
+            const adjacentMachineId = adjacent.machineId
+            if (this.machines.has(adjacentMachineId)) {
                 adjacent.removeAdjacentMachine(machine)
             }
         }
@@ -141,10 +162,10 @@ export class Network {
      * @param secondMachine 
      */
     addLink(firstMachine: Machine, secondMachine: Machine): void {
-        if (!this.machines.has(firstMachine)) {
+        if (!this.machines.has(firstMachine.machineId)) {
             this.addMachine(firstMachine)
         }
-        if (!this.machines.has(secondMachine)) {
+        if (!this.machines.has(secondMachine.machineId)) {
             this.addMachine(secondMachine)
         }
 
@@ -155,8 +176,29 @@ export class Network {
     }
 
     /**
-     * Break the link between two machine, but keep both machines
-     * in the network
+     * Create a link between two existing machines in the network.
+     * Links are created in both directions.
+     * If a machine's id is not already in the network, the link is
+     * not created.
+     * 
+     * @param firstMachineId 
+     * @param secondMachineId 
+     */
+    addLinkById(firstMachineId: string, secondMachineId: string): void {
+        const firstMachine = this.machines.get(firstMachineId)
+        const secondMachine = this.machines.get(secondMachineId)
+
+        if (firstMachine == undefined || secondMachine == undefined) {
+            return
+        }
+
+        // Both machines exist, so carry out the link
+        this.addLink(firstMachine, secondMachine)
+    }
+
+    /**
+     * Break the link between two machines given their objects,
+     * but keep both machines in the network
      * 
      * @param firstMachine
      * @param secondMachine 
@@ -168,6 +210,24 @@ export class Network {
     }
 
     /**
+     * Break the link between two machines given their ids,
+     * but keep both machines in the network.
+     * Does nothing if either machine doesn't exist.
+     * 
+     * @param firstMachineId
+     * @param secondMachineId
+     */
+    removeLinkById(firstMachineId: string, secondMachineId: string): void {
+        const firstMachine = this.machines.get(firstMachineId)
+        const secondMachine = this.machines.get(secondMachineId)
+
+        // Check if these machines exist
+        if (firstMachine != undefined && secondMachine != undefined) {
+            this.removeLink(firstMachine, secondMachine)
+        }
+    }
+
+    /**
      * Check if a link exists between two machines
      * 
      * @param firstMachine
@@ -176,5 +236,24 @@ export class Network {
      */
     hasLink(firstMachine: Machine, secondMachine: Machine): Boolean {
         return firstMachine.hasLink(secondMachine)
+    }
+
+    /**
+     * Check if a link exists between two machines.
+     * If one of the machines doesn't exist, this method returns false.
+     * 
+     * @param firstMachineId
+     * @param secondMachineId
+     */
+    hasLinkById(firstMachineId: string, secondMachineId: string): Boolean {
+        const firstMachine = this.machines.get(firstMachineId)
+        const secondMachine = this.machines.get(secondMachineId)
+
+        // Check if these machines exist
+        if (firstMachine != undefined && secondMachine != undefined) {
+            return this.hasLink(firstMachine, secondMachine)
+        }
+
+        return false
     }
 }
