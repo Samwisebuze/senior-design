@@ -9,7 +9,7 @@ export class Machine {
     readonly version: number = 1 // simple sequential API versioning
     readonly machineId: string = uuidv4()
     /**
-     * Anique software defined ip address
+     * Unique software defined ip address
      */
     address: string
     /**
