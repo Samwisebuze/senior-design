@@ -41,4 +41,51 @@ describe('Network', () => {
         assert.isTrue(network.hasLink(machineOne, machineTwo))
         assert.isTrue(network.hasLink(machineTwo, machineOne))
     })
+
+    it('should link two machines by id', () => {
+        const network = new Network('cool-owner', 'really-cool-network')
+
+        // create machines
+        const machineOne = new Machine('1.2.3.4', 'ubuntu', [8080])
+        const machineOneId = machineOne.machineId
+        const machineTwo = new Machine('1.1.1.1', 'alpine', [22, 80])
+        const machineTwoId = machineTwo.machineId
+
+        // add machines
+        network.addMachine(machineOne)
+        network.addMachine(machineTwo)
+
+        // create link
+        network.addLinkById(machineOneId, machineTwoId)
+
+        assert.equal(network.getAllMachines().length, 2)
+        assert.isTrue(network.hasLink(machineOne, machineTwo))
+        assert.isTrue(network.hasLink(machineTwo, machineOne))
+        assert.isTrue(network.hasLinkById(machineOneId, machineTwoId))
+    })
+
+    it('should unlink two machines by id', () => {
+        const network = new Network('cool-owner', 'really-cool-network')
+
+        // create machines
+        const machineOne = new Machine('1.2.3.4', 'ubuntu', [8080])
+        const machineOneId = machineOne.machineId
+        const machineTwo = new Machine('1.1.1.1', 'alpine', [22, 80])
+        const machineTwoId = machineTwo.machineId
+
+        // add machines
+        network.addMachine(machineOne)
+        network.addMachine(machineTwo)
+
+        // create link
+        network.addLinkById(machineOneId, machineTwoId)
+
+        // break link
+        network.removeLinkById(machineOneId, machineTwoId)
+
+        assert.equal(network.getAllMachines().length, 2)
+        assert.isFalse(network.hasLink(machineOne, machineTwo))
+        assert.isFalse(network.hasLink(machineTwo, machineOne))
+        assert.isFalse(network.hasLinkById(machineOneId, machineTwoId))
+    })
 })
