@@ -501,6 +501,11 @@ pathval@^1.1.0:
   resolved "https://registry.yarnpkg.com/pathval/-/pathval-1.1.0.tgz#b942e6d4bde653005ef6b71361def8727d0645e0"
   integrity sha1-uULm1L3mUwBe9rcTYd74cn0GReA=
 
+reflect-metadata@^0.1.13:
+  version "0.1.13"
+  resolved "https://registry.yarnpkg.com/reflect-metadata/-/reflect-metadata-0.1.13.tgz#67ae3ca57c972a2aa1642b10fe363fe32d49dc08"
+  integrity sha512-Ts1Y/anZELhSsjMcU605fU9RE4Oi3p5ORujwbIKXfWa+0Zxs510Qrmrce5/Jowq3cHSZSJqBjypxmHarc+vEWg==
+
 require-directory@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/require-directory/-/require-directory-2.1.1.tgz#8c64ad5fd30dab1c976e2344ffe7f792a6a6df42"
@@ -620,6 +625,13 @@ type-detect@^4.0.0, type-detect@^4.0.5:
   version "4.0.8"
   resolved "https://registry.yarnpkg.com/type-detect/-/type-detect-4.0.8.tgz#7646fb5f18871cfbb7749e69bd39a6388eb7450c"
   integrity sha512-0fr/mIH1dlO+x7TlcMy+bIDqKPsw/70tVyeHW787goQjhmqaZe10uwLujubK9q9Lg6Fiho1KUKDYz0Z7k7g5/g==
+
+typescript-json-serializer@^1.4.2:
+  version "1.4.2"
+  resolved "https://registry.yarnpkg.com/typescript-json-serializer/-/typescript-json-serializer-1.4.2.tgz#b807810640e95ca4944b69f89c1e7662952a69d5"
+  integrity sha512-3SGIqkrDNwDFuTlDkc/HvsJj2KAxTCdb81D6rhVCwv7KS3z9UZgrKmhHCd1w3X4CVkAtwKnzi6PSIY0SPPzoVw==
+  dependencies:
+    reflect-metadata "^0.1.13"
 
 typescript@^3.7.3:
   version "3.7.3"
