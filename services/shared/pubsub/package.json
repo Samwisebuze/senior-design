@@ -1,0 +1,25 @@
+{
+  "name": "shared-library",
+  "version": "1.0.0",
+  "main": "dist/payload.js",
+  "types": "dist/payload.d.ts",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "build": "./node_modules/.bin/tsc",
+    "test": "./node_modules/.bin/mocha -r ts-node/register test/**/*.ts",
+    "test:watch": "./node_modules/.bin/mocha -r ts-node/register test/**/*.ts --watch --watch-extensions ts"
+  },
+  "dependencies": {
+    "typescript-json-serializer": "^1.4.2",
+    "uuid": "^3.3.3"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.2.7",
+    "@types/mocha": "^5.2.7",
+    "chai": "^4.2.0",
+    "mocha": "^6.2.2",
+    "ts-node": "^8.5.4",
+    "typescript": "^3.7.3"
+  }
+}

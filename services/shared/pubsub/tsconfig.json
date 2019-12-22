@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "ES2019",
+        "outDir": "dist",
+        "declaration": true,
+        "strict": true,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true
+    },
+    "exclude": [
+        "test/",
+        "dist/"
+    ]
+}
