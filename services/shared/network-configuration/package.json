@@ -11,6 +11,7 @@
     "test:watch": "./node_modules/.bin/mocha -r ts-node/register test/**/*.ts --watch --watch-extensions ts"
   },
   "dependencies": {
+    "typescript-json-serializer": "^1.4.2",
     "uuid": "^3.3.3"
   },
   "devDependencies": {
