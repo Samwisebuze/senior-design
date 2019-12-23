@@ -1,0 +1,28 @@
+{
+  "name": "container-service",
+  "version": "0.1.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "build": "./node_modules/.bin/tsc",
+    "start": "npm run build && node dist/index.js",
+    "test": "./node_modules/.bin/mocha -r ts-node/register test/**/*.ts",
+    "test:watch": "./node_modules/.bin/mocha -r ts-node/register test/**/*.ts --watch --watch-extensions ts"
+  },
+  "dependencies": {
+    "@kubernetes/client-node": "^0.11.0",
+    "@types/mongoose": "^5.5.34",
+    "mongoose": "^5.8.2",
+    "shared-library-payload": "file:./../shared/payload/"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.2.7",
+    "@types/mocha": "^5.2.7",
+    "chai": "^4.2.0",
+    "mocha": "^6.2.2",
+    "ts-node": "^8.5.4",
+    "typescript": "^3.7.3"
+  }
+}
