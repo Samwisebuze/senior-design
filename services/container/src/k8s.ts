@@ -42,19 +42,42 @@ export class K8Api {
             }
         }
 
-        await this.k8sCoreApi.createNamespace(namespace)
-                         .catch((e: any) => { throw Error(e) })
+        await this.k8sCoreApi
+                .createNamespace(namespace)
+                .catch((e: any) => {
+                    throw Error(e)
+                })
     }
 
     /**
-     * Get a list of containers inside pods running inside
-     * the namespace
+     * Get a list of containers inside pods running inside the namespace.
+     * 
+     * TODO: respond with custom Object type
      */
-    static async getPods(): Promise<any[]> {
-        const response = await this.k8sCoreApi.listNamespacedPod(this.NAMESPACE)
-                                .catch((e: any) => { throw Error(e)})
+    static async getContainers(): Promise<any[]> {
+        const response = await this.k8sCoreApi
+                                .listNamespacedPod(this.NAMESPACE)
         const body = response.body
-        return body.items
+        const pods = body.items
+
+        // Info to get: deploymentId, podId, containerId, imageName, name
+        const containers = pods.flatMap(pod => {
+            const containerStatuses = pod.status?.containerStatuses
+            const labels = pod.metadata?.labels
+
+            if (containerStatuses) {
+                return containerStatuses.flatMap(containerStatus => {
+                    return {
+                        labels: labels,
+                        containerId: containerStatus.containerID,
+                        imageName: containerStatus.image,
+                        imageId: containerStatus.imageID
+                    }
+                })
+            }
+        })
+
+        return containers
     }
 
     /**
@@ -81,6 +104,7 @@ export class K8Api {
      * and metadata about the deployment.
      */
     static async createDeployment() {
+        // TODO: place deployment identifier in the metadata of the deployment
         const requestData = `apiVersion: apps/v1
 kind: Deployment
 metadata:
