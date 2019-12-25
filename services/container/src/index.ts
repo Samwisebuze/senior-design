@@ -1,14 +1,6 @@
-const k8s = require('@kubernetes/client-node')
 import { Command, Event } from 'shared-library-payload'
+import { K8Api } from './k8s'
 import { DeploymentModel } from './model'
-
-const NAMESPACE = 'virtuoso-container-service'
-
-// Connects on localhost
-// TODO: Offer way to connect to any K8s endpoint
-const kc = new k8s.KubeConfig()
-kc.loadFromDefault()
-const k8sApi = kc.makeApiClient(k8s.CoreV1Api)
 
 export class TestClass {
     foobar: string
@@ -50,6 +42,9 @@ class Deployment {
  * check if that network already exists (by name).
  * If not, create the network via the K8s API
  * and return a success message.
+ * 
+ * If the networkId already exists as a active Deployment in
+ * Kubernetes, this action does nothing.
  * 
  * Uses K8s Deployments under the hood do configure and deploy pods
  * and replace pods if they go down.
