@@ -10,24 +10,29 @@ import { JsonProperty, Serializable, deserialize, serialize } from 'typescript-j
 export class Machine {
     @JsonProperty()
     readonly version: number = 1 // simple sequential API versioning
+
     @JsonProperty()
     readonly machineId: string = uuidv4()
+
     /**
      * Unique software defined ip address
      */
     @JsonProperty()
     address: string
+
     /**
      * Name of docker image. TODO: replace this with an OSImage type?
      */
     @JsonProperty()
     imageName: string
+
     /**
      * List of ports to be opened
      * TOOD: allow ranges of ports to be opened
      */
     @JsonProperty()
     openPorts: number[]
+
     /**
      * Set of machines that are directly accessible from this machine
      */
@@ -104,29 +109,40 @@ export class Machine {
         return deserialize(jsonData, Machine)
     }
 
-    // Serialization helper
-    private static mapToArray(map: Map<string, Machine>): Object[] {
+    /**
+     * Serialization helper: reduces the `adjacentMachines` Map down to
+     * a list of machine ids that are adjacent.
+     * Although this method loses detail in linked machines onced deserialized,
+     * this method works when serialized from a Network of machines.
+     * A simple serialization of the `adjacentMachines` Map wouldn't work
+     * in this case because it can have an infinite number of circular links.
+     * 
+     * Therefore, always serialize a Network, not a Machine.
+     * This method return details are extraneous if you're just serializing
+     * a Network of Machines.
+     * TODO: think about simplifying this method down.
+     * 
+     * @param map
+     * @returns Array
+     */
+    private static mapToArray(map: Map<string, Machine>): string[] {
         return Array
                 .from(map.entries())
                 .map(entry => {
                     const [_, machine] = entry
-                    return Object.assign({}, machine)
+                    return machine.machineId
                 })
     }
     
-    // Deserialization helper
-    private static arrayToMap(array: Object[]): Map<string, Machine> {
-        const result = new Map<string, Machine>()
-
-        if (Object.keys(array).length == 0) {
-            return result
-        }
-
-        for (const item of array) {
-            const machine = Machine.fromJSON(item)
-            result.set(machine.machineId, machine)
-        }
-    
-        return result
+    /**
+     * Deserializaton helper: does almost nothing to `adjacentMachines`.
+     * In serailization/deserialization, the Network is responsible for
+     * re-linking machines together.
+     * 
+     * @param _ 
+     * @returns Map<string, Machine>
+     */
+    private static arrayToMap(_: string[]): Map<string, Machine> {
+        return new Map<string, Machine>()
     }
 }

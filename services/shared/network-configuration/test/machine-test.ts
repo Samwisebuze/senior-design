@@ -48,6 +48,9 @@ describe('Machine', () => {
         assert.deepEqual(machine, deserializedMachine)
     })
 
+    // the Machineserializer doesn't support circular references of Machines
+    // (that would produce JSON of infinite length), so all we can test
+    // is that the direct links between machines are kept in-tact
     it('should serialize a Machine with a link to JSON', () => {
         const machine = new Machine('1.2.3.4', 'ubuntu', [22, 80])
         const secondMachine = new Machine('0.0.0.0', 'alpine', [443])
@@ -56,14 +59,20 @@ describe('Machine', () => {
         secondMachine.addAdjacentMachine(machine)
 
         // show that the json object can be converted to a string and back
-        const json = JSON.parse(JSON.stringify(machine.toJSON()))
+        const json1 = JSON.parse(JSON.stringify(machine.toJSON()))
+        const json2 = JSON.parse(JSON.stringify(secondMachine.toJSON()))
 
-        const deserializedMachine = Machine.fromJSON(json)
+        // show that the json objects can be converted back to Machines
+        const _1 = Machine.fromJSON(json1)
+        const _2 = Machine.fromJSON(json2)
 
-        // the serializer doesn't support circular references of Machines
-        // (that would produce JSON of infinite length), so we can test up to the first layer of links.
-        assert.equal(machine.version, deserializedMachine.version)
-        assert.equal(machine.machineId, deserializedMachine.machineId)
-        assert.equal(machine.getAdjacentMachines().length, deserializedMachine.getAdjacentMachines().length)
+        // show that machine ids links are kept in-tact during a serialization
+        const machineId = machine.machineId
+        const secondMachineId = secondMachine.machineId
+
+        assert.equal(machineId, json1.machineId)
+        assert.equal(secondMachineId, json2.machineId)
+        assert.isTrue(json1.adjacentMachines.includes(secondMachineId))
+        assert.isTrue(json2.adjacentMachines.includes(machineId))
     })
 })
