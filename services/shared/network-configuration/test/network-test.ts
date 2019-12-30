@@ -119,9 +119,9 @@ describe('Network', () => {
 
         const machineOne = new Machine('1.2.3.4', 'ubuntu', [8080])
         const machineTwo = new Machine('1.9.9.9', 'debian', [443])
+
         network.addMachine(machineOne)
         network.addMachine(machineTwo)
-
         network.addLink(machineOne, machineTwo)
 
         // show that the json object can be converted to a string and back
@@ -129,8 +129,6 @@ describe('Network', () => {
 
         const deserializedNetwork = Network.fromJSON(json)
 
-        // assert.deepEqual(network, deserializedNetwork)
-        console.log(network)
-        console.log(deserializedNetwork)
+        assert.deepEqual(network, deserializedNetwork)
     })
 })

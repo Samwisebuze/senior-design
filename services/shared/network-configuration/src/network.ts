@@ -11,19 +11,25 @@ import { JsonProperty, Serializable, deserialize, serialize } from 'typescript-j
 export class Network {
     @JsonProperty()
     readonly version: number = 1 // simple sequential API versioning
+
     @JsonProperty()
     readonly owner: string // TODO: replace this with a User type?
+
     /**
      * Unique identifier generated for the network
      */
     @JsonProperty()
     readonly networkId: string = uuidv4()
+
     @JsonProperty()
     networkName: string
+
     @JsonProperty()
     readonly createdAt: Date
+
     @JsonProperty()
     updatedAt: Date
+
     /**
      * Set of all machines in the network
      */
@@ -194,32 +200,88 @@ export class Network {
     }
 
     static fromJSON(jsonData: Object): Network {
-        return deserialize(jsonData, Network)
+        // @ts-ignore
+        const linkListData: Object[] | undefined = jsonData.machines.linkList
+        const resultNetwork = deserialize(jsonData, Network)
+        const originalUpdatedAt = resultNetwork.updatedAt
+
+        // Final step: re-link machines in the Network as necessary
+        if (linkListData !== undefined) {
+            for (const link of linkListData) {
+                // @ts-ignore
+                const from: string = link.from
+                // @ts-ignore
+                const to: string = link.to
+
+                resultNetwork.addLinkById(from, to)
+            }
+        }
+
+        // Hacky but it works: Reset the updatedAt datetime to the original value
+        // (`addLinkById` automatically updates this when called above)
+        resultNetwork.updatedAt = originalUpdatedAt
+
+        return resultNetwork
     }
 
-    // Serialization helper
-    private static mapToArray(map: Map<string, Machine>): Object[] {
-        return Array
+    /**
+     * Serialization helper: Serializes all machines in the network to
+     * a list of Machine objects and a list of links between machines
+     * 
+     * @param map
+     * @returns Object
+     */
+    private static mapToArray(map: Map<string, Machine>): Object {
+        // Generate a list of machines in the Network
+        const machineList = Array
                 .from(map.entries())
                 .map(entry => {
                     const [_, machine] = entry
-                    return Object.assign({}, machine)
+                    return Object.assign({}, machine.toJSON())
                 })
-    }
-    
-    // Deserialization helper
-    private static arrayToMap(array: Object[]): Map<string, Machine> {
-        const result = new Map<string, Machine>()
 
-        if (Object.keys(array).length == 0) {
+        // Generate a list of links between machines in the Network
+        // TODO: this generates twice the amount of data as needed. fix that.
+        const linkList = Array
+                .from(map.entries())
+                .flatMap(entry => {
+                    const [_, machine] = entry
+                    return machine
+                            .getAdjacentMachines()
+                            .map(adjacentMachine => {
+                                return {
+                                    from: machine.machineId,
+                                    to: adjacentMachine.machineId
+                                }
+                            })
+                })
+
+        return { machineList, linkList }
+    }
+
+    /**
+     * Serialization helper: Serializes all machines in the network to
+     * a list of Machine objects and a list of links between machines
+     * 
+     * @param input
+     * @returns Map<string, Machine>
+     */
+    private static arrayToMap(input: Object): Map<string, Machine> {
+        const result = new Map<string, Machine>()
+        // @ts-ignore
+        const machineList: Object[] = input.machineList
+
+        if (Object.keys(machineList).length == 0) {
             return result
         }
 
-        for (const item of array) {
+        // Deserialize each machine in the network
+        for (const item of machineList) {
             const machine = Machine.fromJSON(item)
             result.set(machine.machineId, machine)
         }
-    
+
+        // Note: Re-linking the machines in the Network is handled by `fromJSON`
         return result
     }
 }
