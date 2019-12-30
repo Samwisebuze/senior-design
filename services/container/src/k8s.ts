@@ -102,6 +102,8 @@ export class K8Api {
      * Given a list of Machines to deploy as a Network, deploy the
      * machines as containers and return the metadata of those containers
      * and metadata about the deployment.
+     * 
+     * Does nothing if the deployment already exists.
      */
     static async createDeployment() {
         // TODO: place deployment identifier in the metadata of the deployment
@@ -127,20 +129,27 @@ spec:
         ports:
         - containerPort: 80`
 
-        console.log('foo:', this.k8sAppsApi.createNamespacedDeployment)
         const deploymentConfig: V1Deployment = <V1Deployment>loadYaml(requestData)
-        console.log(deploymentConfig)
-        console.log(typeof deploymentConfig)
-        const response = await this.k8sAppsApi.createNamespacedDeployment(
-                                   this.NAMESPACE,
-                                   deploymentConfig
-                               )
-                               .catch((e) => { throw Error(JSON.stringify(e)) })
+        const response = await this.k8sAppsApi
+                            .createNamespacedDeployment(
+                                this.NAMESPACE,
+                                deploymentConfig
+                            )
+                            .catch(error => {
+                                const errorResponse = <IncomingMessage>error.response
+                                const statusCode = errorResponse.statusCode
+                                const statusMessage = errorResponse.statusMessage
+        
+                                if (statusCode === 409) {
+                                    // Response 409 means that the deployment already exists, but this is ok
+                                    console.error(`Warning: deployment already exists - ${statusCode}, ${statusMessage}`)
+                                    return
+                                }
+        
+                                console.error(`Error: Error deleting deployment ${statusCode}, ${statusMessage}`)
+                            })
 
-
-        // TODO: if response code is 409, the deployment already exists, so just return
-
-        console.log(response)
+        // console.log(response)
     }
 
     /**
@@ -168,6 +177,7 @@ spec:
                         if (statusCode === 404) {
                             // Response code of 404 means there was nothing to delete,
                             // but this is ok.
+                            console.warn(`Warning: Cannot delete deployment because deployment doesn't exist ${deploymentName} - ${statusCode}, ${statusMessage}`)
                             return true
                         }
 
@@ -194,17 +204,19 @@ spec:
     }
 
     /**
-     * TOOD: Watch for changes in the Kubernetes cluster.
+     * Watch for changes to objects the Kubernetes cluster.
+     * 
+     * Note: returns a stream of all create, update, and delete events.
+     *       It's up to the caller to filter these events.
      */
     static async watch() {
-        // const listFn = () => this.k8sApi.listNamespacedPod('default')
-
+        // const listFn = () => this.k8sCoreApi.listNamespacedPod(this.NAMESPACE)
         // const informer = k8s.makeInformer(kc, '/api/v1/namespaces/default/pods', listFn)
-        
+
         // informer.on('add', (obj: k8s.V1Pod) => { console.log(`Added: ${obj.metadata!.name}`) })
         // informer.on('update', (obj: k8s.V1Pod) => { console.log(`Updated: ${obj.metadata!.name}`) })
         // informer.on('delete', (obj: k8s.V1Pod) => { console.log(`Deleted: ${obj.metadata!.name}`) })
-        
+
         // informer.start()
         // const watch = new k8s.Watch(kc);
         // const req = watch.watch('/api/v1/namespaces',
