@@ -225,6 +225,25 @@ export class Network {
     }
 
     /**
+     * Serialize a Network to a Buffer
+     * 
+     * @returns Buffer
+     */
+    toBuffer(): Buffer {
+        return Buffer.from(JSON.stringify(this.toJSON()))
+    }
+
+    /**
+     * Deserialize a Buffer to a Network instance
+     * 
+     * @param buffer
+     * @returns Network
+     */
+    static fromBuffer(buffer: Buffer): Network {
+        return this.fromJSON(JSON.parse(buffer.toString()))
+    }
+
+    /**
      * Serialization helper: Serializes all machines in the network to
      * a list of Machine objects and a list of links between machines
      * 

@@ -131,4 +131,41 @@ describe('Network', () => {
 
         assert.deepEqual(network, deserializedNetwork)
     })
+
+    it('should serialize a Network to Buffer', () => {
+        const network = new Network('cool-owner', 'really-cool-network')
+
+        const buffer = network.toBuffer()
+        const deserializedNetwork = Network.fromBuffer(buffer)
+
+        assert.deepEqual(network, deserializedNetwork)
+    })
+
+    it('should serialize a Network with Machines to Buffer', () => {
+        const network = new Network('cool-owner', 'really-cool-network')
+
+        const machine = new Machine('1.2.3.4', 'ubuntu', [8080])
+        network.addMachine(machine)
+
+        const buffer = network.toBuffer()
+        const deserializedNetwork = Network.fromBuffer(buffer)
+
+        assert.deepEqual(network, deserializedNetwork)
+    })
+
+    it('should serialize a Network with many Machines to JSON', () => {
+        const network = new Network('cool-owner', 'really-cool-network')
+
+        const machineOne = new Machine('1.2.3.4', 'ubuntu', [8080])
+        const machineTwo = new Machine('1.9.9.9', 'debian', [443])
+
+        network.addMachine(machineOne)
+        network.addMachine(machineTwo)
+        network.addLink(machineOne, machineTwo)
+
+        const buffer = network.toBuffer()
+        const deserializedNetwork = Network.fromBuffer(buffer)
+
+        assert.deepEqual(network, deserializedNetwork)
+    })
 })
