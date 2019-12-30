@@ -1,5 +1,5 @@
 import { assert } from 'chai'
-import { Machine, Network } from '../network-configuration'
+import { Machine, Network } from '../index'
 import { describe, it } from 'mocha'
 
 describe('Network', () => {
