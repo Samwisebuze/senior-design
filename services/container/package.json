@@ -8,7 +8,7 @@
   "scripts": {
     "build": "./node_modules/.bin/tsc",
     "start": "npm run build && node dist/index.js",
-    "test": "./node_modules/.bin/mocha -r ts-node/register test/**/*.ts",
+    "test": "./node_modules/.bin/mocha --exit -r ts-node/register test/**/*.ts",
     "test:watch": "./node_modules/.bin/mocha -r ts-node/register test/**/*.ts --watch --watch-extensions ts"
   },
   "dependencies": {

@@ -1,6 +1,7 @@
 const k8s = require('@kubernetes/client-node')
-import { KubeConfig, CoreV1Api, AppsV1Api, V1Deployment } from '@kubernetes/client-node'
+import { KubeConfig, CoreV1Api, AppsV1Api, V1Deployment, makeInformer, Informer, V1DeploymentStatus } from '@kubernetes/client-node'
 import { IncomingMessage } from 'http'
+import { EventEmitter }  from 'events'
 
 const dumpYaml = k8s.dumpYaml // helper function
 const loadYaml = k8s.loadYaml // helper function
@@ -26,6 +27,11 @@ export class K8Api {
     private static readonly k8sCoreApi = kc.makeApiClient(CoreV1Api)
     private static readonly k8sAppsApi = kc.makeApiClient(AppsV1Api)
 
+    // Outgoing event stream
+    public static readonly eventStream = new EventEmitter()
+    private static deploymentInformer: Informer<V1Deployment> | undefined
+    private static eventStreamInitialized = false
+
     // Standardized way of naming deployments (naming for debugging purposes)
     static deploymentName(deploymentId: string): string {
         return `deployment-${deploymentId}`
@@ -44,8 +50,12 @@ export class K8Api {
 
         await this.k8sCoreApi
                 .createNamespace(namespace)
-                .catch((e: any) => {
-                    throw Error(e)
+                .catch((error: any) => {
+                    const errorResponse = <IncomingMessage>error.response
+                    const statusCode = errorResponse.statusCode
+                    const statusMessage = errorResponse.statusMessage
+
+                    console.error(`Error: ${statusCode} - ${statusMessage}`)
                 })
     }
 
@@ -195,55 +205,58 @@ spec:
      * 
      * https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.10/#read-status-35
      */
-    static async getDeploymentStatus(deploymentId: string) {
+    static async getDeploymentStatus(deploymentId: string): Promise<V1DeploymentStatus | undefined> {
         const deploymentName = 'nginx-deployment' // unique identifier
         const response = await this.k8sAppsApi.readNamespacedDeploymentStatus(deploymentName, this.NAMESPACE)
+        const responseBody = response.body
 
-        console.log(response.body)
-        console.log(JSON.stringify(response.body))
+        console.log(JSON.stringify(response.body.status))
+        return responseBody.status
     }
 
     /**
-     * Watch for changes to objects the Kubernetes cluster.
+     * Watch for changes to deployments the Kubernetes cluster.
      * 
      * Note: returns a stream of all create, update, and delete events.
-     *       It's up to the caller to filter these events.
+     *       It's up to the caller to filter and decide how to use events.
      */
-    static async watch() {
-        // const listFn = () => this.k8sCoreApi.listNamespacedPod(this.NAMESPACE)
-        // const informer = k8s.makeInformer(kc, '/api/v1/namespaces/default/pods', listFn)
+    static watch(): void {
+        if (K8Api.deploymentInformer != undefined) {
+            // Don't attempt to setup more than one watcher
+            return
+        }
 
-        // informer.on('add', (obj: k8s.V1Pod) => { console.log(`Added: ${obj.metadata!.name}`) })
-        // informer.on('update', (obj: k8s.V1Pod) => { console.log(`Updated: ${obj.metadata!.name}`) })
-        // informer.on('delete', (obj: k8s.V1Pod) => { console.log(`Deleted: ${obj.metadata!.name}`) })
+        const listDeployments = () => this.k8sAppsApi.listNamespacedDeployment(this.NAMESPACE)
+        K8Api.deploymentInformer = makeInformer(kc, `/api/v1/namespaces/${this.NAMESPACE}/deployments`, listDeployments)
 
-        // informer.start()
-        // const watch = new k8s.Watch(kc);
-        // const req = watch.watch('/api/v1/namespaces',
-        //     // optional query parameters can go here.
-        //     {},
-        //     // callback is called for each received object.
-        //     (type, obj) => {
-        //         if (type === 'ADDED') {
-        //             console.log('new object:');
-        //         } else if (type === 'MODIFIED') {
-        //             console.log('changed object:');
-        //         } else if (type === 'DELETED') {
-        //             console.log('deleted object:');
-        //         } else {
-        //             console.log('unknown type: ' + type);
-        //         }
-        //         // tslint:disable-next-line:no-console
-        //         console.log(obj);
-        //     },
-        //     // done callback is called if the watch terminates normally
-        //     (err) => {
-        //         // tslint:disable-next-line:no-console
-        //         console.log(err);
-        //     });
+        K8Api.deploymentInformer.on('add', (event: V1Deployment) => {
+            this.eventStream.emit('addDeployment', event)
+        })
 
-        // // watch returns a request object which you can use to abort the watch.
-        // setTimeout(() => { req.abort(); }, 10 * 1000);
+        K8Api.deploymentInformer.on('update', (event: V1Deployment) => {
+            this.eventStream.emit('updateDeployment', event)
+        })
+
+        K8Api.deploymentInformer.on('delete', (event: V1Deployment) => {
+            this.eventStream.emit('deleteDeployment', event)
+        })
+
+        K8Api.deploymentInformer.start()
+
+        K8Api.eventStreamInitialized = true        
+    }
+
+    /**
+     * Teardown the deployment watchers
+     */
+    static stopWatch(): void {
+        if (K8Api.deploymentInformer != undefined) {
+            K8Api.deploymentInformer.off('add', () => {})
+            K8Api.deploymentInformer.off('update', () => {})
+            K8Api.deploymentInformer.off('delete', () => {})
+
+            K8Api.deploymentInformer = undefined
+        }
     }
 
     // TODO
