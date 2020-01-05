@@ -5,17 +5,14 @@ import { K8Api } from '../src/k8s'
 import { V1Deployment } from '@kubernetes/client-node'
 
 
+let deploymentId = ''
+
 /**
  * Perform a smoke test of interacting with the k8s API
  */
 describe('Kubernetes API Test', () => {
-    before(async () => {
-        // Ensure that the deployment doesn't exist before proceding
-        await K8Api.deleteDeployment('nginx-deployment')
-    })
-
     step('should call create a new deployment', async () => {
-        await K8Api.createDeployment()
+        deploymentId = await K8Api.createDeployment()
     })
 
     step('should watch for deployment to be ok', function(done) {
@@ -36,7 +33,7 @@ describe('Kubernetes API Test', () => {
     })
 
     it('should get status of a deployment', async () => {
-        const status = await K8Api.getDeploymentStatus('nginx-deployment')
+        const status = await K8Api.getDeploymentStatus(deploymentId)
 
         assert.isTrue(status != undefined)
         assert.equal(status!.availableReplicas, 1)
@@ -48,7 +45,7 @@ describe('Kubernetes API Test', () => {
     })
 
     it('should return the containers in a deployment', async () => {
-        const containers = await K8Api.getDeploymentContainers('nginx-deployment')
+        const containers = await K8Api.getDeploymentContainers(deploymentId)
 
         assert.isArray(containers)
         assert.equal(containers.length, 1)
@@ -59,7 +56,7 @@ describe('Kubernetes API Test', () => {
     step('should delete a deployment and watch for deployment to be deleted', async function(done) {
         this.timeout(6000)
 
-        const deleted = await K8Api.deleteDeployment('nginx-deployment')
+        const deleted = await K8Api.deleteDeployment(deploymentId)
         assert.isTrue(deleted)
 
         // Watch for 'deleteDeployment' event

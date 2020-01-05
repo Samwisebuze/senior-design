@@ -1,3 +1,4 @@
+const uuidv4 = require('uuid/v4')
 const k8s = require('@kubernetes/client-node')
 import { KubeConfig, CoreV1Api, AppsV1Api, V1Deployment, makeInformer, Informer, V1DeploymentStatus, V1Container } from '@kubernetes/client-node'
 import PubSub from 'pubsub-js'
@@ -122,24 +123,29 @@ export class K8Api {
      * and metadata about the deployment.
      * 
      * Does nothing if the deployment already exists.
+     * 
+     * @returns Promise<string>
      */
-    static async createDeployment() {
+    static async createDeployment(): Promise<string> {
+        // Generate a unique deployment identifier
+        const identifier = `deployment-${uuidv4()}`
+
         // TODO: place deployment identifier in the metadata of the deployment
         const requestData = `apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx-deployment
+  name: ${identifier}
   labels:
-    app: nginx-deployment
+    app: ${identifier}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: nginx-deployment
+      app: ${identifier}
   template:
     metadata:
       labels:
-        app: nginx-deployment
+        app: ${identifier}
     spec:
       containers:
       - name: nginx
@@ -167,7 +173,7 @@ spec:
                                 console.error(`Error: Error deleting deployment ${statusCode}, ${statusMessage}`)
                             })
 
-        // console.log(response)
+        return identifier
     }
 
     /**
@@ -183,10 +189,8 @@ spec:
      * https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.10/#delete-24
      */
     static async deleteDeployment(deploymentId: string): Promise<Boolean> {
-        const deploymentName = 'nginx-deployment' // unique identifier
-        
         await this.k8sAppsApi
-                    .deleteNamespacedDeployment(deploymentName, this.NAMESPACE)
+                    .deleteNamespacedDeployment(deploymentId, this.NAMESPACE)
                     .catch(error => {
                         const errorResponse = <IncomingMessage>error.response
                         const statusCode = errorResponse.statusCode
@@ -195,11 +199,11 @@ spec:
                         if (statusCode === 404) {
                             // Response code of 404 means there was nothing to delete,
                             // but this is ok.
-                            console.warn(`Warning: Cannot delete deployment because deployment doesn't exist ${deploymentName} - ${statusCode}, ${statusMessage}`)
+                            console.warn(`Warning: Cannot delete deployment because deployment doesn't exist ${deploymentId} - ${statusCode}, ${statusMessage}`)
                             return true
                         }
 
-                        console.error(`Error: Error deleting deployment ${deploymentName} - ${statusCode}, ${statusMessage}`)
+                        console.error(`Error: Error deleting deployment ${deploymentId} - ${statusCode}, ${statusMessage}`)
 
                         return false
                     })
@@ -214,10 +218,8 @@ spec:
      * https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.10/#read-status-35
      */
     static async getDeploymentStatus(deploymentId: string): Promise<V1DeploymentStatus | undefined> {
-        const deploymentName = 'nginx-deployment' // unique identifier
-        const response = await this.k8sAppsApi.readNamespacedDeploymentStatus(deploymentName, this.NAMESPACE)
+        const response = await this.k8sAppsApi.readNamespacedDeploymentStatus(deploymentId, this.NAMESPACE)
         const responseBody = response.body
-
         return responseBody.status
     }
 
