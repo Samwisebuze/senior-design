@@ -1,24 +1,17 @@
 const uuidv4 = require('uuid/v4')
 const k8s = require('@kubernetes/client-node')
-import { KubeConfig, CoreV1Api, AppsV1Api, V1Deployment, makeInformer, Informer, V1DeploymentStatus, V1Container } from '@kubernetes/client-node'
+import { KubeConfig, CoreV1Api, AppsV1Api, V1Deployment, makeInformer, Informer, V1DeploymentStatus } from '@kubernetes/client-node'
+import { DeploymentContainer } from '../src/k8sDeploymentContainer'
 import PubSub from 'pubsub-js'
 import { IncomingMessage } from 'http'
-import { EventEmitter }  from 'events'
 
 const dumpYaml = k8s.dumpYaml // helper function
 const loadYaml = k8s.loadYaml // helper function
-const Yaml = require('yamljs')
 
-const f = { hello: { foo: 'bar' } }
-const b = Yaml.stringify(f)
-console.log(b)
-
-// Connects on k8s localhost
+// Connect on k8s localhost
 // TODO: Offer way to connect to any K8s endpoint
-// const kc = new k8s.KubeConfig()
 const kc = new KubeConfig()
 kc.loadFromDefault()
-// const k8sApi = kc.makeApiClient(k8s.CoreV1Api)
 
 
 /**
@@ -29,7 +22,7 @@ export class K8Api {
     private static readonly k8sCoreApi = kc.makeApiClient(CoreV1Api)
     private static readonly k8sAppsApi = kc.makeApiClient(AppsV1Api)
 
-    // Outgoing event stream
+    // Outgoing event stream helper
     private static deploymentInformer: Informer<V1Deployment> | undefined
 
     // Standardized way of naming deployments (naming for debugging purposes)
@@ -125,36 +118,47 @@ export class K8Api {
      * 
      * Does nothing if the deployment already exists.
      * 
+     * TODO: Use custom object type for input
+     * 
      * @returns Promise<[string, string?]>
      */
-    static async createDeployment(): Promise<[string, string?]> {
+    static async createDeployment(containerConfigs: DeploymentContainer[]): Promise<[string, string?]> {
         // Generate a unique deployment identifier
         const identifier = `deployment-${uuidv4()}`
 
-        // TODO: place deployment identifier in the metadata of the deployment
-        const requestData = `apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: ${identifier}
-  labels:
-    app: ${identifier}
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: ${identifier}
-  template:
-    metadata:
-      labels:
-        app: ${identifier}
-    spec:
-      containers:
-      - name: nginx
-        image: nginx:1.17.6-alpine
-        ports:
-        - containerPort: 80`
+        const containersJson = containerConfigs.map(entry => entry.toJSON())
+        const deploymentJson = {
+            apiVersion: 'apps/v1',
+            kind: 'Deployment',
+            metadata: {
+                name: identifier,
+                labels: {
+                    app: identifier
+                }
+            },
+            spec: {
+                replicas: 1,
+                selector: {
+                    matchLabels: {
+                        app: identifier
+                    }
+                },
+                template: {
+                    metadata: {
+                        labels: {
+                            app: identifier
+                        }
+                    },
+                    spec: {
+                        containers: containersJson
+                    }
+                }
+            }
+        }
 
+        const requestData = <string>dumpYaml(deploymentJson)
         const deploymentConfig = <V1Deployment>loadYaml(requestData)
+
         const response = await this.k8sAppsApi
                             .createNamespacedDeployment(
                                 this.NAMESPACE,
@@ -174,8 +178,8 @@ spec:
                                 console.error(`Error: Error creating deployment ${statusCode}, ${statusMessage}`)
                             })
 
-        // Safely unwrap optionals
         try {
+            // Safely unwrap optionals
             if (response) {
                 const responseData = response.body
                 const k8sUid = responseData.metadata?.uid

@@ -2,6 +2,7 @@ import { assert } from 'chai'
 import { describe, it } from 'mocha'
 import { step } from 'mocha-steps'
 import { K8Api } from '../src/k8s'
+import { DeploymentContainer, DeploymentContainerPort } from '../src/k8sDeploymentContainer'
 import { V1Deployment } from '@kubernetes/client-node'
 
 
@@ -12,7 +13,15 @@ let deploymentId = ''
  */
 describe('Kubernetes API Test', () => {
     step('should call create a new deployment', async () => {
-        const [id, k8sId] = await K8Api.createDeployment()
+        const containerConfigs = [
+            new DeploymentContainer(
+                'nginx',
+                'nginx:1.17.6-alpine',
+                [new DeploymentContainerPort(80)]
+            )
+        ]
+
+        const [id, k8sId] = await K8Api.createDeployment(containerConfigs)
         deploymentId = id
         console.info(`[Info] id: ${deploymentId}, k8s id: ${k8sId}`)
 
