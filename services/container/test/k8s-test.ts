@@ -43,11 +43,16 @@ describe('Kubernetes API Test', () => {
     })
 
     step('should return all containers in the namespace', async () => {
-        const pods = await K8Api.getContainers()
-        assert.isArray(pods)
+        const containers = await K8Api.getContainers()
+        assert.isArray(containers)
     })
 
-    it('should return the containers in a deployment')
+    it('should return the containers in a deployment', async () => {
+        const containers = await K8Api.getDeploymentContainers('nginx-deployment')
+
+        assert.isArray(containers)
+        assert.equal(containers.length, 1)
+    })
 
     it('should update a deployment')
 

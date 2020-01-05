@@ -1,5 +1,5 @@
 const k8s = require('@kubernetes/client-node')
-import { KubeConfig, CoreV1Api, AppsV1Api, V1Deployment, makeInformer, Informer, V1DeploymentStatus } from '@kubernetes/client-node'
+import { KubeConfig, CoreV1Api, AppsV1Api, V1Deployment, makeInformer, Informer, V1DeploymentStatus, V1Container } from '@kubernetes/client-node'
 import PubSub from 'pubsub-js'
 import { IncomingMessage } from 'http'
 import { EventEmitter }  from 'events'
@@ -94,14 +94,23 @@ export class K8Api {
      * deployment inside pods running inside the namespace
      * 
      * @param deploymentId
-     * @returns any[]
+     * @returns object[]
      */
-    static async getDeploymentPods(deploymentId: string): Promise<any[]> {
-        const deploymentName = 'nginx-deployment' // TODO: use unique identifier
+    static async getDeploymentContainers(deploymentId: string): Promise<object[]> {
+        // There is no direct method to return all pods from a specific deployment.
+        // Alternatively, we can list all pods and filter by selector
+        const allContainers = await K8Api.getContainers()
 
-        // const response = await this.k8sAppsApi.deployment
+        // Only return containers that have deploymentId as a seletor label
+        return allContainers.filter(entry => {
+            const selectors = entry.labels
 
-        return []
+            if (selectors.app && selectors.app === deploymentId) {
+                return true
+            }
+
+            return false
+        })
     }
 
     /**
@@ -121,16 +130,16 @@ kind: Deployment
 metadata:
   name: nginx-deployment
   labels:
-    app: nginx
+    app: nginx-deployment
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: nginx
+      app: nginx-deployment
   template:
     metadata:
       labels:
-        app: nginx
+        app: nginx-deployment
     spec:
       containers:
       - name: nginx
