@@ -5,7 +5,10 @@
         "outDir": "dist",
         "declaration": true,
         "strict": true,
-        "esModuleInterop": true
+        "esModuleInterop": true,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "strictPropertyInitialization": false
     },
     "exclude": [
         "test/",
