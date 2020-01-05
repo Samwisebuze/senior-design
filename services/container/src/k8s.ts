@@ -120,13 +120,14 @@ export class K8Api {
      * 
      * Given a list of Machines to deploy as a Network, deploy the
      * machines as containers and return the metadata of those containers
-     * and metadata about the deployment.
+     * and metadata about the deployment. Returns the identifier for the
+     * deployment and identifier for the kubernetes deployment metadata.
      * 
      * Does nothing if the deployment already exists.
      * 
-     * @returns Promise<string>
+     * @returns Promise<[string, string?]>
      */
-    static async createDeployment(): Promise<string> {
+    static async createDeployment(): Promise<[string, string?]> {
         // Generate a unique deployment identifier
         const identifier = `deployment-${uuidv4()}`
 
@@ -153,7 +154,7 @@ spec:
         ports:
         - containerPort: 80`
 
-        const deploymentConfig: V1Deployment = <V1Deployment>loadYaml(requestData)
+        const deploymentConfig = <V1Deployment>loadYaml(requestData)
         const response = await this.k8sAppsApi
                             .createNamespacedDeployment(
                                 this.NAMESPACE,
@@ -170,10 +171,24 @@ spec:
                                     return
                                 }
         
-                                console.error(`Error: Error deleting deployment ${statusCode}, ${statusMessage}`)
+                                console.error(`Error: Error creating deployment ${statusCode}, ${statusMessage}`)
                             })
 
-        return identifier
+        // Safely unwrap optionals
+        try {
+            if (response) {
+                const responseData = response.body
+                const k8sUid = responseData.metadata?.uid
+                return [identifier, k8sUid]
+            }
+
+            return [identifier, undefined]
+        } catch (error) {
+            console.error(`Error: Error creating deployment ${error}`)
+
+            // Creating the deployment failed, so return just the identifier
+            return [identifier, undefined]
+        }
     }
 
     /**

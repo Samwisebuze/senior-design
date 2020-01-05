@@ -12,7 +12,12 @@ let deploymentId = ''
  */
 describe('Kubernetes API Test', () => {
     step('should call create a new deployment', async () => {
-        deploymentId = await K8Api.createDeployment()
+        const [id, k8sId] = await K8Api.createDeployment()
+        deploymentId = id
+        console.info(`[Info] id: ${deploymentId}, k8s id: ${k8sId}`)
+
+        assert.isOk(deploymentId)
+        assert.isOk(k8sId)
     })
 
     step('should watch for deployment to be ok', function(done) {
