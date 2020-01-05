@@ -1,5 +1,6 @@
 const k8s = require('@kubernetes/client-node')
 import { KubeConfig, CoreV1Api, AppsV1Api, V1Deployment, makeInformer, Informer, V1DeploymentStatus } from '@kubernetes/client-node'
+import PubSub from 'pubsub-js'
 import { IncomingMessage } from 'http'
 import { EventEmitter }  from 'events'
 
@@ -28,9 +29,7 @@ export class K8Api {
     private static readonly k8sAppsApi = kc.makeApiClient(AppsV1Api)
 
     // Outgoing event stream
-    public static readonly eventStream = new EventEmitter()
     private static deploymentInformer: Informer<V1Deployment> | undefined
-    private static eventStreamInitialized = false
 
     // Standardized way of naming deployments (naming for debugging purposes)
     static deploymentName(deploymentId: string): string {
@@ -210,17 +209,42 @@ spec:
         const response = await this.k8sAppsApi.readNamespacedDeploymentStatus(deploymentName, this.NAMESPACE)
         const responseBody = response.body
 
-        console.log(JSON.stringify(response.body.status))
         return responseBody.status
     }
 
     /**
+     * Internal pubsub: Subscribe to particular deployment events
+     * in the Kubernetes cluster. Returns a unique subscriber token
+     * that can be used to unsubscribe.
+     * 
+     * @param eventName
+     * @returns string
+     */
+    public static subscribe(eventName: string, subscriberFunc: Function): string {
+        // Start the watcher (does nothing if the watcher is already watching)
+        K8Api.watch()
+        // Subscribe and return the unique subscriber token
+        return <string>PubSub.subscribe(eventName, subscriberFunc)
+    }
+
+    /**
+     * Unsubscribe a subscriber for deployment events via its unique token.
+     * 
+     * @param token
+     * @returns void
+     */
+    public static unsubscribe(token: string): void {
+        PubSub.unsubscribe(token)
+    }
+
+    /**
      * Watch for changes to deployments the Kubernetes cluster.
+     * Does nothing if the watcher is already watching.
      * 
      * Note: returns a stream of all create, update, and delete events.
      *       It's up to the caller to filter and decide how to use events.
      */
-    static watch(): void {
+    private static watch(): void {
         if (K8Api.deploymentInformer != undefined) {
             // Don't attempt to setup more than one watcher
             return
@@ -230,26 +254,27 @@ spec:
         K8Api.deploymentInformer = makeInformer(kc, `/api/v1/namespaces/${this.NAMESPACE}/deployments`, listDeployments)
 
         K8Api.deploymentInformer.on('add', (event: V1Deployment) => {
-            this.eventStream.emit('addDeployment', event)
+            // eventName: addDeployment
+            PubSub.publish('addDeployment', event)
         })
 
         K8Api.deploymentInformer.on('update', (event: V1Deployment) => {
-            this.eventStream.emit('updateDeployment', event)
+            // eventName: updateDeployment
+            PubSub.publish('updateDeployment', event)
         })
 
         K8Api.deploymentInformer.on('delete', (event: V1Deployment) => {
-            this.eventStream.emit('deleteDeployment', event)
+            // eventName: deleteDeployment
+            PubSub.publish('deleteDeployment', event)
         })
 
         K8Api.deploymentInformer.start()
-
-        K8Api.eventStreamInitialized = true        
     }
 
     /**
      * Teardown the deployment watchers
      */
-    static stopWatch(): void {
+    private static stopWatch(): void {
         if (K8Api.deploymentInformer != undefined) {
             K8Api.deploymentInformer.off('add', () => {})
             K8Api.deploymentInformer.off('update', () => {})

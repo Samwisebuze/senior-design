@@ -2,7 +2,7 @@ import { assert } from 'chai'
 import { describe, it } from 'mocha'
 import { step } from 'mocha-steps'
 import { K8Api } from '../src/k8s'
-import { V1Deployment, V1DeploymentStatus } from '@kubernetes/client-node'
+import { V1Deployment } from '@kubernetes/client-node'
 
 
 /**
@@ -22,23 +22,14 @@ describe('Kubernetes API Test', () => {
         // In this test, wait for the Deployment to be stable
         // (all pods up and running), then, move on to the next test
         this.timeout(6000)
-        K8Api.watch()
 
         // Wait for deployment status to become 'OK'
-        K8Api.eventStream.on('addDeployment', (event: V1Deployment) => {
-            const deploymentStatus = event.status
-            if (deploymentStatus !== undefined && deploymentStatus.availableReplicas === 1) {
-                // deployment is ready!
-                K8Api.stopWatch()
-                done()
-            }
-        })
+        const subscriberToken = K8Api.subscribe('updateDeployment', (_: string, data: V1Deployment) => {
+            const deploymentStatus = data.status
 
-        K8Api.eventStream.on('updateDeployment', (event: V1Deployment) => {
-            const deploymentStatus = event.status
             if (deploymentStatus !== undefined && deploymentStatus.availableReplicas === 1) {
                 // deployment is ready!
-                K8Api.stopWatch()
+                K8Api.unsubscribe(subscriberToken)
                 done()
             }
         })
@@ -51,34 +42,25 @@ describe('Kubernetes API Test', () => {
         assert.equal(status!.availableReplicas, 1)
     })
 
-    // step('should return all containers in the namespace', async () => {
-    //     const pods = await K8Api.getContainers()
-    //     console.log(pods)
-    //     assert.isArray(pods)
-    // })
+    step('should return all containers in the namespace', async () => {
+        const pods = await K8Api.getContainers()
+        assert.isArray(pods)
+    })
 
-    //it('should return the containers in a deployment')
+    it('should return the containers in a deployment')
 
-    //it('should update a deployment')
+    it('should update a deployment')
 
-    // step('should delete a deployment', async () => {
-    //     const deleted = await K8Api.deleteDeployment('nginx-deployment')
-    //     assert.isTrue(deleted)
-    // })
+    step('should delete a deployment and watch for deployment to be deleted', async function(done) {
+        this.timeout(6000)
 
-    // step('should watch for deployment to be fully deleted', function(done) {
-    //     // In this test, wait for the Deployment to be fully deleted (all pods down)
-    //     this.timeout(6000)
-    //     // K8Api.watch()
+        const deleted = await K8Api.deleteDeployment('nginx-deployment')
+        assert.isTrue(deleted)
 
-    //     K8Api.eventStream.on('updateDeployment', (event: V1Deployment) => {
-    //         // const deploymentStatus = event.status
-    //         // if (deploymentStatus !== undefined && deploymentStatus.availableReplicas === 1) {
-    //         //     // deployment is ready!
-    //         //     done()
-    //         // }
-    //         console.log('deleted:', event)
-    //         done()
-    //     })
-    // })
+        // Watch for 'deleteDeployment' event
+        const subscriberToken = K8Api.subscribe('deleteDeployment', (_: string, data: V1Deployment) => {
+            K8Api.unsubscribe(subscriberToken)
+            done()
+        })
+    })
 })
