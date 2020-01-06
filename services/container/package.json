@@ -12,6 +12,7 @@
     "test:watch": "./node_modules/.bin/mocha -r ts-node/register test/**/*.ts --watch --watch-extensions ts"
   },
   "dependencies": {
+    "@kubernetes/client-node": "^0.11.0",
     "@typegoose/typegoose": "^6.2.1",
     "mongoose": "^5.8.4",
     "pubsub-js": "^1.8.0",
@@ -19,7 +20,6 @@
     "uuid": "^3.3.3"
   },
   "devDependencies": {
-    "@kubernetes/client-node": "^0.11.0",
     "@types/chai": "^4.2.7",
     "@types/mocha": "^5.2.7",
     "@types/mongoose": "^5.5.38",
