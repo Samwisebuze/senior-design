@@ -1,30 +1,43 @@
 import { assert } from 'chai'
-import { describe, it, Test } from 'mocha'
+import { describe, it } from 'mocha'
+import { step } from 'mocha-steps'
 import { createDeployment, shutdownDeployment } from '../src/index'
 import { Command } from 'shared-library-payload'
 
-const networkId = 'dummy-network-id' // in reality, this would be a uuid
+const networkId = 'network-uuid-here' // in reality, this would be a uuid
 
 describe('ContainerService Test', () => {
-    it('should create a new Network Deployment on Command', async () => {
+    step('should create a new Network Deployment on Command', async function() {
+        this.timeout(6000)
+
         const command = new Command(
             'DummyService',
             'CreateNetworkDeployment',
             { networkId: networkId }
         )
-        const response = await createDeployment(command)
+        const responseEvent = await createDeployment(command)
 
-        assert.isOk(response)
+        assert.isOk(responseEvent)
+        assert.equal(responseEvent.sender, 'ContainerService')
+        assert.equal(responseEvent.name, 'DidCreateNetwork')
+        assert.deepEqual(responseEvent.data, { networkId: networkId })
     })
 
-    it('should shutdown a Network Deployment on Command', async () => {
+    step('should update a Network Deployment on Command')
+
+    step('should shutdown a Network Deployment on Command', async function() {
+        this.timeout(6000)
+
         const command = new Command(
             'DummyService',
             'ShutdownNetworkDeployment',
             { networkId: networkId }
         )
-        const response = await shutdownDeployment(command)
+        const responseEvent = await shutdownDeployment(command)
 
-        assert.isOk(response)
+        assert.isOk(responseEvent)
+        assert.equal(responseEvent.sender, 'ContainerService')
+        assert.equal(responseEvent.name, 'DidShutdownNetwork')
+        assert.deepEqual(responseEvent.data, { networkId: networkId })
     })
 })

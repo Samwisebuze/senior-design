@@ -5,9 +5,14 @@ import { DeploymentModel, IDeployment, IDeploymentMachine } from './model'
 import { DeploymentContainer, DeploymentContainerPort } from './k8sDeploymentContainer'
 
 
+// TODO: replace with environment variable
+const MONGO_URI = 'mongodb://root:root@localhost:27017/'
+const MONGO_DBNAME = 'test'
+
 mongoose.set('useNewUrlParser', true)
 mongoose.set('useUnifiedTopology', true)
 mongoose.set('useCreateIndex', true)
+mongoose.set('useFindAndModify', false)
 
 
 /**
@@ -32,45 +37,49 @@ export const createDeployment = async (command: Command): Promise<Event> => {
     const networkId = <string>commandContent.networkId
 
     // Connect to mongoose
-    await mongoose.connect('mongodb://root:root@localhost:27017/', { dbName: 'test' })
+    await mongoose.connect(MONGO_URI, { dbName: MONGO_DBNAME })
 
-    // First, check if the deployment already exists
-    const deploymentExists = await DeploymentModel.findOne({ networkId: networkId, removed: false }).exec()
-    
+    // MongoDB: First, check if the deployment already exists
+    const deploymentExists = await DeploymentModel
+                                .findOne({ networkId: networkId, removed: false })
+                                .exec()
+
     if (deploymentExists != null) {
         // Nothing to do
-        return new Event('ContainerService', 'CreatedNetwork', { networkId })
+        return new Event('ContainerService', 'DidCreateNetwork', { networkId })
     }
 
-    // Carry out deployment
+    // K8s: Carry out deployment
     // TODO: get real machine configuration from incoming command
     const deploymentConfig = new DeploymentContainer(
         'nginx', 'nginx:1.17.6-alpine', [new DeploymentContainerPort(80)]
     )
     const [deploymentId, _] = await K8Api.createDeployment([deploymentConfig])
 
-    // Save deployment metadata for later usage
+    // MongoDB: Save deployment metadata for later usage
     const deploymentMetadata = new IDeployment()
     deploymentMetadata.deploymentId = deploymentId
     deploymentMetadata.networkId = networkId
     deploymentMetadata.ownerId = 'ownerid-here'
     deploymentMetadata.machines = []
-
     await DeploymentModel.create(deploymentMetadata)
 
-    // Test, retrieve what we just inserted
-    const result2 = await DeploymentModel.findOne({ deploymentId: deploymentId }).exec()
-    console.log('found result:', result2)
+    // MongoDB: Test, retrieve what we just inserted
+    await DeploymentModel
+            .findOne({ deploymentId: deploymentId })
+            .exec()
 
-    return new Event('ContainerService', 'CreatedNetwork', { networkId })
+    return new Event('ContainerService', 'DidCreateNetwork', { networkId })
 }
 
 
 /**
- * Update the given Network's Deployment. Save configuration updates
- * in MongoDB.
+ * Update the given Network's Deployment.
+ * Has the ability to add, modify, or delete individual containers.
+ * 
+ * Saves configuration updates in MongoDB.
  */
-const updateNetwork = () => {
+const updateNetwork = async (command: Command) => {
     // Find the Deployment configuration in MongoDB for the Network
     // If the Deployment configuration doesn't exist, then the Deployment 
 
@@ -87,25 +96,27 @@ export const shutdownDeployment = async (command: Command): Promise<Event> => {
     // @ts-ignore
     const networkId = <string>commandContent.networkId
 
-    await mongoose.connect('mongodb://root:root@localhost:27017/', { useNewUrlParser: true, useUnifiedTopology: true, dbName: 'test' })
+    await mongoose.connect(MONGO_URI, { dbName: MONGO_DBNAME })
 
-    // Given the networkId, get the corresponding deployment id
-    const result = await DeploymentModel.findOne({ networkId: networkId, removed: false }).exec()
-    console.log('found result:', result)
+    // MongoDB: Given the networkId, get the corresponding deployment id that is alive (not removed)
+    const result = await DeploymentModel
+                            .findOne({ networkId: networkId, removed: false })
+                            .exec()
 
     if (!result) {
         return new Event('ContainerService', 'ShutdownNetworkError', { networkId })
     }
 
-    const deploymentId = result?.deploymentId
-
     // K8s: Shutdown the network by it's deployment id
-    const removed = await K8Api.deleteDeployment(deploymentId)
+    const deploymentId = result.deploymentId
+    const didDelete = await K8Api.deleteDeployment(deploymentId)
 
-    if (removed) {
-        // Mark as removed in MongoDB
-        await DeploymentModel.findOneAndUpdate(result, { removed: true })
-        return new Event('ContainerService', 'ShutdownNetwork', { networkId })
+    if (didDelete) {
+        // MongoDB: Mark as removed
+        await DeploymentModel
+                .findOneAndUpdate({ deploymentId: deploymentId }, { removed: true })
+                .exec()
+        return new Event('ContainerService', 'DidShutdownNetwork', { networkId })
     }
 
     // Something went wrong
