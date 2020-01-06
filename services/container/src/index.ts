@@ -1,8 +1,13 @@
+const mongoose = require('mongoose')
 import { Command, Event } from 'shared-library-payload'
 import { K8Api } from './k8s'
 import { DeploymentModel, IDeployment, IDeploymentMachine } from './model'
-import * as mongoose from 'mongoose'
 import { DeploymentContainer, DeploymentContainerPort } from './k8sDeploymentContainer'
+
+
+mongoose.set('useNewUrlParser', true)
+mongoose.set('useUnifiedTopology', true)
+mongoose.set('useCreateIndex', true)
 
 
 /**
@@ -27,7 +32,7 @@ export const createDeployment = async (command: Command): Promise<Event> => {
     const networkId = <string>commandContent.networkId
 
     // Connect to mongoose
-    await mongoose.connect('mongodb://root:root@localhost:27017/', { useNewUrlParser: true, useUnifiedTopology: true, dbName: 'test' })
+    await mongoose.connect('mongodb://root:root@localhost:27017/', { dbName: 'test' })
 
     // First, check if the deployment already exists
     const deploymentExists = await DeploymentModel.findOne({ networkId: networkId, removed: false }).exec()

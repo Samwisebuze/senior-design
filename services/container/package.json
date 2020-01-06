@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@typegoose/typegoose": "^6.2.1",
-    "mongoose": "^5.8.2",
+    "mongoose": "^5.8.4",
     "pubsub-js": "^1.8.0",
     "shared-library-payload": "file:./../shared/payload/",
     "uuid": "^3.3.3"

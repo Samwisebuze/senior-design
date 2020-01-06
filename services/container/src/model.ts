@@ -62,7 +62,7 @@ class IDeployment {
 
 
 // Build Deployment Schema (remove the `_id` field - it's not needed here)
-const deploymentSchema = buildSchema(IDeployment, { _id: false, id: false })
+const deploymentSchema = buildSchema(IDeployment)
 
 // Build Deployment Model
 const DeploymentModel = addModelToTypegoose(mongoose.model('Deployment', deploymentSchema), IDeployment)
