@@ -1,7 +1,7 @@
 import { assert } from 'chai'
 import { describe, it } from 'mocha'
 import { step } from 'mocha-steps'
-import { createDeployment, shutdownDeployment } from '../src/index'
+import { createDeployment, shutdownDeployment } from '../src/deployment-controller'
 import { Command } from 'shared-library-payload'
 
 const networkId = 'network-uuid-here' // in reality, this would be a uuid
