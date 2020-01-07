@@ -2,7 +2,7 @@ import { assert } from 'chai'
 import { describe, it } from 'mocha'
 import { step } from 'mocha-steps'
 import { K8Api } from '../src/k8s'
-import { DeploymentContainer, DeploymentContainerPort } from '../src/k8sDeploymentContainer'
+import { DeploymentContainer } from '../src/k8sDeploymentContainer'
 import { V1Deployment } from '@kubernetes/client-node'
 
 
@@ -15,9 +15,7 @@ describe('Kubernetes API Test', () => {
     step('should call create a new deployment', async () => {
         const containerConfigs = [
             new DeploymentContainer(
-                'nginx',
-                'nginx:1.17.6-alpine',
-                [new DeploymentContainerPort(80)]
+                'nginx', 'nginx:1.17.6-alpine', [80]
             )
         ]
 
@@ -46,7 +44,9 @@ describe('Kubernetes API Test', () => {
         })
     })
 
-    it('should get status of a deployment', async () => {
+    step('should get status of a deployment', async function() {
+        this.timeout(7000)
+        await sleep(3000) // ????
         const status = await K8Api.getDeploymentStatus(deploymentId)
 
         assert.isTrue(status != undefined)
@@ -58,14 +58,14 @@ describe('Kubernetes API Test', () => {
         assert.isArray(containers)
     })
 
-    it('should return the containers in a deployment', async () => {
+    step('should return the containers in a deployment', async () => {
         const containers = await K8Api.getDeploymentContainers(deploymentId)
 
         assert.isArray(containers)
         assert.equal(containers.length, 1)
     })
 
-    it('should update a deployment')
+    step('should update a deployment')
 
     step('should delete a deployment and watch for deployment to be deleted', async function(done) {
         this.timeout(6000)
@@ -80,3 +80,9 @@ describe('Kubernetes API Test', () => {
         })
     })
 })
+
+function sleep(ms: number): any {
+    return new Promise(resolve => {
+        setTimeout(resolve, ms)
+    })
+}

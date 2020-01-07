@@ -1,7 +1,7 @@
 const uuidv4 = require('uuid/v4')
 const k8s = require('@kubernetes/client-node')
 import { KubeConfig, CoreV1Api, AppsV1Api, V1Deployment, makeInformer, Informer, V1DeploymentStatus } from '@kubernetes/client-node'
-import { DeploymentContainer } from '../src/k8sDeploymentContainer'
+import { DeploymentContainer } from './K8sDeploymentContainer'
 import PubSub from 'pubsub-js'
 import { IncomingMessage } from 'http'
 

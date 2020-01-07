@@ -1,13 +1,13 @@
 import { assert } from 'chai'
 import { describe, it } from 'mocha'
-import { DeploymentContainer, DeploymentContainerPort } from '../src/k8sDeploymentContainer'
+import { DeploymentContainer } from '../src/K8sDeploymentContainer'
 
 /**
  * Perform a smoke test of interacting with the k8s API
  */
 describe('Kubernetes DeploymentContainer', () => {
     it('should be well tested', () => {
-        const ports = [new DeploymentContainerPort(80)]
+        const ports = [80]
         const container = new DeploymentContainer('foo', 'nginx:1.17.6-alpine', ports)
 
         const actualJSON = container.toJSON()

@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 import { Command, Event } from 'shared-library-payload'
 import { K8Api } from './k8s'
 import { DeploymentModel, IDeployment, IDeploymentMachine } from './model'
-import { DeploymentContainer, DeploymentContainerPort } from './k8sDeploymentContainer'
+import { DeploymentContainer } from './K8sDeploymentContainer'
 
 
 // TODO: replace with environment variable
@@ -32,11 +32,14 @@ mongoose.set('useFindAndModify', false)
  */
 export const createDeployment = async (command: Command): Promise<Event> => {
     // Pretend that a Command to create a new network just came in
+    // TODO: This incoming data will be replaced with an incoming object of type Network
     const commandContent = command.data
     // @ts-ignore
     const networkId = <string>commandContent.networkId
+    // @ts-ignore
+    const deploymentContainers = <DeploymentContainer[]>commandContent.containers
 
-    // Connect to mongoose
+    // Connect to mongoose  TODO: move this connection to higher level
     await mongoose.connect(MONGO_URI, { dbName: MONGO_DBNAME })
 
     // MongoDB: First, check if the deployment already exists
@@ -50,24 +53,16 @@ export const createDeployment = async (command: Command): Promise<Event> => {
     }
 
     // K8s: Carry out deployment
-    // TODO: get real machine configuration from incoming command
-    const deploymentConfig = new DeploymentContainer(
-        'nginx', 'nginx:1.17.6-alpine', [new DeploymentContainerPort(80)]
-    )
-    const [deploymentId, _] = await K8Api.createDeployment([deploymentConfig])
+    // TODO: Convert incoming 
+    const [deploymentId, _] = await K8Api.createDeployment(deploymentContainers)
 
     // MongoDB: Save deployment metadata for later usage
     const deploymentMetadata = new IDeployment()
     deploymentMetadata.deploymentId = deploymentId
     deploymentMetadata.networkId = networkId
-    deploymentMetadata.ownerId = 'ownerid-here'
-    deploymentMetadata.machines = []
+    deploymentMetadata.ownerId = 'ownerid-here' // TODO
+    deploymentMetadata.machines = [] // TODO
     await DeploymentModel.create(deploymentMetadata)
-
-    // MongoDB: Test, retrieve what we just inserted
-    await DeploymentModel
-            .findOne({ deploymentId: deploymentId })
-            .exec()
 
     return new Event('ContainerService', 'DidCreateNetwork', { networkId })
 }

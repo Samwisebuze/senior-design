@@ -5,9 +5,9 @@
 export class DeploymentContainer {
     public readonly name: string
     public readonly image: string
-    public readonly ports: DeploymentContainerPort[]
+    public readonly ports: number[]
 
-    constructor(name: string, image: string, ports: DeploymentContainerPort[]) {
+    constructor(name: string, image: string, ports: number[]) {
         this.name = name
         this.image = image
         this.ports = ports
@@ -17,7 +17,9 @@ export class DeploymentContainer {
         return {
             name: this.name,
             image: this.image,
-            ports: this.ports.map(entry => entry.toJSON())
+            ports: this.ports.map(port => {
+                return { containerPort: port }
+            })
         }
     }
 }
