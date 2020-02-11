@@ -20,10 +20,14 @@
     "react-helmet": "^5.2.1"
   },
   "devDependencies": {
+    "@commitlint/cli": "^8.3.5",
+    "@commitlint/config-conventional": "^8.3.4",
     "@types/node": "^13.7.1",
     "@types/react": "^16.9.19",
     "@types/react-dom": "^16.9.5",
     "@types/react-helmet": "^5.0.15",
+    "husky": "^4.2.1",
+    "lint-staged": "^10.0.7",
     "prettier": "^1.19.1",
     "typescript": "^3.7.5"
   },
@@ -47,5 +51,17 @@
   },
   "bugs": {
     "url": "https://github.com/gatsbyjs/gatsby/issues"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "lint-staged": {
+    "src/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
+      "prettier --write",
+      "git add"
+    ]
   }
 }
