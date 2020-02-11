@@ -1,9 +1,9 @@
 {
-  "name": "gatsby-starter-default",
+  "name": "virtuoso-web",
   "private": true,
-  "description": "A simple starter to get up and developing quickly with Gatsby",
+  "description": "The frontend for Virtuoso",
   "version": "0.1.0",
-  "author": "Kyle Mathews <mathews.kyle@gmail.com>",
+  "author": "Nick Rook",
   "dependencies": {
     "gatsby": "^2.19.7",
     "gatsby-image": "^2.2.39",
@@ -31,10 +31,6 @@
     "prettier": "^1.19.1",
     "typescript": "^3.7.5"
   },
-  "keywords": [
-    "gatsby"
-  ],
-  "license": "MIT",
   "scripts": {
     "build": "gatsby build",
     "develop": "gatsby develop",
@@ -44,13 +40,6 @@
     "clean": "gatsby clean",
     "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1",
     "type-check": "tsc --noEmit"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/gatsbyjs/gatsby-starter-default"
-  },
-  "bugs": {
-    "url": "https://github.com/gatsbyjs/gatsby/issues"
   },
   "husky": {
     "hooks": {
