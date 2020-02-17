@@ -1,6 +1,6 @@
 # Service Name
 
-High Level Description
+The Network service defines a set of APIs and commands that enable clients to create, update, and delete network documents. 
 
 ## Installing
 
