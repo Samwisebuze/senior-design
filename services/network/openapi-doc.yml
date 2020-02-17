@@ -9,9 +9,6 @@ servers:
   - url: https:// dev.server.test/api
     description: Staging Release
 
-security:
-  - 
-
 paths:
   /network:
     get:
@@ -229,7 +226,7 @@ components:
       flows:
         authorizationCode:
           authorizationUrl: https://example.com/oauth/authorize
-          tokenUrl: https:// example.com/oauth/token
+          tokenUrl: https://example.com/oauth/token
           scopes:
             read: Grants read access.
             write: Grants write access.
