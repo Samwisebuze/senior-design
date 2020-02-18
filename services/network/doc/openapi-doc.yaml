@@ -1,0 +1,854 @@
+openapi: 3.0.2
+info:
+  title: Network Service
+  version: 0.1.0
+  description: 'The Network service defines a set of APIs and commands that enable clients to create, update, and delete network documents.'
+  contact:
+    name: Samuel Buzas
+    url: 'https://samuelbuzas.com'
+  license:
+    name: MIT
+servers:
+  - url: 'https://api.server.test/api'
+    description: Production
+  - url: 'https:// dev.server.test/api'
+    description: Staging Release
+paths:
+  /networks:
+    description: The Networks Collection Resource.
+    get:
+      description: Get a List of Networks.
+      tags:
+        - network
+      operationId: getNetworks
+      security:
+        - OAuth2:
+            - read
+        - BearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/networkNameFilterParam'
+        - $ref: '#/components/parameters/networkOwnerFilterParam'
+        - $ref: '#/components/parameters/networkSearchParam'
+      responses:
+        '200':
+          description: A List of Network Models.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Network_Full'
+              examples:
+                example-1: {}
+            application/xml:
+              schema:
+                type: object
+                properties: {}
+          headers:
+            X-Pagination:
+              schema:
+                type: string
+              description: |
+                Pagination Metadata
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '415':
+          $ref: '#/components/responses/UnsupportedMediaType'
+      summary: Get Networks
+    post:
+      description: Create a new Network.
+      tags:
+        - network
+      operationId: createNetwork
+      security:
+        - OAuth2:
+            - write
+        - BearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NetworkForCreation'
+      responses:
+        '201':
+          headers:
+            Location:
+              schema:
+                type: string
+                format: uri
+                description: A relative link to the newly created resource.
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Network_Full'
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Bad Request
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '415':
+          $ref: '#/components/responses/UnsupportedMediaType'
+      summary: Create Network
+  '/networks/{networkId}':
+    description: A Network Resource.
+    parameters:
+      - $ref: '#/components/parameters/networkIdParam'
+    get:
+      description: Get a Network resource.
+      tags:
+        - network
+      operationId: getNetworkById
+      security:
+        - OAuth2:
+            - read
+        - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Network_Full'
+            application/vnd.virtuoso.hateoas+json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Network_Full'
+                  links:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/HATEOASLink'
+            application/vnd.virtuoso.slim.hateoas+json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Network_Slim'
+                  links:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/HATEOASLink'
+          description: A Network Resource
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+        '401':
+          description: Unauthorized Access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Resource Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      summary: Get Network
+    patch:
+      description: Update a network resource using the JsonPatch specification.
+      tags:
+        - network
+      operationId: patchNetworkById
+      security:
+        - OAuth2:
+            - write
+        - BearerAuth: []
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateMachineCommand'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '415':
+          $ref: '#/components/responses/UnsupportedMediaType'
+    delete:
+      description: Delete a network resource.
+      tags:
+        - network
+      operationId: deleteNetworkById
+      security:
+        - OAuth2:
+            - write
+        - BearerAuth: []
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '415':
+          $ref: '#/components/responses/UnsupportedMediaType'
+  '/networks/{networkId}/machines':
+    description: The Machines of a Network Collection.
+    parameters:
+      - $ref: '#/components/parameters/networkIdParam'
+    get:
+      description: Gets a list of Machines in the Network.
+      tags:
+        - machine
+      security:
+        - OAuth2:
+            - read
+        - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Machine'
+            application/vnd.virtuoso.hateoas+json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Machine'
+                  links:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/HATEOASLink'
+          description: Ok
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '415':
+          description: Unsupported Media Type
+      operationId: getMachinesFromNetwork
+      summary: Get Machines in Network
+    post:
+      description: Add a new Machine to the network.
+      tags:
+        - machine
+      security:
+        - OAuth2:
+            - write
+        - BearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MachineForCreation'
+        description: Command to create a new Machine.
+      responses:
+        '201':
+          description: Created
+          headers:
+            Location:
+              schema:
+                type: string
+              description: URL to the newly created resouce
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Machine'
+            application/vnd.virtuoso.hateoas+json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Machine'
+                  links:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/HATEOASLink'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '415':
+          $ref: '#/components/responses/UnsupportedMediaType'
+      operationId: addMachineToNetwork
+      summary: Create Machine on Network
+  '/networks/{networkId}/machines/{machineId}':
+    description: A Network Machine Resource.
+    parameters:
+      - $ref: '#/components/parameters/networkIdParam'
+      - $ref: '#/components/parameters/machineIdParam'
+    get:
+      description: Get a Machine on the Network.
+      tags:
+        - machine
+      operationId: getMachineFromNetwork
+      security:
+        - OAuth2:
+            - read
+        - BearerAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Machine'
+            application/vnd.virtuoso.hateoas+json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Machine'
+                  links:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/HATEOASLink'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '415':
+          description: Unsupported Media Type
+    patch:
+      description: 'Update a Machine on the Network, using the JSON Patch specification.'
+      tags:
+        - machine
+      operationId: patchMachineFromNetwork
+      security:
+        - OAuth2:
+            - write
+        - BearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JsonPatch'
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      description: Remove a Machine from the Network.
+      tags:
+        - machine
+      operationId: removeMachineFromNetwork
+      security:
+        - OAuth2:
+            - write
+        - BearerAuth: []
+      responses:
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+    OAuth2:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: 'https://example.com/oauth/authorize'
+          tokenUrl: 'https://example.com/oauth/token'
+          scopes:
+            read: Grants read access.
+            write: Grants write access.
+            admin: grants access to admin operations.
+  parameters:
+    networkIdParam:
+      name: networkId
+      in: path
+      required: true
+      description: Network resource identifier.
+      schema:
+        type: string
+        format: uuid
+    machineIdParam:
+      name: machineId
+      in: path
+      required: true
+      description: Machine resource identifier.
+      schema:
+        type: string
+        format: uuid
+    networkOwnerFilterParam:
+      name: owner
+      in: query
+      required: false
+      description: Filter on network owner.
+      schema:
+        type: string
+        maxLength: 40
+    networkNameFilterParam:
+      name: name
+      in: query
+      required: false
+      description: Filter on the network name.
+      schema:
+        type: string
+        maxLength: 40
+    networkSearchParam:
+      name: search
+      in: query
+      required: false
+      description: Query String to search.
+      schema:
+        type: string
+        maxLength: 255
+  requestBodies:
+    CreateNetworkCommand:
+      description: Command to Created a Network.
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NetworkForCreation'
+    CreateMachineCommand:
+      description: Command to Created a Machine
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/MachineForCreation'
+    UpdateMachineCommand:
+      description: Command to Update a Machine
+      required: true
+      content:
+        application/json-patch+json:
+          schema:
+            $ref: '#/components/schemas/JsonPatch'
+  responses:
+    NotFound:
+      description: The specified resource was not found.
+      content:
+        application/json:
+          schema:
+            type: object
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Validation Errors
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    UnsupportedMediaType:
+      description: Unsupported Media Type
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NoContent:
+      description: '204, No Content'
+      content: {}
+    NetworkCollection:
+      description: A collection of Network objects.
+      headers:
+        X-Pagination:
+          schema:
+            additionalProperties: false
+            type: object
+            properties:
+              pageNumber:
+                type: integer
+                minimum: 1
+                maximum: 1000
+              totalPages:
+                type: integer
+                minimum: 1
+                maximum: 1000
+              totalCount:
+                type: integer
+                minimum: 0
+                maximum: 999999999
+              pageSize:
+                type: integer
+                minimum: 1
+                maximum: 25
+      content:
+        application/json:
+          schema:
+            description: An array of Networks.
+            type: array
+            maxItems: 25
+            items:
+              $ref: '#/components/schemas/Network_Full'
+        application/vnd.virtuoso.hateoas+json:
+          schema:
+            description: An HATEOAS response with data and links properties.
+            type: object
+            properties:
+              links:
+                type: array
+                maxItems: 100
+                items:
+                  $ref: '#/components/schemas/HATEOASLink'
+              data:
+                type: array
+                maxItems: 25
+                items:
+                  $ref: '#/components/schemas/Network_Full'
+    NetworkCreated:
+      description: Created Network.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Network_Full'
+    NetworkFetch:
+      description: Found
+      headers:
+        Cache-Control:
+          schema:
+            type: string
+            default: 'private, max-age=120000'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Network_Full'
+        application/vnd.virtuoso.full+json:
+          schema:
+            $ref: '#/components/schemas/Network_Full'
+        application/vnd.virtuoso.full.hateoas+json:
+          schema:
+            $ref: '#/components/schemas/Network_Full'
+        application/vnd.virtuoso.slim+json:
+          schema:
+            $ref: '#/components/schemas/Network_Slim'
+        application/vnd.virtuoso.slim.hateoas+json:
+          schema:
+            $ref: '#/components/schemas/Network_Slim'
+    MachineCollection:
+      description: A collection of Machine Resources
+      headers:
+        X-Pagination:
+          schema:
+            additionalProperties: false
+            type: object
+            properties:
+              pageNumber:
+                type: integer
+                minimum: 1
+                maximum: 1000
+              totalPages:
+                type: integer
+                minimum: 1
+                maximum: 1000
+              totalCount:
+                type: integer
+                minimum: 0
+                maximum: 999999999
+              pageSize:
+                type: integer
+                minimum: 1
+                maximum: 25
+      content:
+        application/json:
+          schema:
+            type: array
+            maxItems: 25
+            items:
+              $ref: '#/components/schemas/Machine'
+        application/vnd.virtuoso.hateoas+json:
+          schema:
+            type: object
+            properties:
+              links:
+                type: array
+                maxItems: 100
+                items:
+                  $ref: '#/components/schemas/HATEOASLink'
+              data:
+                type: array
+                maxItems: 25
+                items:
+                  $ref: '#/components/schemas/Machine'
+    MachineFetch:
+      description: A Machine Resource.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Machine'
+    MachineCreated:
+      description: Created a Machine.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Machine'
+  schemas:
+    NetworkForCreation:
+      description: A Network model for a POST request.
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+          maxLength: 255
+          description: A unique name for the network.
+        owner:
+          type: string
+          format: uuid
+          description: The ID of the user who created the network.
+    Network_Full:
+      description: A Network Model with all of available properties.
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: UUID
+        name:
+          type: string
+          maxLength: 255
+          description: A unique name for the network.
+        owner:
+          type: string
+          description: The ID of the user who created the network.
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        subNetworks:
+          type: array
+          maxItems: 100
+          items:
+            type: string
+            format: uuid
+          description: An Array of Sub-Networks.
+        Machines:
+          type: array
+          maxItems: 100
+          items:
+            $ref: '#/components/schemas/Machine'
+      title: Network Model
+    Network_Slim:
+      description: A slim version of the network model.
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: UUID
+        name:
+          type: string
+          description: A unique name for the network.
+        owner:
+          type: string
+          description: The ID of the user who created the network.
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      title: Network Model
+    Machine:
+      description: A Machine Model
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          format: uuid
+        address:
+          type: string
+          format: ipv4
+        imageName:
+          type: string
+        network:
+          type: object
+          properties:
+            openPorts:
+              type: array
+              maxItems: 100
+              items:
+                type: integer
+                minimum: 1
+                maximum: 65535
+            networks:
+              type: array
+              maxItems: 100
+              items:
+                type: string
+                format: uuid
+            adjacentMachines:
+              type: array
+              maxItems: 100
+              items:
+                type: string
+                format: uuid
+    MachineForCreation:
+      description: A Machine model for a POST request
+      type: object
+      additionalProperties: false
+      properties:
+        address:
+          type: string
+          format: ipv4
+        imageName:
+          type: string
+        openPorts:
+          type: array
+          maxItems: 100
+          items:
+            type: integer
+            minimum: 1
+            maximum: 65535
+    JsonPatch:
+      description: JsonPatch Document Model
+      externalDocs:
+        url: 'https://tools.ietf.org/html/rfc6902'
+      type: array
+      maxItems: 10
+      items:
+        type: object
+        required:
+          - op
+          - path
+        properties:
+          op:
+            type: string
+            enum:
+              - add
+              - remove
+              - replace
+              - copy
+              - move
+              - test
+          path:
+            type: string
+            pattern: '([/]([a-z][a-zA-Z]+))+'
+          from:
+            type: string
+            pattern: '([/]([a-z][a-zA-Z]+))+'
+          value:
+            type: string
+      title: Json Patch Document
+    HATEOASLink:
+      description: HATEOAS Link Model
+      externalDocs:
+        url: 'https://tools.ietf.org/html/rfc5988'
+      type: object
+      additionalProperties: false
+      properties:
+        href:
+          type: string
+          pattern: '([/][a-z0-9][a-zA-Z0-9]+[/]*)'
+        rel:
+          type: string
+          maxLength: 100
+        type:
+          type: string
+          maxLength: 6
+          pattern: '([A-Z]+)'
+      title: HATEOAS Link
+    Error:
+      description: Error Model
+      externalDocs:
+        url: 'https://tools.ietf.org/html/rfc7807'
+      additionalProperties: false
+      type: object
+      properties:
+        errors:
+          type: array
+          maxItems: 100
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+                format: url
+              title:
+                type: string
+              detail:
+                type: string
+              instance:
+                type: string
+                format: uri
+              status:
+                type: integer
+                minimum: 100
+                maximum: 599
+              errors:
+                type: array
+                items:
+                  type: object
+            required:
+              - type
+              - title
+              - status
+      title: Error
+tags:
+  - name: machine
+    description: Everything to do with Machines.
+  - name: network
+    description: Everything to do with Networks
