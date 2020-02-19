@@ -25,6 +25,8 @@ module.exports = {
   },
   plugins: ["react", "@typescript-eslint", "react-hooks"],
   rules: {
+    "no-unused-vars": 0,
+    
     "import/no-useless-path-segments": 1,
     "import/no-unresolved": 0,
     "import/extensions": 0,
