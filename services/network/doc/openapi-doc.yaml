@@ -11,7 +11,7 @@ info:
 servers:
   - url: 'https://api.server.test/api'
     description: Production
-  - url: 'https:// dev.server.test/api'
+  - url: 'https://dev.server.test/api'
     description: Staging Release
 paths:
   /networks:
@@ -179,17 +179,26 @@ paths:
         $ref: '#/components/requestBodies/UpdateMachineCommand'
       responses:
         '204':
-          $ref: '#/components/responses/NoContent'
+          description: No Content
         '400':
-          $ref: '#/components/responses/BadRequest'
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
         '401':
-          $ref: '#/components/responses/Unauthorized'
+          description: Not Authorized
         '403':
-          $ref: '#/components/responses/Unauthorized'
+          description: Forbidden
         '404':
-          $ref: '#/components/responses/NotFound'
+          description: Not Found
         '415':
-          $ref: '#/components/responses/UnsupportedMediaType'
+          description: Unsuported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      summary: Update Network
     delete:
       description: Delete a network resource.
       tags:
@@ -201,15 +210,20 @@ paths:
         - BearerAuth: []
       responses:
         '204':
-          $ref: '#/components/responses/NoContent'
+          description: No Content
         '401':
-          $ref: '#/components/responses/Unauthorized'
+          description: Unauthorized
         '403':
-          $ref: '#/components/responses/Unauthorized'
+          description: Forbidden
         '404':
-          $ref: '#/components/responses/NotFound'
+          description: Not Found
         '415':
-          $ref: '#/components/responses/UnsupportedMediaType'
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      summary: Delete Network
   '/networks/{networkId}/machines':
     description: The Machines of a Network Collection.
     parameters:
@@ -243,6 +257,12 @@ paths:
                     items:
                       $ref: '#/components/schemas/HATEOASLink'
           description: Ok
+          headers:
+            X-Pagination:
+              schema:
+                type: string
+              description: |
+                Pagination MetaData
         '401':
           description: Unauthorized
         '403':
@@ -251,8 +271,23 @@ paths:
           description: Not Found
         '415':
           description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
       operationId: getMachinesFromNetwork
       summary: Get Machines in Network
+      parameters:
+        - in: query
+          name: search
+          description: Search Query String
+          schema:
+            type: string
+        - schema:
+            type: string
+          in: query
+          name: image
+          description: Filter by Image-name
     post:
       description: Add a new Machine to the network.
       tags:
@@ -274,7 +309,7 @@ paths:
             Location:
               schema:
                 type: string
-              description: URL to the newly created resouce
+              description: URL to the newly created resource.
           content:
             application/json:
               schema:
@@ -298,7 +333,7 @@ paths:
         '415':
           $ref: '#/components/responses/UnsupportedMediaType'
       operationId: addMachineToNetwork
-      summary: Create Machine on Network
+      summary: Create Machine in Network
   '/networks/{networkId}/machines/{machineId}':
     description: A Network Machine Resource.
     parameters:
@@ -338,6 +373,11 @@ paths:
           description: Not Found
         '415':
           description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      summary: Get A Machine In Network
     patch:
       description: 'Update a Machine on the Network, using the JSON Patch specification.'
       tags:
@@ -352,6 +392,10 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/JsonPatch'
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/JsonPatch'
+        description: ''
       responses:
         '204':
           description: No Content
@@ -373,6 +417,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+      summary: Update Machine In Network
     delete:
       description: Remove a Machine from the Network.
       tags:
@@ -391,21 +436,19 @@ paths:
           description: Forbidden
         '404':
           description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
         '415':
           description: Unsupported Media Type
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+      summary: Delete A Machine In Network
 components:
   securitySchemes:
     BearerAuth:
       type: http
       scheme: bearer
+      description: JWT Token
     OAuth2:
       type: oauth2
       flows:
