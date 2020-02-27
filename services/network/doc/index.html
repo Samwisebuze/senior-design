@@ -1130,7 +1130,7 @@ ul.nav-tabs {
                       <article id="api-Machine-addMachineToNetwork-0" data-group="User" data-name="addMachineToNetwork" data-version="0">
                         <div class="pull-left">
                           <h1>addMachineToNetwork</h1>
-                          <p></p>
+                          <p>Create Machine in Network</p>
                         </div>
                         <div class="pull-right"></div>
                         <div class="clearfix"></div>
@@ -1159,7 +1159,7 @@ ul.nav-tabs {
 
                         <div class="tab-content">
                           <div class="tab-pane active" id="examples-Machine-addMachineToNetwork-0-curl">
-                            <pre class="prettyprint"><code class="language-bsh">curl -X POST -H "Accept: application/json,application/problem+json" -H "Content-Type: application/json" -H "Authorization: Basic [[basicHash]]" "https://api.server.test/api/networks/{networkId}/machines"</code></pre>
+                            <pre class="prettyprint"><code class="language-bsh">curl -X POST -H "Accept: application/json,application/vnd.virtuoso.hateoas+json,application/problem+json" -H "Content-Type: application/json" -H "Authorization: Basic [[basicHash]]" "https://api.server.test/api/networks/{networkId}/machines"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Machine-addMachineToNetwork-0-java">
                             <pre class="prettyprint"><code class="language-java">import org.openapitools.client.*;
@@ -1235,10 +1235,11 @@ public class MachineApiExample {
 [apiConfig setAccessToken:@"YOUR_ACCESS_TOKEN"];
 
 UUID *networkId = 38400000-8cf0-11bd-b23e-10b96e4ef00d; // Network resource identifier. (default to null)
-MachineForCreation *machineForCreation = ; // 
+MachineForCreation *machineForCreation = ; //  (optional)
 
 MachineApi *apiInstance = [[MachineApi alloc] init];
 
+// Create Machine in Network
 [apiInstance addMachineToNetworkWith:networkId
     machineForCreation:machineForCreation
               completionHandler: ^(Machine output, NSError* error) {
@@ -1267,7 +1268,9 @@ OAuth2.accessToken = "YOUR ACCESS TOKEN"
 
 var api = new NetworkService.MachineApi()
 var networkId = 38400000-8cf0-11bd-b23e-10b96e4ef00d; // {UUID} Network resource identifier.
-var machineForCreation = ; // {MachineForCreation} 
+var opts = {
+  'machineForCreation':  // {MachineForCreation} 
+};
 
 var callback = function(error, data, response) {
   if (error) {
@@ -1276,7 +1279,7 @@ var callback = function(error, data, response) {
     console.log('API called successfully. Returned data: ' + data);
   }
 };
-api.addMachineToNetwork(networkId, machineForCreation, callback);
+api.addMachineToNetwork(networkId, opts, callback);
 </code></pre>
                             </div>
 
@@ -1305,10 +1308,11 @@ namespace Example
 
             var apiInstance = new MachineApi();
             var networkId = new UUID(); // UUID | Network resource identifier. (default to null)
-            var machineForCreation = new MachineForCreation(); // MachineForCreation | 
+            var machineForCreation = new MachineForCreation(); // MachineForCreation |  (optional) 
 
             try
             {
+                // Create Machine in Network
                 Machine result = apiInstance.addMachineToNetwork(networkId, machineForCreation);
                 Debug.WriteLine(result);
             }
@@ -1385,10 +1389,11 @@ openapi_client.configuration.access_token = 'YOUR_ACCESS_TOKEN'
 # create an instance of the API class
 api_instance = openapi_client.MachineApi()
 networkId = 38400000-8cf0-11bd-b23e-10b96e4ef00d # UUID | Network resource identifier. (default to null)
-machineForCreation =  # MachineForCreation | 
+machineForCreation =  # MachineForCreation |  (optional)
 
 try: 
-    api_response = api_instance.add_machine_to_network(networkId, machineForCreation)
+    # Create Machine in Network
+    api_response = api_instance.add_machine_to_network(networkId, machineForCreation=machineForCreation)
     pprint(api_response)
 except ApiException as e:
     print("Exception when calling MachineApi->addMachineToNetwork: %s\n" % e)</code></pre>
@@ -1463,9 +1468,9 @@ Network resource identifier.
                                 <th width="150px">Name</th>
                                 <th>Description</th>
                               </tr>
-                                <tr><td style="width:150px;">machineForCreation <span style="color:red;">*</span></td>
+                                <tr><td style="width:150px;">machineForCreation </td>
 <td>
-<p class="marked">Command to Created a Machine</p>
+<p class="marked">Command to create a new Machine.</p>
 <script>
 $(document).ready(function() {
   var schemaWrapper = ;
@@ -1497,7 +1502,7 @@ $(document).ready(function() {
                             <h3 id="examples-Machine-addMachineToNetwork-title-201"></h3>
                             <p id="examples-Machine-addMachineToNetwork-description-201" class="marked"></p>
                             <script>
-                              var responseMachine201_description = `Created a Machine.`;
+                              var responseMachine201_description = `Created`;
                               var responseMachine201_description_break = responseMachine201_description.indexOf('\n');
                               if (responseMachine201_description_break == -1) {
                                 $("#examples-Machine-addMachineToNetwork-title-201").text("Status: 201 - " + responseMachine201_description);
@@ -1515,6 +1520,9 @@ $(document).ready(function() {
 
 
 
+                                <li class="">
+                                  <a data-toggle="tab" href="#responses-addMachineToNetwork-201-headers">Headers</a>
+                                </li>
 
                             </ul>
 
@@ -1525,11 +1533,37 @@ $(document).ready(function() {
                                     <script>
                                       $(document).ready(function() {
                                         var schemaWrapper = {
-  "description" : "Created a Machine.",
+  "description" : "Created",
+  "headers" : {
+    "Location" : {
+      "description" : "URL to the newly created resource.",
+      "style" : "simple",
+      "explode" : false,
+      "schema" : {
+        "type" : "string"
+      }
+    }
+  },
   "content" : {
     "application/json" : {
       "schema" : {
         "$ref" : "#/components/schemas/Machine"
+      }
+    },
+    "application/vnd.virtuoso.hateoas+json" : {
+      "schema" : {
+        "type" : "object",
+        "properties" : {
+          "data" : {
+            "$ref" : "#/components/schemas/Machine"
+          },
+          "links" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/HATEOASLink"
+            }
+          }
+        }
       }
     }
   }
@@ -1554,6 +1588,22 @@ $(document).ready(function() {
                                   </div>
                                   <input id='responses-Machine-addMachineToNetwork-201-schema-data' type='hidden' value=''></input>
                                 </div>
+                                  <div class="tab-pane" id="responses-addMachineToNetwork-201-headers">
+                                      <table>
+                                          <tr>
+                                              <th width="150px">Name</th>
+                                              <th width="100px">Type</th>
+                                              <th width="100px">Format</th>
+                                              <th>Description</th>
+                                          </tr>
+                                              <tr>
+                                                  <td>Location</td>
+                                                  <td>String</td>
+                                                  <td></td>
+                                                  <td>URL to the newly created resource.</td>
+                                              </tr>
+                                      </table>
+                                  </div>
                             </div>
                             <h3 id="examples-Machine-addMachineToNetwork-title-400"></h3>
                             <p id="examples-Machine-addMachineToNetwork-description-400" class="marked"></p>
@@ -1806,7 +1856,7 @@ $(document).ready(function() {
                       <article id="api-Machine-getMachineFromNetwork-0" data-group="User" data-name="getMachineFromNetwork" data-version="0">
                         <div class="pull-left">
                           <h1>getMachineFromNetwork</h1>
-                          <p></p>
+                          <p>Get A Machine In Network</p>
                         </div>
                         <div class="pull-right"></div>
                         <div class="clearfix"></div>
@@ -1915,6 +1965,7 @@ UUID *machineId = 38400000-8cf0-11bd-b23e-10b96e4ef00d; // Machine resource iden
 
 MachineApi *apiInstance = [[MachineApi alloc] init];
 
+// Get A Machine In Network
 [apiInstance getMachineFromNetworkWith:networkId
     machineId:machineId
               completionHandler: ^(Machine output, NSError* error) {
@@ -1985,6 +2036,7 @@ namespace Example
 
             try
             {
+                // Get A Machine In Network
                 Machine result = apiInstance.getMachineFromNetwork(networkId, machineId);
                 Debug.WriteLine(result);
             }
@@ -2064,6 +2116,7 @@ networkId = 38400000-8cf0-11bd-b23e-10b96e4ef00d # UUID | Network resource ident
 machineId = 38400000-8cf0-11bd-b23e-10b96e4ef00d # UUID | Machine resource identifier. (default to null)
 
 try: 
+    # Get A Machine In Network
     api_response = api_instance.get_machine_from_network(networkId, machineId)
     pprint(api_response)
 except ApiException as e:
@@ -2321,12 +2374,51 @@ Machine resource identifier.
 
 
                             <ul id="responses-detail-Machine-getMachineFromNetwork-415" class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-Machine-getMachineFromNetwork-415-schema">Schema</a>
+                                </li>
+
+
 
 
                             </ul>
 
 
                             <div class="tab-content" id="responses-Machine-getMachineFromNetwork-415-wrapper" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-Machine-getMachineFromNetwork-415-schema">
+                                  <div id="responses-Machine-getMachineFromNetwork-schema-415" class="exampleStyle">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "Unsupported Media Type",
+  "content" : {
+    "application/json" : {
+      "schema" : {
+        "$ref" : "#/components/schemas/Error"
+      }
+    }
+  }
+};
+                                        var schema = schemaWrapper.schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.definitions = Object.assign({}, defs);
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-Machine-getMachineFromNetwork-415-schema-data').val(JSON.stringify(schema));
+                                        var result = $('#responses-Machine-getMachineFromNetwork-schema-415');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-Machine-getMachineFromNetwork-415-schema-data' type='hidden' value=''></input>
+                                </div>
                             </div>
                         </article>
                       </div>
@@ -2335,7 +2427,7 @@ Machine resource identifier.
                       <article id="api-Machine-getMachinesFromNetwork-0" data-group="User" data-name="getMachinesFromNetwork" data-version="0">
                         <div class="pull-left">
                           <h1>getMachinesFromNetwork</h1>
-                          <p></p>
+                          <p>Get Machines in Network</p>
                         </div>
                         <div class="pull-right"></div>
                         <div class="clearfix"></div>
@@ -2364,7 +2456,7 @@ Machine resource identifier.
 
                         <div class="tab-content">
                           <div class="tab-pane active" id="examples-Machine-getMachinesFromNetwork-0-curl">
-                            <pre class="prettyprint"><code class="language-bsh">curl -X GET -H "Accept: application/json,application/vnd.virtuoso.hateoas+json,application/problem+json" -H "Authorization: Basic [[basicHash]]" "https://api.server.test/api/networks/{networkId}/machines"</code></pre>
+                            <pre class="prettyprint"><code class="language-bsh">curl -X GET -H "Accept: application/json,application/vnd.virtuoso.hateoas+json" -H "Authorization: Basic [[basicHash]]" "https://api.server.test/api/networks/{networkId}/machines?search=&image="</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Machine-getMachinesFromNetwork-0-java">
                             <pre class="prettyprint"><code class="language-java">import org.openapitools.client.*;
@@ -2394,8 +2486,10 @@ public class MachineApiExample {
 
         MachineApi apiInstance = new MachineApi();
         UUID networkId = 38400000-8cf0-11bd-b23e-10b96e4ef00d; // UUID | Network resource identifier.
+        String search = search_example; // String | Search Query String
+        String image = image_example; // String | Filter by Image-name
         try {
-            array[Machine] result = apiInstance.getMachinesFromNetwork(networkId);
+            array[Machine] result = apiInstance.getMachinesFromNetwork(networkId, search, image);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling MachineApi#getMachinesFromNetwork");
@@ -2414,8 +2508,10 @@ public class MachineApiExample {
     public static void main(String[] args) {
         MachineApi apiInstance = new MachineApi();
         UUID networkId = 38400000-8cf0-11bd-b23e-10b96e4ef00d; // UUID | Network resource identifier.
+        String search = search_example; // String | Search Query String
+        String image = image_example; // String | Filter by Image-name
         try {
-            array[Machine] result = apiInstance.getMachinesFromNetwork(networkId);
+            array[Machine] result = apiInstance.getMachinesFromNetwork(networkId, search, image);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling MachineApi#getMachinesFromNetwork");
@@ -2438,10 +2534,15 @@ public class MachineApiExample {
 [apiConfig setAccessToken:@"YOUR_ACCESS_TOKEN"];
 
 UUID *networkId = 38400000-8cf0-11bd-b23e-10b96e4ef00d; // Network resource identifier. (default to null)
+String *search = search_example; // Search Query String (optional) (default to null)
+String *image = image_example; // Filter by Image-name (optional) (default to null)
 
 MachineApi *apiInstance = [[MachineApi alloc] init];
 
+// Get Machines in Network
 [apiInstance getMachinesFromNetworkWith:networkId
+    search:search
+    image:image
               completionHandler: ^(array[Machine] output, NSError* error) {
                             if (output) {
                                 NSLog(@"%@", output);
@@ -2468,6 +2569,10 @@ OAuth2.accessToken = "YOUR ACCESS TOKEN"
 
 var api = new NetworkService.MachineApi()
 var networkId = 38400000-8cf0-11bd-b23e-10b96e4ef00d; // {UUID} Network resource identifier.
+var opts = {
+  'search': search_example, // {String} Search Query String
+  'image': image_example // {String} Filter by Image-name
+};
 
 var callback = function(error, data, response) {
   if (error) {
@@ -2476,7 +2581,7 @@ var callback = function(error, data, response) {
     console.log('API called successfully. Returned data: ' + data);
   }
 };
-api.getMachinesFromNetwork(networkId, callback);
+api.getMachinesFromNetwork(networkId, opts, callback);
 </code></pre>
                             </div>
 
@@ -2505,10 +2610,13 @@ namespace Example
 
             var apiInstance = new MachineApi();
             var networkId = new UUID(); // UUID | Network resource identifier. (default to null)
+            var search = search_example;  // String | Search Query String (optional)  (default to null)
+            var image = image_example;  // String | Filter by Image-name (optional)  (default to null)
 
             try
             {
-                array[Machine] result = apiInstance.getMachinesFromNetwork(networkId);
+                // Get Machines in Network
+                array[Machine] result = apiInstance.getMachinesFromNetwork(networkId, search, image);
                 Debug.WriteLine(result);
             }
             catch (Exception e)
@@ -2533,9 +2641,11 @@ OpenAPITools\Client\Configuration::getDefaultConfiguration()->setAccessToken('YO
 
 $api_instance = new OpenAPITools\Client\Api\MachineApi();
 $networkId = 38400000-8cf0-11bd-b23e-10b96e4ef00d; // UUID | Network resource identifier.
+$search = search_example; // String | Search Query String
+$image = image_example; // String | Filter by Image-name
 
 try {
-    $result = $api_instance->getMachinesFromNetwork($networkId);
+    $result = $api_instance->getMachinesFromNetwork($networkId, $search, $image);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling MachineApi->getMachinesFromNetwork: ', $e->getMessage(), PHP_EOL;
@@ -2556,9 +2666,11 @@ $WWW::OPenAPIClient::Configuration::access_token = 'YOUR_ACCESS_TOKEN';
 
 my $api_instance = WWW::OPenAPIClient::MachineApi->new();
 my $networkId = 38400000-8cf0-11bd-b23e-10b96e4ef00d; # UUID | Network resource identifier.
+my $search = search_example; # String | Search Query String
+my $image = image_example; # String | Filter by Image-name
 
 eval { 
-    my $result = $api_instance->getMachinesFromNetwork(networkId => $networkId);
+    my $result = $api_instance->getMachinesFromNetwork(networkId => $networkId, search => $search, image => $image);
     print Dumper($result);
 };
 if ($@) {
@@ -2582,9 +2694,12 @@ openapi_client.configuration.access_token = 'YOUR_ACCESS_TOKEN'
 # create an instance of the API class
 api_instance = openapi_client.MachineApi()
 networkId = 38400000-8cf0-11bd-b23e-10b96e4ef00d # UUID | Network resource identifier. (default to null)
+search = search_example # String | Search Query String (optional) (default to null)
+image = image_example # String | Filter by Image-name (optional) (default to null)
 
 try: 
-    api_response = api_instance.get_machines_from_network(networkId)
+    # Get Machines in Network
+    api_response = api_instance.get_machines_from_network(networkId, search=search, image=image)
     pprint(api_response)
 except ApiException as e:
     print("Exception when calling MachineApi->getMachinesFromNetwork: %s\n" % e)</code></pre>
@@ -2595,9 +2710,11 @@ except ApiException as e:
 
 pub fn main() {
     let networkId = 38400000-8cf0-11bd-b23e-10b96e4ef00d; // UUID
+    let search = search_example; // String
+    let image = image_example; // String
 
     let mut context = MachineApi::Context::default();
-    let result = client.getMachinesFromNetwork(networkId, &context).wait();
+    let result = client.getMachinesFromNetwork(networkId, search, image, &context).wait();
     println!("{:?}", result);
 
 }
@@ -2654,12 +2771,59 @@ Network resource identifier.
 
 
 
+                            <div class="methodsubtabletitle">Query parameters</div>
+                            <table id="methodsubtable">
+                              <tr>
+                                <th width="150px">Name</th>
+                                <th>Description</th>
+                              </tr>
+                                <tr><td style="width:150px;">search</td>
+<td>
+
+
+    <div id="d2e199_getMachinesFromNetwork_search">
+        <div class="json-schema-view">
+            <div class="primitive">
+                <span class="type">
+                    String
+                </span>
+
+                    <div class="inner description marked">
+Search Query String
+                    </div>
+            </div>
+        </div>
+    </div>
+</td>
+</tr>
+
+                                <tr><td style="width:150px;">image</td>
+<td>
+
+
+    <div id="d2e199_getMachinesFromNetwork_image">
+        <div class="json-schema-view">
+            <div class="primitive">
+                <span class="type">
+                    String
+                </span>
+
+                    <div class="inner description marked">
+Filter by Image-name
+                    </div>
+            </div>
+        </div>
+    </div>
+</td>
+</tr>
+
+                            </table>
 
                           <h2>Responses</h2>
                             <h3 id="examples-Machine-getMachinesFromNetwork-title-200"></h3>
                             <p id="examples-Machine-getMachinesFromNetwork-description-200" class="marked"></p>
                             <script>
-                              var responseMachine200_description = `A collection of Machine Resources`;
+                              var responseMachine200_description = `Ok`;
                               var responseMachine200_description_break = responseMachine200_description.indexOf('\n');
                               if (responseMachine200_description_break == -1) {
                                 $("#examples-Machine-getMachinesFromNetwork-title-200").text("Status: 200 - " + responseMachine200_description);
@@ -2690,43 +2854,20 @@ Network resource identifier.
                                     <script>
                                       $(document).ready(function() {
                                         var schemaWrapper = {
-  "description" : "A collection of Machine Resources",
+  "description" : "Ok",
   "headers" : {
     "X-Pagination" : {
+      "description" : "Pagination MetaData\n",
       "style" : "simple",
       "explode" : false,
       "schema" : {
-        "type" : "object",
-        "properties" : {
-          "pageNumber" : {
-            "maximum" : 1000,
-            "minimum" : 1,
-            "type" : "integer"
-          },
-          "totalPages" : {
-            "maximum" : 1000,
-            "minimum" : 1,
-            "type" : "integer"
-          },
-          "totalCount" : {
-            "maximum" : 999999999,
-            "minimum" : 0,
-            "type" : "integer"
-          },
-          "pageSize" : {
-            "maximum" : 25,
-            "minimum" : 1,
-            "type" : "integer"
-          }
-        },
-        "additionalProperties" : false
+        "type" : "string"
       }
     }
   },
   "content" : {
     "application/json" : {
       "schema" : {
-        "maxItems" : 25,
         "type" : "array",
         "items" : {
           "$ref" : "#/components/schemas/Machine"
@@ -2737,18 +2878,16 @@ Network resource identifier.
       "schema" : {
         "type" : "object",
         "properties" : {
-          "links" : {
-            "maxItems" : 100,
-            "type" : "array",
-            "items" : {
-              "$ref" : "#/components/schemas/HATEOASLink"
-            }
-          },
           "data" : {
-            "maxItems" : 25,
             "type" : "array",
             "items" : {
               "$ref" : "#/components/schemas/Machine"
+            }
+          },
+          "links" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/HATEOASLink"
             }
           }
         }
@@ -2786,9 +2925,10 @@ Network resource identifier.
                                           </tr>
                                               <tr>
                                                   <td>XMinusPagination</td>
-                                                  <td>Object</td>
+                                                  <td>String</td>
                                                   <td></td>
-                                                  <td></td>
+                                                  <td>Pagination MetaData
+</td>
                                               </tr>
                                       </table>
                                   </div>
@@ -2808,56 +2948,17 @@ Network resource identifier.
 
 
                             <ul id="responses-detail-Machine-getMachinesFromNetwork-401" class="nav nav-tabs nav-tabs-examples" >
-                                <li class="active">
-                                  <a data-toggle="tab" href="#responses-Machine-getMachinesFromNetwork-401-schema">Schema</a>
-                                </li>
-
-
 
 
                             </ul>
 
 
                             <div class="tab-content" id="responses-Machine-getMachinesFromNetwork-401-wrapper" style='margin-bottom: 10px;'>
-                                <div class="tab-pane active" id="responses-Machine-getMachinesFromNetwork-401-schema">
-                                  <div id="responses-Machine-getMachinesFromNetwork-schema-401" class="exampleStyle">
-                                    <script>
-                                      $(document).ready(function() {
-                                        var schemaWrapper = {
-  "description" : "Unauthorized",
-  "content" : {
-    "application/problem+json" : {
-      "schema" : {
-        "$ref" : "#/components/schemas/Error"
-      }
-    }
-  }
-};
-                                        var schema = schemaWrapper.schema;
-                                        if (schema.$ref != null) {
-                                          schema = defsParser.$refs.get(schema.$ref);
-                                        } else {
-                                          schemaWrapper.definitions = Object.assign({}, defs);
-                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
-                                            console.log(err);
-                                          });
-                                        }
-
-                                        var view = new JSONSchemaView(schema, 3);
-                                        $('#responses-Machine-getMachinesFromNetwork-401-schema-data').val(JSON.stringify(schema));
-                                        var result = $('#responses-Machine-getMachinesFromNetwork-schema-401');
-                                        result.empty();
-                                        result.append(view.render());
-                                      });
-                                    </script>
-                                  </div>
-                                  <input id='responses-Machine-getMachinesFromNetwork-401-schema-data' type='hidden' value=''></input>
-                                </div>
                             </div>
                             <h3 id="examples-Machine-getMachinesFromNetwork-title-403"></h3>
                             <p id="examples-Machine-getMachinesFromNetwork-description-403" class="marked"></p>
                             <script>
-                              var responseMachine403_description = `Unauthorized`;
+                              var responseMachine403_description = `Forbidden`;
                               var responseMachine403_description_break = responseMachine403_description.indexOf('\n');
                               if (responseMachine403_description_break == -1) {
                                 $("#examples-Machine-getMachinesFromNetwork-title-403").text("Status: 403 - " + responseMachine403_description);
@@ -2869,51 +2970,34 @@ Network resource identifier.
 
 
                             <ul id="responses-detail-Machine-getMachinesFromNetwork-403" class="nav nav-tabs nav-tabs-examples" >
-                                <li class="active">
-                                  <a data-toggle="tab" href="#responses-Machine-getMachinesFromNetwork-403-schema">Schema</a>
-                                </li>
-
-
 
 
                             </ul>
 
 
                             <div class="tab-content" id="responses-Machine-getMachinesFromNetwork-403-wrapper" style='margin-bottom: 10px;'>
-                                <div class="tab-pane active" id="responses-Machine-getMachinesFromNetwork-403-schema">
-                                  <div id="responses-Machine-getMachinesFromNetwork-schema-403" class="exampleStyle">
-                                    <script>
-                                      $(document).ready(function() {
-                                        var schemaWrapper = {
-  "description" : "Unauthorized",
-  "content" : {
-    "application/problem+json" : {
-      "schema" : {
-        "$ref" : "#/components/schemas/Error"
-      }
-    }
-  }
-};
-                                        var schema = schemaWrapper.schema;
-                                        if (schema.$ref != null) {
-                                          schema = defsParser.$refs.get(schema.$ref);
-                                        } else {
-                                          schemaWrapper.definitions = Object.assign({}, defs);
-                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
-                                            console.log(err);
-                                          });
-                                        }
+                            </div>
+                            <h3 id="examples-Machine-getMachinesFromNetwork-title-404"></h3>
+                            <p id="examples-Machine-getMachinesFromNetwork-description-404" class="marked"></p>
+                            <script>
+                              var responseMachine404_description = `Not Found`;
+                              var responseMachine404_description_break = responseMachine404_description.indexOf('\n');
+                              if (responseMachine404_description_break == -1) {
+                                $("#examples-Machine-getMachinesFromNetwork-title-404").text("Status: 404 - " + responseMachine404_description);
+                              } else {
+                                $("#examples-Machine-getMachinesFromNetwork-title-404").text("Status: 404 - " + responseMachine404_description.substring(0, responseMachine404_description_break));
+                                $("#examples-Machine-getMachinesFromNetwork-description-404").html(responseMachine404_description.substring(responseMachine404_description_break));
+                              }
+                            </script>
 
-                                        var view = new JSONSchemaView(schema, 3);
-                                        $('#responses-Machine-getMachinesFromNetwork-403-schema-data').val(JSON.stringify(schema));
-                                        var result = $('#responses-Machine-getMachinesFromNetwork-schema-403');
-                                        result.empty();
-                                        result.append(view.render());
-                                      });
-                                    </script>
-                                  </div>
-                                  <input id='responses-Machine-getMachinesFromNetwork-403-schema-data' type='hidden' value=''></input>
-                                </div>
+
+                            <ul id="responses-detail-Machine-getMachinesFromNetwork-404" class="nav nav-tabs nav-tabs-examples" >
+
+
+                            </ul>
+
+
+                            <div class="tab-content" id="responses-Machine-getMachinesFromNetwork-404-wrapper" style='margin-bottom: 10px;'>
                             </div>
                             <h3 id="examples-Machine-getMachinesFromNetwork-title-415"></h3>
                             <p id="examples-Machine-getMachinesFromNetwork-description-415" class="marked"></p>
@@ -2948,7 +3032,7 @@ Network resource identifier.
                                         var schemaWrapper = {
   "description" : "Unsupported Media Type",
   "content" : {
-    "application/problem+json" : {
+    "application/json" : {
       "schema" : {
         "$ref" : "#/components/schemas/Error"
       }
@@ -2983,7 +3067,7 @@ Network resource identifier.
                       <article id="api-Machine-patchMachineFromNetwork-0" data-group="User" data-name="patchMachineFromNetwork" data-version="0">
                         <div class="pull-left">
                           <h1>patchMachineFromNetwork</h1>
-                          <p></p>
+                          <p>Update Machine In Network</p>
                         </div>
                         <div class="pull-right"></div>
                         <div class="clearfix"></div>
@@ -3012,7 +3096,7 @@ Network resource identifier.
 
                         <div class="tab-content">
                           <div class="tab-pane active" id="examples-Machine-patchMachineFromNetwork-0-curl">
-                            <pre class="prettyprint"><code class="language-bsh">curl -X PATCH -H "Accept: application/problem+json" -H "Content-Type: application/json" -H "Authorization: Basic [[basicHash]]" "https://api.server.test/api/networks/{networkId}/machines/{machineId}"</code></pre>
+                            <pre class="prettyprint"><code class="language-bsh">curl -X PATCH -H "Accept: application/json" -H "Content-Type: application/json,application/json-patch+json" -H "Authorization: Basic [[basicHash]]" "https://api.server.test/api/networks/{networkId}/machines/{machineId}"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Machine-patchMachineFromNetwork-0-java">
                             <pre class="prettyprint"><code class="language-java">import org.openapitools.client.*;
@@ -3093,6 +3177,7 @@ array[Object] *object = ; //  (optional)
 
 MachineApi *apiInstance = [[MachineApi alloc] init];
 
+// Update Machine In Network
 [apiInstance patchMachineFromNetworkWith:networkId
     machineId:machineId
     object:object
@@ -3165,6 +3250,7 @@ namespace Example
 
             try
             {
+                // Update Machine In Network
                 apiInstance.patchMachineFromNetwork(networkId, machineId, object);
             }
             catch (Exception e)
@@ -3244,6 +3330,7 @@ machineId = 38400000-8cf0-11bd-b23e-10b96e4ef00d # UUID | Machine resource ident
 object =  # array[Object] |  (optional)
 
 try: 
+    # Update Machine In Network
     api_instance.patch_machine_from_network(networkId, machineId, object=object)
 except ApiException as e:
     print("Exception when calling MachineApi->patchMachineFromNetwork: %s\n" % e)</code></pre>
@@ -3379,7 +3466,7 @@ $(document).ready(function() {
                             <h3 id="examples-Machine-patchMachineFromNetwork-title-204"></h3>
                             <p id="examples-Machine-patchMachineFromNetwork-description-204" class="marked"></p>
                             <script>
-                              var responseMachine204_description = `204, No Content`;
+                              var responseMachine204_description = `No Content`;
                               var responseMachine204_description_break = responseMachine204_description.indexOf('\n');
                               if (responseMachine204_description_break == -1) {
                                 $("#examples-Machine-patchMachineFromNetwork-title-204").text("Status: 204 - " + responseMachine204_description);
@@ -3398,6 +3485,67 @@ $(document).ready(function() {
 
                             <div class="tab-content" id="responses-Machine-patchMachineFromNetwork-204-wrapper" style='margin-bottom: 10px;'>
                             </div>
+                            <h3 id="examples-Machine-patchMachineFromNetwork-title-400"></h3>
+                            <p id="examples-Machine-patchMachineFromNetwork-description-400" class="marked"></p>
+                            <script>
+                              var responseMachine400_description = `Bad Request`;
+                              var responseMachine400_description_break = responseMachine400_description.indexOf('\n');
+                              if (responseMachine400_description_break == -1) {
+                                $("#examples-Machine-patchMachineFromNetwork-title-400").text("Status: 400 - " + responseMachine400_description);
+                              } else {
+                                $("#examples-Machine-patchMachineFromNetwork-title-400").text("Status: 400 - " + responseMachine400_description.substring(0, responseMachine400_description_break));
+                                $("#examples-Machine-patchMachineFromNetwork-description-400").html(responseMachine400_description.substring(responseMachine400_description_break));
+                              }
+                            </script>
+
+
+                            <ul id="responses-detail-Machine-patchMachineFromNetwork-400" class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-Machine-patchMachineFromNetwork-400-schema">Schema</a>
+                                </li>
+
+
+
+
+                            </ul>
+
+
+                            <div class="tab-content" id="responses-Machine-patchMachineFromNetwork-400-wrapper" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-Machine-patchMachineFromNetwork-400-schema">
+                                  <div id="responses-Machine-patchMachineFromNetwork-schema-400" class="exampleStyle">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "Bad Request",
+  "content" : {
+    "application/json" : {
+      "schema" : {
+        "$ref" : "#/components/schemas/Error"
+      }
+    }
+  }
+};
+                                        var schema = schemaWrapper.schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.definitions = Object.assign({}, defs);
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-Machine-patchMachineFromNetwork-400-schema-data').val(JSON.stringify(schema));
+                                        var result = $('#responses-Machine-patchMachineFromNetwork-schema-400');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-Machine-patchMachineFromNetwork-400-schema-data' type='hidden' value=''></input>
+                                </div>
+                            </div>
                             <h3 id="examples-Machine-patchMachineFromNetwork-title-401"></h3>
                             <p id="examples-Machine-patchMachineFromNetwork-description-401" class="marked"></p>
                             <script>
@@ -3413,56 +3561,17 @@ $(document).ready(function() {
 
 
                             <ul id="responses-detail-Machine-patchMachineFromNetwork-401" class="nav nav-tabs nav-tabs-examples" >
-                                <li class="active">
-                                  <a data-toggle="tab" href="#responses-Machine-patchMachineFromNetwork-401-schema">Schema</a>
-                                </li>
-
-
 
 
                             </ul>
 
 
                             <div class="tab-content" id="responses-Machine-patchMachineFromNetwork-401-wrapper" style='margin-bottom: 10px;'>
-                                <div class="tab-pane active" id="responses-Machine-patchMachineFromNetwork-401-schema">
-                                  <div id="responses-Machine-patchMachineFromNetwork-schema-401" class="exampleStyle">
-                                    <script>
-                                      $(document).ready(function() {
-                                        var schemaWrapper = {
-  "description" : "Unauthorized",
-  "content" : {
-    "application/problem+json" : {
-      "schema" : {
-        "$ref" : "#/components/schemas/Error"
-      }
-    }
-  }
-};
-                                        var schema = schemaWrapper.schema;
-                                        if (schema.$ref != null) {
-                                          schema = defsParser.$refs.get(schema.$ref);
-                                        } else {
-                                          schemaWrapper.definitions = Object.assign({}, defs);
-                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
-                                            console.log(err);
-                                          });
-                                        }
-
-                                        var view = new JSONSchemaView(schema, 3);
-                                        $('#responses-Machine-patchMachineFromNetwork-401-schema-data').val(JSON.stringify(schema));
-                                        var result = $('#responses-Machine-patchMachineFromNetwork-schema-401');
-                                        result.empty();
-                                        result.append(view.render());
-                                      });
-                                    </script>
-                                  </div>
-                                  <input id='responses-Machine-patchMachineFromNetwork-401-schema-data' type='hidden' value=''></input>
-                                </div>
                             </div>
                             <h3 id="examples-Machine-patchMachineFromNetwork-title-403"></h3>
                             <p id="examples-Machine-patchMachineFromNetwork-description-403" class="marked"></p>
                             <script>
-                              var responseMachine403_description = `Unauthorized`;
+                              var responseMachine403_description = `Forbidden`;
                               var responseMachine403_description_break = responseMachine403_description.indexOf('\n');
                               if (responseMachine403_description_break == -1) {
                                 $("#examples-Machine-patchMachineFromNetwork-title-403").text("Status: 403 - " + responseMachine403_description);
@@ -3474,51 +3583,34 @@ $(document).ready(function() {
 
 
                             <ul id="responses-detail-Machine-patchMachineFromNetwork-403" class="nav nav-tabs nav-tabs-examples" >
-                                <li class="active">
-                                  <a data-toggle="tab" href="#responses-Machine-patchMachineFromNetwork-403-schema">Schema</a>
-                                </li>
-
-
 
 
                             </ul>
 
 
                             <div class="tab-content" id="responses-Machine-patchMachineFromNetwork-403-wrapper" style='margin-bottom: 10px;'>
-                                <div class="tab-pane active" id="responses-Machine-patchMachineFromNetwork-403-schema">
-                                  <div id="responses-Machine-patchMachineFromNetwork-schema-403" class="exampleStyle">
-                                    <script>
-                                      $(document).ready(function() {
-                                        var schemaWrapper = {
-  "description" : "Unauthorized",
-  "content" : {
-    "application/problem+json" : {
-      "schema" : {
-        "$ref" : "#/components/schemas/Error"
-      }
-    }
-  }
-};
-                                        var schema = schemaWrapper.schema;
-                                        if (schema.$ref != null) {
-                                          schema = defsParser.$refs.get(schema.$ref);
-                                        } else {
-                                          schemaWrapper.definitions = Object.assign({}, defs);
-                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
-                                            console.log(err);
-                                          });
-                                        }
+                            </div>
+                            <h3 id="examples-Machine-patchMachineFromNetwork-title-404"></h3>
+                            <p id="examples-Machine-patchMachineFromNetwork-description-404" class="marked"></p>
+                            <script>
+                              var responseMachine404_description = `Not Found`;
+                              var responseMachine404_description_break = responseMachine404_description.indexOf('\n');
+                              if (responseMachine404_description_break == -1) {
+                                $("#examples-Machine-patchMachineFromNetwork-title-404").text("Status: 404 - " + responseMachine404_description);
+                              } else {
+                                $("#examples-Machine-patchMachineFromNetwork-title-404").text("Status: 404 - " + responseMachine404_description.substring(0, responseMachine404_description_break));
+                                $("#examples-Machine-patchMachineFromNetwork-description-404").html(responseMachine404_description.substring(responseMachine404_description_break));
+                              }
+                            </script>
 
-                                        var view = new JSONSchemaView(schema, 3);
-                                        $('#responses-Machine-patchMachineFromNetwork-403-schema-data').val(JSON.stringify(schema));
-                                        var result = $('#responses-Machine-patchMachineFromNetwork-schema-403');
-                                        result.empty();
-                                        result.append(view.render());
-                                      });
-                                    </script>
-                                  </div>
-                                  <input id='responses-Machine-patchMachineFromNetwork-403-schema-data' type='hidden' value=''></input>
-                                </div>
+
+                            <ul id="responses-detail-Machine-patchMachineFromNetwork-404" class="nav nav-tabs nav-tabs-examples" >
+
+
+                            </ul>
+
+
+                            <div class="tab-content" id="responses-Machine-patchMachineFromNetwork-404-wrapper" style='margin-bottom: 10px;'>
                             </div>
                             <h3 id="examples-Machine-patchMachineFromNetwork-title-415"></h3>
                             <p id="examples-Machine-patchMachineFromNetwork-description-415" class="marked"></p>
@@ -3553,7 +3645,7 @@ $(document).ready(function() {
                                         var schemaWrapper = {
   "description" : "Unsupported Media Type",
   "content" : {
-    "application/problem+json" : {
+    "application/json" : {
       "schema" : {
         "$ref" : "#/components/schemas/Error"
       }
@@ -3588,7 +3680,7 @@ $(document).ready(function() {
                       <article id="api-Machine-removeMachineFromNetwork-0" data-group="User" data-name="removeMachineFromNetwork" data-version="0">
                         <div class="pull-left">
                           <h1>removeMachineFromNetwork</h1>
-                          <p></p>
+                          <p>Delete A Machine In Network</p>
                         </div>
                         <div class="pull-right"></div>
                         <div class="clearfix"></div>
@@ -3617,7 +3709,7 @@ $(document).ready(function() {
 
                         <div class="tab-content">
                           <div class="tab-pane active" id="examples-Machine-removeMachineFromNetwork-0-curl">
-                            <pre class="prettyprint"><code class="language-bsh">curl -X DELETE -H "Accept: application/problem+json" -H "Authorization: Basic [[basicHash]]" "https://api.server.test/api/networks/{networkId}/machines/{machineId}"</code></pre>
+                            <pre class="prettyprint"><code class="language-bsh">curl -X DELETE -H "Accept: application/json" -H "Authorization: Basic [[basicHash]]" "https://api.server.test/api/networks/{networkId}/machines/{machineId}"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Machine-removeMachineFromNetwork-0-java">
                             <pre class="prettyprint"><code class="language-java">import org.openapitools.client.*;
@@ -3695,6 +3787,7 @@ UUID *machineId = 38400000-8cf0-11bd-b23e-10b96e4ef00d; // Machine resource iden
 
 MachineApi *apiInstance = [[MachineApi alloc] init];
 
+// Delete A Machine In Network
 [apiInstance removeMachineFromNetworkWith:networkId
     machineId:machineId
               completionHandler: ^(NSError* error) {
@@ -3762,6 +3855,7 @@ namespace Example
 
             try
             {
+                // Delete A Machine In Network
                 apiInstance.removeMachineFromNetwork(networkId, machineId);
             }
             catch (Exception e)
@@ -3838,6 +3932,7 @@ networkId = 38400000-8cf0-11bd-b23e-10b96e4ef00d # UUID | Network resource ident
 machineId = 38400000-8cf0-11bd-b23e-10b96e4ef00d # UUID | Machine resource identifier. (default to null)
 
 try: 
+    # Delete A Machine In Network
     api_instance.remove_machine_from_network(networkId, machineId)
 except ApiException as e:
     print("Exception when calling MachineApi->removeMachineFromNetwork: %s\n" % e)</code></pre>
@@ -3939,7 +4034,7 @@ Machine resource identifier.
                             <h3 id="examples-Machine-removeMachineFromNetwork-title-204"></h3>
                             <p id="examples-Machine-removeMachineFromNetwork-description-204" class="marked"></p>
                             <script>
-                              var responseMachine204_description = `204, No Content`;
+                              var responseMachine204_description = `No Content`;
                               var responseMachine204_description_break = responseMachine204_description.indexOf('\n');
                               if (responseMachine204_description_break == -1) {
                                 $("#examples-Machine-removeMachineFromNetwork-title-204").text("Status: 204 - " + responseMachine204_description);
@@ -3973,56 +4068,17 @@ Machine resource identifier.
 
 
                             <ul id="responses-detail-Machine-removeMachineFromNetwork-401" class="nav nav-tabs nav-tabs-examples" >
-                                <li class="active">
-                                  <a data-toggle="tab" href="#responses-Machine-removeMachineFromNetwork-401-schema">Schema</a>
-                                </li>
-
-
 
 
                             </ul>
 
 
                             <div class="tab-content" id="responses-Machine-removeMachineFromNetwork-401-wrapper" style='margin-bottom: 10px;'>
-                                <div class="tab-pane active" id="responses-Machine-removeMachineFromNetwork-401-schema">
-                                  <div id="responses-Machine-removeMachineFromNetwork-schema-401" class="exampleStyle">
-                                    <script>
-                                      $(document).ready(function() {
-                                        var schemaWrapper = {
-  "description" : "Unauthorized",
-  "content" : {
-    "application/problem+json" : {
-      "schema" : {
-        "$ref" : "#/components/schemas/Error"
-      }
-    }
-  }
-};
-                                        var schema = schemaWrapper.schema;
-                                        if (schema.$ref != null) {
-                                          schema = defsParser.$refs.get(schema.$ref);
-                                        } else {
-                                          schemaWrapper.definitions = Object.assign({}, defs);
-                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
-                                            console.log(err);
-                                          });
-                                        }
-
-                                        var view = new JSONSchemaView(schema, 3);
-                                        $('#responses-Machine-removeMachineFromNetwork-401-schema-data').val(JSON.stringify(schema));
-                                        var result = $('#responses-Machine-removeMachineFromNetwork-schema-401');
-                                        result.empty();
-                                        result.append(view.render());
-                                      });
-                                    </script>
-                                  </div>
-                                  <input id='responses-Machine-removeMachineFromNetwork-401-schema-data' type='hidden' value=''></input>
-                                </div>
                             </div>
                             <h3 id="examples-Machine-removeMachineFromNetwork-title-403"></h3>
                             <p id="examples-Machine-removeMachineFromNetwork-description-403" class="marked"></p>
                             <script>
-                              var responseMachine403_description = `Unauthorized`;
+                              var responseMachine403_description = `Forbidden`;
                               var responseMachine403_description_break = responseMachine403_description.indexOf('\n');
                               if (responseMachine403_description_break == -1) {
                                 $("#examples-Machine-removeMachineFromNetwork-title-403").text("Status: 403 - " + responseMachine403_description);
@@ -4034,51 +4090,34 @@ Machine resource identifier.
 
 
                             <ul id="responses-detail-Machine-removeMachineFromNetwork-403" class="nav nav-tabs nav-tabs-examples" >
-                                <li class="active">
-                                  <a data-toggle="tab" href="#responses-Machine-removeMachineFromNetwork-403-schema">Schema</a>
-                                </li>
-
-
 
 
                             </ul>
 
 
                             <div class="tab-content" id="responses-Machine-removeMachineFromNetwork-403-wrapper" style='margin-bottom: 10px;'>
-                                <div class="tab-pane active" id="responses-Machine-removeMachineFromNetwork-403-schema">
-                                  <div id="responses-Machine-removeMachineFromNetwork-schema-403" class="exampleStyle">
-                                    <script>
-                                      $(document).ready(function() {
-                                        var schemaWrapper = {
-  "description" : "Unauthorized",
-  "content" : {
-    "application/problem+json" : {
-      "schema" : {
-        "$ref" : "#/components/schemas/Error"
-      }
-    }
-  }
-};
-                                        var schema = schemaWrapper.schema;
-                                        if (schema.$ref != null) {
-                                          schema = defsParser.$refs.get(schema.$ref);
-                                        } else {
-                                          schemaWrapper.definitions = Object.assign({}, defs);
-                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
-                                            console.log(err);
-                                          });
-                                        }
+                            </div>
+                            <h3 id="examples-Machine-removeMachineFromNetwork-title-404"></h3>
+                            <p id="examples-Machine-removeMachineFromNetwork-description-404" class="marked"></p>
+                            <script>
+                              var responseMachine404_description = `Not Found`;
+                              var responseMachine404_description_break = responseMachine404_description.indexOf('\n');
+                              if (responseMachine404_description_break == -1) {
+                                $("#examples-Machine-removeMachineFromNetwork-title-404").text("Status: 404 - " + responseMachine404_description);
+                              } else {
+                                $("#examples-Machine-removeMachineFromNetwork-title-404").text("Status: 404 - " + responseMachine404_description.substring(0, responseMachine404_description_break));
+                                $("#examples-Machine-removeMachineFromNetwork-description-404").html(responseMachine404_description.substring(responseMachine404_description_break));
+                              }
+                            </script>
 
-                                        var view = new JSONSchemaView(schema, 3);
-                                        $('#responses-Machine-removeMachineFromNetwork-403-schema-data').val(JSON.stringify(schema));
-                                        var result = $('#responses-Machine-removeMachineFromNetwork-schema-403');
-                                        result.empty();
-                                        result.append(view.render());
-                                      });
-                                    </script>
-                                  </div>
-                                  <input id='responses-Machine-removeMachineFromNetwork-403-schema-data' type='hidden' value=''></input>
-                                </div>
+
+                            <ul id="responses-detail-Machine-removeMachineFromNetwork-404" class="nav nav-tabs nav-tabs-examples" >
+
+
+                            </ul>
+
+
+                            <div class="tab-content" id="responses-Machine-removeMachineFromNetwork-404-wrapper" style='margin-bottom: 10px;'>
                             </div>
                             <h3 id="examples-Machine-removeMachineFromNetwork-title-415"></h3>
                             <p id="examples-Machine-removeMachineFromNetwork-description-415" class="marked"></p>
@@ -4113,7 +4152,7 @@ Machine resource identifier.
                                         var schemaWrapper = {
   "description" : "Unsupported Media Type",
   "content" : {
-    "application/problem+json" : {
+    "application/json" : {
       "schema" : {
         "$ref" : "#/components/schemas/Error"
       }
@@ -4819,7 +4858,7 @@ $(document).ready(function() {
                       <article id="api-Network-deleteNetworkById-0" data-group="User" data-name="deleteNetworkById" data-version="0">
                         <div class="pull-left">
                           <h1>deleteNetworkById</h1>
-                          <p></p>
+                          <p>Delete Network</p>
                         </div>
                         <div class="pull-right"></div>
                         <div class="clearfix"></div>
@@ -4848,7 +4887,7 @@ $(document).ready(function() {
 
                         <div class="tab-content">
                           <div class="tab-pane active" id="examples-Network-deleteNetworkById-0-curl">
-                            <pre class="prettyprint"><code class="language-bsh">curl -X DELETE -H "Accept: application/problem+json,application/json" -H "Authorization: Basic [[basicHash]]" "https://api.server.test/api/networks/{networkId}"</code></pre>
+                            <pre class="prettyprint"><code class="language-bsh">curl -X DELETE -H "Accept: application/json" -H "Authorization: Basic [[basicHash]]" "https://api.server.test/api/networks/{networkId}"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Network-deleteNetworkById-0-java">
                             <pre class="prettyprint"><code class="language-java">import org.openapitools.client.*;
@@ -4923,6 +4962,7 @@ UUID *networkId = 38400000-8cf0-11bd-b23e-10b96e4ef00d; // Network resource iden
 
 NetworkApi *apiInstance = [[NetworkApi alloc] init];
 
+// Delete Network
 [apiInstance deleteNetworkByIdWith:networkId
               completionHandler: ^(NSError* error) {
                             if (error) {
@@ -4987,6 +5027,7 @@ namespace Example
 
             try
             {
+                // Delete Network
                 apiInstance.deleteNetworkById(networkId);
             }
             catch (Exception e)
@@ -5060,6 +5101,7 @@ api_instance = openapi_client.NetworkApi()
 networkId = 38400000-8cf0-11bd-b23e-10b96e4ef00d # UUID | Network resource identifier. (default to null)
 
 try: 
+    # Delete Network
     api_instance.delete_network_by_id(networkId)
 except ApiException as e:
     print("Exception when calling NetworkApi->deleteNetworkById: %s\n" % e)</code></pre>
@@ -5134,7 +5176,7 @@ Network resource identifier.
                             <h3 id="examples-Network-deleteNetworkById-title-204"></h3>
                             <p id="examples-Network-deleteNetworkById-description-204" class="marked"></p>
                             <script>
-                              var responseNetwork204_description = `204, No Content`;
+                              var responseNetwork204_description = `No Content`;
                               var responseNetwork204_description_break = responseNetwork204_description.indexOf('\n');
                               if (responseNetwork204_description_break == -1) {
                                 $("#examples-Network-deleteNetworkById-title-204").text("Status: 204 - " + responseNetwork204_description);
@@ -5168,56 +5210,17 @@ Network resource identifier.
 
 
                             <ul id="responses-detail-Network-deleteNetworkById-401" class="nav nav-tabs nav-tabs-examples" >
-                                <li class="active">
-                                  <a data-toggle="tab" href="#responses-Network-deleteNetworkById-401-schema">Schema</a>
-                                </li>
-
-
 
 
                             </ul>
 
 
                             <div class="tab-content" id="responses-Network-deleteNetworkById-401-wrapper" style='margin-bottom: 10px;'>
-                                <div class="tab-pane active" id="responses-Network-deleteNetworkById-401-schema">
-                                  <div id="responses-Network-deleteNetworkById-schema-401" class="exampleStyle">
-                                    <script>
-                                      $(document).ready(function() {
-                                        var schemaWrapper = {
-  "description" : "Unauthorized",
-  "content" : {
-    "application/problem+json" : {
-      "schema" : {
-        "$ref" : "#/components/schemas/Error"
-      }
-    }
-  }
-};
-                                        var schema = schemaWrapper.schema;
-                                        if (schema.$ref != null) {
-                                          schema = defsParser.$refs.get(schema.$ref);
-                                        } else {
-                                          schemaWrapper.definitions = Object.assign({}, defs);
-                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
-                                            console.log(err);
-                                          });
-                                        }
-
-                                        var view = new JSONSchemaView(schema, 3);
-                                        $('#responses-Network-deleteNetworkById-401-schema-data').val(JSON.stringify(schema));
-                                        var result = $('#responses-Network-deleteNetworkById-schema-401');
-                                        result.empty();
-                                        result.append(view.render());
-                                      });
-                                    </script>
-                                  </div>
-                                  <input id='responses-Network-deleteNetworkById-401-schema-data' type='hidden' value=''></input>
-                                </div>
                             </div>
                             <h3 id="examples-Network-deleteNetworkById-title-403"></h3>
                             <p id="examples-Network-deleteNetworkById-description-403" class="marked"></p>
                             <script>
-                              var responseNetwork403_description = `Unauthorized`;
+                              var responseNetwork403_description = `Forbidden`;
                               var responseNetwork403_description_break = responseNetwork403_description.indexOf('\n');
                               if (responseNetwork403_description_break == -1) {
                                 $("#examples-Network-deleteNetworkById-title-403").text("Status: 403 - " + responseNetwork403_description);
@@ -5229,56 +5232,17 @@ Network resource identifier.
 
 
                             <ul id="responses-detail-Network-deleteNetworkById-403" class="nav nav-tabs nav-tabs-examples" >
-                                <li class="active">
-                                  <a data-toggle="tab" href="#responses-Network-deleteNetworkById-403-schema">Schema</a>
-                                </li>
-
-
 
 
                             </ul>
 
 
                             <div class="tab-content" id="responses-Network-deleteNetworkById-403-wrapper" style='margin-bottom: 10px;'>
-                                <div class="tab-pane active" id="responses-Network-deleteNetworkById-403-schema">
-                                  <div id="responses-Network-deleteNetworkById-schema-403" class="exampleStyle">
-                                    <script>
-                                      $(document).ready(function() {
-                                        var schemaWrapper = {
-  "description" : "Unauthorized",
-  "content" : {
-    "application/problem+json" : {
-      "schema" : {
-        "$ref" : "#/components/schemas/Error"
-      }
-    }
-  }
-};
-                                        var schema = schemaWrapper.schema;
-                                        if (schema.$ref != null) {
-                                          schema = defsParser.$refs.get(schema.$ref);
-                                        } else {
-                                          schemaWrapper.definitions = Object.assign({}, defs);
-                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
-                                            console.log(err);
-                                          });
-                                        }
-
-                                        var view = new JSONSchemaView(schema, 3);
-                                        $('#responses-Network-deleteNetworkById-403-schema-data').val(JSON.stringify(schema));
-                                        var result = $('#responses-Network-deleteNetworkById-schema-403');
-                                        result.empty();
-                                        result.append(view.render());
-                                      });
-                                    </script>
-                                  </div>
-                                  <input id='responses-Network-deleteNetworkById-403-schema-data' type='hidden' value=''></input>
-                                </div>
                             </div>
                             <h3 id="examples-Network-deleteNetworkById-title-404"></h3>
                             <p id="examples-Network-deleteNetworkById-description-404" class="marked"></p>
                             <script>
-                              var responseNetwork404_description = `The specified resource was not found.`;
+                              var responseNetwork404_description = `Not Found`;
                               var responseNetwork404_description_break = responseNetwork404_description.indexOf('\n');
                               if (responseNetwork404_description_break == -1) {
                                 $("#examples-Network-deleteNetworkById-title-404").text("Status: 404 - " + responseNetwork404_description);
@@ -5290,51 +5254,12 @@ Network resource identifier.
 
 
                             <ul id="responses-detail-Network-deleteNetworkById-404" class="nav nav-tabs nav-tabs-examples" >
-                                <li class="active">
-                                  <a data-toggle="tab" href="#responses-Network-deleteNetworkById-404-schema">Schema</a>
-                                </li>
-
-
 
 
                             </ul>
 
 
                             <div class="tab-content" id="responses-Network-deleteNetworkById-404-wrapper" style='margin-bottom: 10px;'>
-                                <div class="tab-pane active" id="responses-Network-deleteNetworkById-404-schema">
-                                  <div id="responses-Network-deleteNetworkById-schema-404" class="exampleStyle">
-                                    <script>
-                                      $(document).ready(function() {
-                                        var schemaWrapper = {
-  "description" : "The specified resource was not found.",
-  "content" : {
-    "application/json" : {
-      "schema" : {
-        "type" : "object"
-      }
-    }
-  }
-};
-                                        var schema = schemaWrapper.schema;
-                                        if (schema.$ref != null) {
-                                          schema = defsParser.$refs.get(schema.$ref);
-                                        } else {
-                                          schemaWrapper.definitions = Object.assign({}, defs);
-                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
-                                            console.log(err);
-                                          });
-                                        }
-
-                                        var view = new JSONSchemaView(schema, 3);
-                                        $('#responses-Network-deleteNetworkById-404-schema-data').val(JSON.stringify(schema));
-                                        var result = $('#responses-Network-deleteNetworkById-schema-404');
-                                        result.empty();
-                                        result.append(view.render());
-                                      });
-                                    </script>
-                                  </div>
-                                  <input id='responses-Network-deleteNetworkById-404-schema-data' type='hidden' value=''></input>
-                                </div>
                             </div>
                             <h3 id="examples-Network-deleteNetworkById-title-415"></h3>
                             <p id="examples-Network-deleteNetworkById-description-415" class="marked"></p>
@@ -5369,7 +5294,7 @@ Network resource identifier.
                                         var schemaWrapper = {
   "description" : "Unsupported Media Type",
   "content" : {
-    "application/problem+json" : {
+    "application/json" : {
       "schema" : {
         "$ref" : "#/components/schemas/Error"
       }
@@ -6831,7 +6756,7 @@ Query String to search.
                       <article id="api-Network-patchNetworkById-0" data-group="User" data-name="patchNetworkById" data-version="0">
                         <div class="pull-left">
                           <h1>patchNetworkById</h1>
-                          <p></p>
+                          <p>Update Network</p>
                         </div>
                         <div class="pull-right"></div>
                         <div class="clearfix"></div>
@@ -6860,7 +6785,7 @@ Query String to search.
 
                         <div class="tab-content">
                           <div class="tab-pane active" id="examples-Network-patchNetworkById-0-curl">
-                            <pre class="prettyprint"><code class="language-bsh">curl -X PATCH -H "Accept: application/problem+json,application/json" -H "Content-Type: application/json-patch+json" -H "Authorization: Basic [[basicHash]]" "https://api.server.test/api/networks/{networkId}"</code></pre>
+                            <pre class="prettyprint"><code class="language-bsh">curl -X PATCH -H "Accept: application/json" -H "Content-Type: application/json-patch+json" -H "Authorization: Basic [[basicHash]]" "https://api.server.test/api/networks/{networkId}"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Network-patchNetworkById-0-java">
                             <pre class="prettyprint"><code class="language-java">import org.openapitools.client.*;
@@ -6938,6 +6863,7 @@ array[Object] *object = ; //
 
 NetworkApi *apiInstance = [[NetworkApi alloc] init];
 
+// Update Network
 [apiInstance patchNetworkByIdWith:networkId
     object:object
               completionHandler: ^(NSError* error) {
@@ -7005,6 +6931,7 @@ namespace Example
 
             try
             {
+                // Update Network
                 apiInstance.patchNetworkById(networkId, object);
             }
             catch (Exception e)
@@ -7081,6 +7008,7 @@ networkId = 38400000-8cf0-11bd-b23e-10b96e4ef00d # UUID | Network resource ident
 object =  # array[Object] | 
 
 try: 
+    # Update Network
     api_instance.patch_network_by_id(networkId, object)
 except ApiException as e:
     print("Exception when calling NetworkApi->patchNetworkById: %s\n" % e)</code></pre>
@@ -7189,7 +7117,7 @@ $(document).ready(function() {
                             <h3 id="examples-Network-patchNetworkById-title-204"></h3>
                             <p id="examples-Network-patchNetworkById-description-204" class="marked"></p>
                             <script>
-                              var responseNetwork204_description = `204, No Content`;
+                              var responseNetwork204_description = `No Content`;
                               var responseNetwork204_description_break = responseNetwork204_description.indexOf('\n');
                               if (responseNetwork204_description_break == -1) {
                                 $("#examples-Network-patchNetworkById-title-204").text("Status: 204 - " + responseNetwork204_description);
@@ -7211,7 +7139,7 @@ $(document).ready(function() {
                             <h3 id="examples-Network-patchNetworkById-title-400"></h3>
                             <p id="examples-Network-patchNetworkById-description-400" class="marked"></p>
                             <script>
-                              var responseNetwork400_description = `Validation Errors`;
+                              var responseNetwork400_description = `Bad Request`;
                               var responseNetwork400_description_break = responseNetwork400_description.indexOf('\n');
                               if (responseNetwork400_description_break == -1) {
                                 $("#examples-Network-patchNetworkById-title-400").text("Status: 400 - " + responseNetwork400_description);
@@ -7239,9 +7167,9 @@ $(document).ready(function() {
                                     <script>
                                       $(document).ready(function() {
                                         var schemaWrapper = {
-  "description" : "Validation Errors",
+  "description" : "Bad Request",
   "content" : {
-    "application/problem+json" : {
+    "application/json" : {
       "schema" : {
         "$ref" : "#/components/schemas/Error"
       }
@@ -7272,7 +7200,7 @@ $(document).ready(function() {
                             <h3 id="examples-Network-patchNetworkById-title-401"></h3>
                             <p id="examples-Network-patchNetworkById-description-401" class="marked"></p>
                             <script>
-                              var responseNetwork401_description = `Unauthorized`;
+                              var responseNetwork401_description = `Not Authorized`;
                               var responseNetwork401_description_break = responseNetwork401_description.indexOf('\n');
                               if (responseNetwork401_description_break == -1) {
                                 $("#examples-Network-patchNetworkById-title-401").text("Status: 401 - " + responseNetwork401_description);
@@ -7284,56 +7212,17 @@ $(document).ready(function() {
 
 
                             <ul id="responses-detail-Network-patchNetworkById-401" class="nav nav-tabs nav-tabs-examples" >
-                                <li class="active">
-                                  <a data-toggle="tab" href="#responses-Network-patchNetworkById-401-schema">Schema</a>
-                                </li>
-
-
 
 
                             </ul>
 
 
                             <div class="tab-content" id="responses-Network-patchNetworkById-401-wrapper" style='margin-bottom: 10px;'>
-                                <div class="tab-pane active" id="responses-Network-patchNetworkById-401-schema">
-                                  <div id="responses-Network-patchNetworkById-schema-401" class="exampleStyle">
-                                    <script>
-                                      $(document).ready(function() {
-                                        var schemaWrapper = {
-  "description" : "Unauthorized",
-  "content" : {
-    "application/problem+json" : {
-      "schema" : {
-        "$ref" : "#/components/schemas/Error"
-      }
-    }
-  }
-};
-                                        var schema = schemaWrapper.schema;
-                                        if (schema.$ref != null) {
-                                          schema = defsParser.$refs.get(schema.$ref);
-                                        } else {
-                                          schemaWrapper.definitions = Object.assign({}, defs);
-                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
-                                            console.log(err);
-                                          });
-                                        }
-
-                                        var view = new JSONSchemaView(schema, 3);
-                                        $('#responses-Network-patchNetworkById-401-schema-data').val(JSON.stringify(schema));
-                                        var result = $('#responses-Network-patchNetworkById-schema-401');
-                                        result.empty();
-                                        result.append(view.render());
-                                      });
-                                    </script>
-                                  </div>
-                                  <input id='responses-Network-patchNetworkById-401-schema-data' type='hidden' value=''></input>
-                                </div>
                             </div>
                             <h3 id="examples-Network-patchNetworkById-title-403"></h3>
                             <p id="examples-Network-patchNetworkById-description-403" class="marked"></p>
                             <script>
-                              var responseNetwork403_description = `Unauthorized`;
+                              var responseNetwork403_description = `Forbidden`;
                               var responseNetwork403_description_break = responseNetwork403_description.indexOf('\n');
                               if (responseNetwork403_description_break == -1) {
                                 $("#examples-Network-patchNetworkById-title-403").text("Status: 403 - " + responseNetwork403_description);
@@ -7345,56 +7234,17 @@ $(document).ready(function() {
 
 
                             <ul id="responses-detail-Network-patchNetworkById-403" class="nav nav-tabs nav-tabs-examples" >
-                                <li class="active">
-                                  <a data-toggle="tab" href="#responses-Network-patchNetworkById-403-schema">Schema</a>
-                                </li>
-
-
 
 
                             </ul>
 
 
                             <div class="tab-content" id="responses-Network-patchNetworkById-403-wrapper" style='margin-bottom: 10px;'>
-                                <div class="tab-pane active" id="responses-Network-patchNetworkById-403-schema">
-                                  <div id="responses-Network-patchNetworkById-schema-403" class="exampleStyle">
-                                    <script>
-                                      $(document).ready(function() {
-                                        var schemaWrapper = {
-  "description" : "Unauthorized",
-  "content" : {
-    "application/problem+json" : {
-      "schema" : {
-        "$ref" : "#/components/schemas/Error"
-      }
-    }
-  }
-};
-                                        var schema = schemaWrapper.schema;
-                                        if (schema.$ref != null) {
-                                          schema = defsParser.$refs.get(schema.$ref);
-                                        } else {
-                                          schemaWrapper.definitions = Object.assign({}, defs);
-                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
-                                            console.log(err);
-                                          });
-                                        }
-
-                                        var view = new JSONSchemaView(schema, 3);
-                                        $('#responses-Network-patchNetworkById-403-schema-data').val(JSON.stringify(schema));
-                                        var result = $('#responses-Network-patchNetworkById-schema-403');
-                                        result.empty();
-                                        result.append(view.render());
-                                      });
-                                    </script>
-                                  </div>
-                                  <input id='responses-Network-patchNetworkById-403-schema-data' type='hidden' value=''></input>
-                                </div>
                             </div>
                             <h3 id="examples-Network-patchNetworkById-title-404"></h3>
                             <p id="examples-Network-patchNetworkById-description-404" class="marked"></p>
                             <script>
-                              var responseNetwork404_description = `The specified resource was not found.`;
+                              var responseNetwork404_description = `Not Found`;
                               var responseNetwork404_description_break = responseNetwork404_description.indexOf('\n');
                               if (responseNetwork404_description_break == -1) {
                                 $("#examples-Network-patchNetworkById-title-404").text("Status: 404 - " + responseNetwork404_description);
@@ -7406,56 +7256,17 @@ $(document).ready(function() {
 
 
                             <ul id="responses-detail-Network-patchNetworkById-404" class="nav nav-tabs nav-tabs-examples" >
-                                <li class="active">
-                                  <a data-toggle="tab" href="#responses-Network-patchNetworkById-404-schema">Schema</a>
-                                </li>
-
-
 
 
                             </ul>
 
 
                             <div class="tab-content" id="responses-Network-patchNetworkById-404-wrapper" style='margin-bottom: 10px;'>
-                                <div class="tab-pane active" id="responses-Network-patchNetworkById-404-schema">
-                                  <div id="responses-Network-patchNetworkById-schema-404" class="exampleStyle">
-                                    <script>
-                                      $(document).ready(function() {
-                                        var schemaWrapper = {
-  "description" : "The specified resource was not found.",
-  "content" : {
-    "application/json" : {
-      "schema" : {
-        "type" : "object"
-      }
-    }
-  }
-};
-                                        var schema = schemaWrapper.schema;
-                                        if (schema.$ref != null) {
-                                          schema = defsParser.$refs.get(schema.$ref);
-                                        } else {
-                                          schemaWrapper.definitions = Object.assign({}, defs);
-                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
-                                            console.log(err);
-                                          });
-                                        }
-
-                                        var view = new JSONSchemaView(schema, 3);
-                                        $('#responses-Network-patchNetworkById-404-schema-data').val(JSON.stringify(schema));
-                                        var result = $('#responses-Network-patchNetworkById-schema-404');
-                                        result.empty();
-                                        result.append(view.render());
-                                      });
-                                    </script>
-                                  </div>
-                                  <input id='responses-Network-patchNetworkById-404-schema-data' type='hidden' value=''></input>
-                                </div>
                             </div>
                             <h3 id="examples-Network-patchNetworkById-title-415"></h3>
                             <p id="examples-Network-patchNetworkById-description-415" class="marked"></p>
                             <script>
-                              var responseNetwork415_description = `Unsupported Media Type`;
+                              var responseNetwork415_description = `Unsuported Media Type`;
                               var responseNetwork415_description_break = responseNetwork415_description.indexOf('\n');
                               if (responseNetwork415_description_break == -1) {
                                 $("#examples-Network-patchNetworkById-title-415").text("Status: 415 - " + responseNetwork415_description);
@@ -7483,9 +7294,9 @@ $(document).ready(function() {
                                     <script>
                                       $(document).ready(function() {
                                         var schemaWrapper = {
-  "description" : "Unsupported Media Type",
+  "description" : "Unsuported Media Type",
   "content" : {
-    "application/problem+json" : {
+    "application/json" : {
       "schema" : {
         "$ref" : "#/components/schemas/Error"
       }
