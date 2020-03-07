@@ -8,6 +8,7 @@
     "experimentalDecorators": true,
     "target": "es2019",
     "emitDecoratorMetadata": true,
+    "noImplicitAny": false,
     "moduleResolution": "node",
     "importHelpers": true,
     "types": [
