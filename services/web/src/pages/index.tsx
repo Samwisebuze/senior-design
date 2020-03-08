@@ -3,10 +3,11 @@ import { Link } from "gatsby";
 
 import Image from "../components/image";
 import SEO from "../components/seo";
+import BaseLayout from "../components/BaseLayout";
 
 const IndexPage = () => {
   return (
-    <div>
+    <BaseLayout>
       <SEO title="Home" />
       <h1>Hi people</h1>
       <p>Welcome to Virtuoso!</p>
@@ -16,7 +17,7 @@ const IndexPage = () => {
       <h1>
         <Link to="/app/">Go To App</Link>
       </h1>
-    </div>
+    </BaseLayout>
   );
 };
 

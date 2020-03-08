@@ -12,8 +12,8 @@ const PrivateRoute: React.FC<Props> = ({
   location,
   ...rest
 }) => {
-  if (!isLoggedIn() && location && location.pathname !== `/app/login`) {
-    navigate("/app/login");
+  if (!isLoggedIn() && location && location.pathname !== `/login`) {
+    navigate("/login");
     return null;
   }
 
