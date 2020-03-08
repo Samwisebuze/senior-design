@@ -1,9 +1,8 @@
 import React from "react";
-import "typeface-roboto";
+import { navigate } from "gatsby";
 import { createStyles, Theme, makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
-import CssBaseline from "@material-ui/core/CssBaseline";
 import Toolbar from "@material-ui/core/Toolbar";
 import List from "@material-ui/core/List";
 import Typography from "@material-ui/core/Typography";
@@ -13,8 +12,16 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
+import Button from "@material-ui/core/Button";
+import styled from "styled-components";
+import BaseLayout from "./BaseLayout";
+import { isLoggedIn, logout } from "../util/auth";
 
 const drawerWidth = 240;
+
+const StyledToolbar = styled(Toolbar)`
+  justify-content: space-between;
+`;
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -39,57 +46,67 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const App: React.FC = ({ children }) => {
+const AppLayout: React.FC = ({ children }) => {
   const classes = useStyles();
 
+  const handleLogout = () => {
+    logout(() => navigate(`/login`));
+  };
+
   return (
-    <div className={classes.root}>
-      <CssBaseline />
-      <AppBar position="fixed" className={classes.appBar}>
-        <Toolbar>
-          <Typography variant="h6" noWrap>
-            Virtuoso
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <Drawer
-        className={classes.drawer}
-        variant="permanent"
-        classes={{
-          paper: classes.drawerPaper,
-        }}
-      >
-        <div className={classes.toolbar} />
-        <List>
-          {["Host", "Server", "Router", "Switch", "Firewall"].map(
-            (text, index) => (
+    <BaseLayout>
+      <div className={classes.root}>
+        <AppBar position="fixed" className={classes.appBar}>
+          <StyledToolbar>
+            <Typography variant="h6" noWrap>
+              Virtuoso
+            </Typography>
+            {isLoggedIn() ? (
+              <Button color="inherit" onClick={handleLogout}>
+                Log Out
+              </Button>
+            ) : null}
+          </StyledToolbar>
+        </AppBar>
+        <Drawer
+          className={classes.drawer}
+          variant="permanent"
+          classes={{
+            paper: classes.drawerPaper,
+          }}
+        >
+          <div className={classes.toolbar} />
+          <List>
+            {["Host", "Server", "Router", "Switch", "Firewall"].map(
+              (text, index) => (
+                <ListItem button key={text}>
+                  <ListItemIcon>
+                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                  </ListItemIcon>
+                  <ListItemText primary={text} />
+                </ListItem>
+              )
+            )}
+          </List>
+          <Divider />
+          <List>
+            {["Connect"].map((text, index) => (
               <ListItem button key={text}>
                 <ListItemIcon>
                   {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
                 </ListItemIcon>
                 <ListItemText primary={text} />
               </ListItem>
-            )
-          )}
-        </List>
-        <Divider />
-        <List>
-          {["Connect"].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-        </List>
-      </Drawer>
-      <main className={classes.content}>
-        <div className={classes.toolbar} />
-        <div>{children}</div>
-      </main>
-    </div>
+            ))}
+          </List>
+        </Drawer>
+        <main className={classes.content}>
+          <div className={classes.toolbar} />
+          <div>{children}</div>
+        </main>
+      </div>
+    </BaseLayout>
   );
 };
 
-export default App;
+export default AppLayout;
