@@ -14,8 +14,8 @@ import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
 import Button from "@material-ui/core/Button";
 import styled from "styled-components";
-import BaseLayout from "./BaseLayout";
 import { isLoggedIn, logout } from "../util/auth";
+import BaseLayout from "./BaseLayout";
 
 const drawerWidth = 240;
 
@@ -27,6 +27,8 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       display: "flex",
+      height: "100%",
+      width: "100%",
     },
     appBar: {
       zIndex: theme.zIndex.drawer + 1,
@@ -39,10 +41,11 @@ const useStyles = makeStyles((theme: Theme) =>
       width: drawerWidth,
     },
     content: {
+      display: "flex",
+      flexDirection: "column",
       flexGrow: 1,
-      padding: theme.spacing(3),
     },
-    toolbar: theme.mixins.toolbar,
+    toolbar: { width: "100%", ...theme.mixins.toolbar },
   })
 );
 
@@ -102,7 +105,7 @@ const AppLayout: React.FC = ({ children }) => {
         </Drawer>
         <main className={classes.content}>
           <div className={classes.toolbar} />
-          <div>{children}</div>
+          {children}
         </main>
       </div>
     </BaseLayout>

@@ -6,17 +6,15 @@ import RandomPerson from "../modules/RandomPerson";
 import AppLayout from "../components/AppLayout";
 import Default from "../modules/Default";
 import PrivateRoute from "../components/PrivateRoute";
-import { isLoggedIn, logout } from "../util/auth";
+import Application from "../components/canvas/application";
+import BodyWidget from "../components/canvas/BodyWidget";
 
 const App = () => {
+  const app = new Application();
+
   return (
     <AppLayout>
-      <Link to="/">Go To Homepage</Link>
-      <h1>This is the app!</h1>
-      <Router basepath="/app">
-        <RandomPerson path="/random-person" />
-        <PrivateRoute component={Default} path="/" />
-      </Router>
+      <BodyWidget app={app} />
     </AppLayout>
   );
 };
