@@ -4,3 +4,6 @@
 [submodule "services/virtuoso-auth"]
 	path = services/virtuoso-auth
 	url = git@github.com:Samwisebuze/virtuoso-auth.git
+[submodule "services/virtuoso-network"]
+	path = services/virtuoso-network
+	url = git@github.com:Samwisebuze/virtuoso-network.git
