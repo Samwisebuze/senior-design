@@ -7,3 +7,6 @@
 [submodule "services/virtuoso-network"]
 	path = services/virtuoso-network
 	url = git@github.com:Samwisebuze/virtuoso-network.git
+[submodule "services/virtuoso-container"]
+	path = services/virtuoso-container
+	url = https://github.com/koreyhuskonen/containeroso
