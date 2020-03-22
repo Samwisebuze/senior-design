@@ -22,7 +22,7 @@ services:
   # (kong w/o database)
   # ---
   api_gateway:
-    image: virtuoso-api-gateway:latest
+    build: ./virtuoso-api-gateway/
     container_name: virtuoso-api-gateway
     restart: always
     ports:
