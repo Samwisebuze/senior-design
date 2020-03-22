@@ -8,9 +8,10 @@ networks:
 
 services:
   # Front-end Web Service
+  # (accessible at http://localhost:80/)
   # ---
   web:
-    image: virtuoso-web:latest
+    build: ./web/
     container_name: virtuoso_web_service
     restart: always
     environment:
