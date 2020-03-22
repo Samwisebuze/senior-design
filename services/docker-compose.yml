@@ -33,8 +33,7 @@ services:
   # Auth Service
   # ---
   auth:
-    #build: ../
-    image: virtuoso-auth:latest
+    build: ./virtuoso-auth/
     container_name: virtuoso_auth_service
     hostname: virtuoso_auth_service
     restart: always

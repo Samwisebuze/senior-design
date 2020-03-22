@@ -1,3 +1,6 @@
 [submodule "services/virtuoso-api-gateway"]
 	path = services/virtuoso-api-gateway
 	url = git@github.com:Samwisebuze/virtuoso-gateway.git
+[submodule "services/virtuoso-auth"]
+	path = services/virtuoso-auth
+	url = git@github.com:Samwisebuze/virtuoso-auth.git
