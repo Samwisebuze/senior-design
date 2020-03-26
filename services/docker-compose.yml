@@ -18,6 +18,18 @@ services:
       FOO: bar
     ports:
       - '80:80'
+  # Container Service
+  # ---
+  container:
+    build:
+      context: ./virtuoso-container/
+      dockerfile: Dockerfile.containeroso
+    container_name: virtuoso-container
+    restart: always
+    ports:
+      - '5000:5000'
+    networks:
+      - kong-net
   # API Gateway
   # (kong w/o database)
   # ---
