@@ -27,6 +27,12 @@ Pull in all changes from submodules:
 $ git submodule update --remote
 ```
 
+Update a single submodule:
+
+```sh
+$ git submodule update --init --remote -- virtuoso-container
+```
+
 Check health and get a list of available services in the API Gateway:
 
 ```sh
