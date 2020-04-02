@@ -17,7 +17,6 @@ RUN yarn build
 # Runs static files on nginx, resulting in
 # a very small image size.
 # https://github.com/gatsbyjs/gatsby-docker
-FROM gatsbyjs/gatsby:onbuild as build
 FROM nginx:1.17.9-alpine
 
 COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
