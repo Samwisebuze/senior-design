@@ -23,13 +23,15 @@ services:
   container:
     build:
       context: ./virtuoso-container/
-      dockerfile: Dockerfile.containeroso
+      dockerfile: Dockerfile
     container_name: virtuoso_container_service
     restart: always
     ports:
       - '5000:5000'
     networks:
       - kong-net
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
   # Network Service
   # ---
   # network:
