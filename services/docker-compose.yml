@@ -36,6 +36,8 @@ services:
   #   build: ./virtuoso-network/
   #   container_name: virtuoso_container_service
   #   restart: always
+  #   environment:
+  #     MONGO_URL: mongodb://root:root@virtuoso_mongo_service:27017/test
   #   ports:
   #     - '6000:8080'
   #   networks:
