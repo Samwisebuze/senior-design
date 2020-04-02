@@ -30,6 +30,20 @@ services:
       - '5000:5000'
     networks:
       - kong-net
+  # Network Service
+  # ---
+  # network:
+  #   build: ./virtuoso-network/
+  #   container_name: virtuoso_container_service
+  #   restart: always
+  #   ports:
+  #     - '6000:8080'
+  #   networks:
+  #     - kong-net
+  #     - database-net
+  #   depends_on:
+  #     - mongo
+  #     - api_gateway
   # API Gateway
   # (kong w/o database)
   # ---
