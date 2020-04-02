@@ -24,7 +24,7 @@ services:
     build:
       context: ./virtuoso-container/
       dockerfile: Dockerfile.containeroso
-    container_name: virtuoso-container
+    container_name: virtuoso_container_service
     restart: always
     ports:
       - '5000:5000'
@@ -35,7 +35,7 @@ services:
   # ---
   api_gateway:
     build: ./virtuoso-api-gateway/
-    container_name: virtuoso-api-gateway
+    container_name: virtuoso_api_gateway_service
     restart: always
     ports:
       - '8000:8000'
@@ -50,7 +50,7 @@ services:
     hostname: virtuoso_auth_service
     restart: always
     environment:
-      MONGODB_URI: mongodb://root:root@mongo_service:27017/test
+      MONGODB_URI: mongodb://root:root@virtuoso_mongo_service:27017/test
       JWT_SECRET: test123
     ports:
       - '4000:4000'
@@ -64,8 +64,8 @@ services:
   # ---
   mongo:
     image: mongo:4.2.2-bionic # MongoDB on Ubuntu Bionic
-    container_name: mongo_service
-    hostname: mongo_service
+    container_name: virtuoso_mongo_service
+    hostname: virtuoso_mongo_service
     restart: always
     environment:
       MONGO_INITDB_ROOT_USERNAME: root

@@ -15,6 +15,8 @@ $ docker-compose up
 # (use ^c to stop)
 ```
 
+Then, head to [http://localhost:80](http://localhost:80)
+
 Or, if you already have the repository cloned, pull in the submodules with:
 
 ```sh
@@ -26,6 +28,8 @@ Pull in all changes from submodules:
 ```sh
 $ git submodule update --remote
 ```
+
+## Other Commands
 
 Update a single submodule:
 
