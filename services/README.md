@@ -29,6 +29,17 @@ Pull in all changes from submodules:
 $ git submodule update --remote
 ```
 
+## Quick Port Guide for Development
+
+- `80`: front-end
+- `4000`: auth service
+- `5000`: container service
+- `8000`: api gateway service
+- `8001`: api gateway management/status service
+- `8080`: network service
+- `8888`: web ssh service
+- `27017`: MongoDB service
+
 ## Other Commands
 
 Update a single submodule:
