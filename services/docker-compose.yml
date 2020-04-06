@@ -6,6 +6,9 @@ networks:
   database-net:
     driver: bridge
 
+volumes:
+  mongo-data:
+
 services:
   # Front-end Web Service
   # (accessible at http://localhost:80/)
@@ -111,4 +114,4 @@ services:
       - database-net
     volumes:
       - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro # this works so we're keeping it
-      - ./_docker_compose_volumes/mongoData:/data/db
+      - mongo-data:/data/db
