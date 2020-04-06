@@ -63,12 +63,12 @@ const BodyWidget: React.FC<Props> = ({ app }) => {
             color="rgb(192,0,255)"
           />
           <TrayItemWidget
-            model={{ type: "out" }}
+            model={{ type: "in" }}
             name="Switch"
             color="rgb(192,255,0)"
           />
           <TrayItemWidget
-            model={{ type: "out" }}
+            model={{ type: "in" }}
             name="Firewall"
             color="rgb(255,0,0)"
           />
