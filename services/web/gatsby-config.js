@@ -30,7 +30,7 @@ module.exports = {
     },
     {
       resolve: `gatsby-plugin-create-client-paths`,
-      options: { prefixes: [`/app/*`, `/canvas/*`] },
+      options: { prefixes: [`/app/*`] },
     },
     {
       resolve: `gatsby-plugin-material-ui`,
