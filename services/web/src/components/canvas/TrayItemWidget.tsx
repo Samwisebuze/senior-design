@@ -4,8 +4,8 @@ import styled from "styled-components";
 const Tray = styled.div<{ color?: string }>`
   color: white;
   font-family: Helvetica, Arial;
-  padding: 5px;
-  margin: 0px 10px;
+  padding: 8px;
+  margin: 8px;
   border: solid 1px ${p => p.color || "red"};
   border-radius: 5px;
   margin-bottom: 2px;
@@ -24,7 +24,10 @@ const TrayItemWidget: React.FC<Props> = ({ color, model, name }) => {
       color={color}
       draggable
       onDragStart={event => {
-        event.dataTransfer.setData("storm-diagram-node", JSON.stringify(model));
+        event.dataTransfer.setData(
+          "storm-diagram-node",
+          JSON.stringify({ model, color, name })
+        );
       }}
       className="tray-item"
     >

@@ -40,24 +40,37 @@ interface Props {
 }
 
 const BodyWidget: React.FC<Props> = ({ app }) => {
-  const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
+  const [_, forceUpdate] = useReducer(x => x + 1, 0);
 
+  // ["Host", "Server", "Router", "Switch", "Firewall"]
   return (
     <Body>
-      <Header>
-        <div className="title">Storm React Diagrams - DnD demo</div>
-      </Header>
       <Content>
         <TrayWidget>
           <TrayItemWidget
+            model={{ type: "out" }}
+            name="Host"
+            color="rgb(0,192,255)"
+          />
+          <TrayItemWidget
+            model={{ type: "out" }}
+            name="Server"
+            color="rgb(255,192,0)"
+          />
+          <TrayItemWidget
             model={{ type: "in" }}
-            name="In Node"
+            name="Router"
+            color="rgb(192,0,255)"
+          />
+          <TrayItemWidget
+            model={{ type: "out" }}
+            name="Switch"
             color="rgb(192,255,0)"
           />
           <TrayItemWidget
             model={{ type: "out" }}
-            name="Out Node"
-            color="rgb(0,192,255)"
+            name="Firewall"
+            color="rgb(255,0,0)"
           />
         </TrayWidget>
         <Layer
@@ -73,17 +86,11 @@ const BodyWidget: React.FC<Props> = ({ app }) => {
             ).length;
 
             let node: DefaultNodeModel | null = null;
-            if (data.type === "in") {
-              node = new DefaultNodeModel(
-                `Node ${nodesCount + 1}`,
-                "rgb(192,255,0)"
-              );
+            if (data.model.type === "in") {
+              node = new DefaultNodeModel(data.name, data.color);
               node.addInPort("In");
             } else {
-              node = new DefaultNodeModel(
-                `Node ${nodesCount + 1}`,
-                "rgb(0,192,255)"
-              );
+              node = new DefaultNodeModel(data.name, data.color);
               node.addOutPort("Out");
             }
             const point = app.getDiagramEngine().getRelativeMousePoint(event);

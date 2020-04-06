@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 export const Tray = styled.div`
   min-width: 200px;
-  background: rgb(20, 20, 20);
+  background: rgb(25, 25, 25);
   flex-grow: 0;
   flex-shrink: 0;
 `;
