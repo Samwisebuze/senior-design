@@ -17,33 +17,22 @@ export const getUser = (): User | null => {
 const setUser = (user: User) =>
   window.localStorage.setItem("gatsbyUser", JSON.stringify(user));
 
-export const handleLogin = async ({
+export const handleLogin = ({
   username,
   password,
 }: {
   username: string;
   password: string;
 }) => {
-  try {
-    const response = await fetch("http://localhost:4000/api/v1/authenticate", {
-      method: "post",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, password }),
-    });
-    const data = await response.json();
-
-    console.log("Login Successful", data);
-
+  if (username === `john@gmail.com` && password === `pass`) {
     return setUser({
-      username: data.username,
-      id: data._id,
-      token: data.token,
+      username: `john@gmail.com`,
+      id: `Johnny`,
+      token: `e893089j8fe9apjf3ocj8efoj839fpj83f3a`,
     });
-  } catch (error) {
-    console.error(error);
-
-    return false;
   }
+
+  return false;
 };
 
 export const isLoggedIn = () => {

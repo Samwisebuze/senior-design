@@ -47,9 +47,9 @@ const Login: React.FC = () => {
     );
   };
 
-  const handleSubmit: FormEventHandler = event => {
+  const handleSubmit: FormEventHandler = async event => {
     event.preventDefault();
-    handleLogin(state);
+    await handleLogin(state);
   };
 
   if (isLoggedIn()) {
