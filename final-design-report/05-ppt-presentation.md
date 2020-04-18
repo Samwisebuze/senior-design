@@ -4,4 +4,4 @@ Link to presentation: [https://docs.google.com/presentation/d/1quGG2fYZMX7zi2mWD
 
 ---
 
-[⭠ Previous Page](#) | [Next Page ⭢](#)
+[⭠ Previous Page](#) | [Next Page ⭢](06-final-expo-poster.md)
