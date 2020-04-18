@@ -2,7 +2,7 @@
 
 | Document | Link |
 | -------- | ---- |
-|1. Project Description | TODO |
+|1. Project Description | [01-project-description.md](01-project-description.md) |
 |2. User Interface Specification | TODO |
 |3. Test Plan and Results | TODO |
 |4. User Manual | TODO |
