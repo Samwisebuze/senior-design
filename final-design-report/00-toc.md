@@ -1,4 +1,6 @@
-# Table of Contents
+# Final Design Report
+
+## Table of Contents
 
 | Document | Link |
 | -------- | ---- |
