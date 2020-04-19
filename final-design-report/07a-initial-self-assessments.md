@@ -53,4 +53,4 @@ In designing a solution, our project has three core components: an interactive, 
 
 ---
 
-[⭠ Previous Page](06-final-expo-poster.md) | [Next Page ⭢](#)
+[⭠ Previous Page](06-final-expo-poster.md) | [Next Page ⭢](07b-final-self-assessments.md)
