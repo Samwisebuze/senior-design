@@ -2,7 +2,9 @@
 
 ## Korey Huskonen
 
-TODO
+My primary contribution to Virtuoso is the Virtual Network Creation Engine (VNCE), the component responsible for creating and configuring the actual “virtual devices” on the server. Developing the VNCE, which I dubbed Containeroso, provided ample opportunity to build upon the skills I mentioned in the fall, mainly applied networking and software containerization. Containeroso is ultimately a Python Flask app that manages the lifecycle of Docker containers and networks. Building it required drawing on my knowledge of graph theory (from classes like Discrete Structures), networking and iptables (from Cyber Defense), and API design (from Software Engineering). The major success of Containeroso is that it only uses Docker to emulate entire virtual networks, which makes the creation and teardown of these networks easy and artifact-free. However, it took a significant amount of research before I arrived at this Docker-only solution, because while Docker’s built-in networking features are robust, they are not suited for emulating networks of arbitrary complexity. For example, you cannot connect two “Docker networks” together, and route traffic across their domains. But Containeroso can. 
+
+Our group accomplished what we set out to build: an app that lets you create and interact with virtual networks from an easy-to-use, intuitive web interface. It’s simple, it works, and it can be used to teach networking fundamentals. Throughout this process, I’ve had the opportunity to learn from my knowledgeable peers about modern web app design and best practices. I’ve learned that working with a group on a large software project requires discipline and frequent communication. I’ve also learned that while modern programming tools like Git and Docker enable you to develop independently and easily integrate different team members’ code modules, this process is still not trivial. Each of us made valuable contributions to the project, and I enjoyed working with this team. 
 
 ## Samuel Buzas
 
