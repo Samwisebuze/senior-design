@@ -8,6 +8,7 @@ import TrayWidget from "./TrayWidget";
 import Application from "./application";
 import TrayItemWidget from "./TrayItemWidget";
 import Canvas from "./Canvas";
+import Button from "@material-ui/core/Button";
 
 const Body = styled.div`
   flex-grow: 1;
@@ -43,6 +44,12 @@ const StyledFab = styled(Fab)`
   right: 16px;
 `;
 
+const StyledButton = styled(Button)`
+  bottom: 16px;
+  left: 16px;
+  position: absolute;
+`;
+
 interface Props {
   app: Application;
 }
@@ -70,6 +77,13 @@ const BodyWidget: React.FC<Props> = ({ app }) => {
             name="Switch"
             color="rgb(255,192,0)"
           />
+          <StyledButton
+            variant="contained"
+            color="secondary"
+            href="http://localhost:8888?hostname=1e7ca3482f5344be"
+          >
+            Inspect Node
+          </StyledButton>
         </TrayWidget>
         <Layer
           onDrop={event => {
@@ -119,7 +133,5 @@ const BodyWidget: React.FC<Props> = ({ app }) => {
     </Body>
   );
 };
-
-// href="http://localhost:8888?hostname=660fd7b1403f4987"
 
 export default BodyWidget;
