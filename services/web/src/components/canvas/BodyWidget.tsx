@@ -2,6 +2,8 @@ import * as React from "react";
 import { DefaultNodeModel } from "@projectstorm/react-diagrams";
 import styled from "@emotion/styled";
 import { useReducer } from "react";
+import Fab from "@material-ui/core/Fab";
+import AddIcon from "@material-ui/icons/Add";
 import TrayWidget from "./TrayWidget";
 import Application from "./application";
 import TrayItemWidget from "./TrayItemWidget";
@@ -35,6 +37,12 @@ const Layer = styled.div`
   flex-grow: 1;
 `;
 
+const StyledFab = styled(Fab)`
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+`;
+
 interface Props {
   app: Application;
 }
@@ -53,24 +61,14 @@ const BodyWidget: React.FC<Props> = ({ app }) => {
             color="rgb(0,192,255)"
           />
           <TrayItemWidget
-            model={{ type: "out" }}
-            name="Server"
-            color="rgb(255,192,0)"
-          />
-          <TrayItemWidget
-            model={{ type: "in" }}
+            model={{ type: "both" }}
             name="Router"
             color="rgb(192,0,255)"
           />
           <TrayItemWidget
-            model={{ type: "in" }}
+            model={{ type: "both" }}
             name="Switch"
-            color="rgb(192,255,0)"
-          />
-          <TrayItemWidget
-            model={{ type: "in" }}
-            name="Firewall"
-            color="rgb(255,0,0)"
+            color="rgb(255,192,0)"
           />
         </TrayWidget>
         <Layer
@@ -89,8 +87,12 @@ const BodyWidget: React.FC<Props> = ({ app }) => {
             if (data.model.type === "in") {
               node = new DefaultNodeModel(data.name, data.color);
               node.addInPort("In");
+            } else if (data.model.type === "out") {
+              node = new DefaultNodeModel(data.name, data.color);
+              node.addOutPort("Out");
             } else {
               node = new DefaultNodeModel(data.name, data.color);
+              node.addInPort("In");
               node.addOutPort("Out");
             }
             const point = app.getDiagramEngine().getRelativeMousePoint(event);
@@ -109,9 +111,15 @@ const BodyWidget: React.FC<Props> = ({ app }) => {
         >
           <Canvas engine={app.getDiagramEngine()} />
         </Layer>
+        <StyledFab color="primary" variant="extended">
+          <AddIcon style={{ "margin-right": "4px" }} />
+          Create Network
+        </StyledFab>
       </Content>
     </Body>
   );
 };
+
+// href="http://localhost:8888?hostname=660fd7b1403f4987"
 
 export default BodyWidget;
