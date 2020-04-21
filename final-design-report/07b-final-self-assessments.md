@@ -8,7 +8,14 @@ Our group accomplished what we set out to build: an app that lets you create and
 
 ## Samuel Buzas
 
-TODO
+My contributions to the Virtuoso project were mostly technical. I worked with Noah to plan and create our architecture. This involved a fair amount of research into the existing tooling and platforms available to us. I learned a great deal about proper API design and attempted to apply it to our project. My main contribution to the project was our network service, which serves as the persistence service for network domain documents.
+
+When writing on the Network Service, I attempted to use Typescript. I found it to be a major departure from the tooling and features I was accustomed to. I found it was to much work to learn about the JavaScript ecosystem and produce high-quality code at the same time. I chose to re-write the service in Java, using the spring framework. Luckily our architecture choices made that rewrite possible. My success was growing my API design skills and sharing that skill with fellow students through the ACM. I applied my skills in my service, making it well structured and evolvable. My obstacle was a lack of knowledge about the Javascript development ecosystem. This prevented me from working efficiently, making informed decisions, and contributed to burnout.
+
+Our group set out to create a fully-functional web platform for interactively learning about computer networks. While we didn't deliver the entire package, we have developed a solid proof-of-concept. From this experience, I've learned that real software projects are extremely complex. In greenfield projects, where everything is being made from scratch, it can be hard to make choices do the sheer amount of options available. We did learn the value of sticking to an MVP plan and making working software first. 
+
+I'm content with what we have created with our project. I know that it's not completely ready for real usage, but it's set up in a way that will encourage me to revisit it in the future. I feel that I played my part in helping to plan an motivate the group during the fall. I guided us through the initial architecture and helped my teammates understand the components we would need. I do feel that during the spring semester I dropped the ball. The stresses of life got to me and instead of continuing to work I just sort of shut down. There is a lesson to be learned about developer burnout and making sure to balance your schedule to avoid it. I'd like to give special thanks to Noah Bass, for really leading the team overall. He helped us stay on task, kept us creative, and put in many hours coding too.
+
 
 ## Nick Rook
 
