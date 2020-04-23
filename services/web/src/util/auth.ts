@@ -46,6 +46,29 @@ export const handleLogin = async ({
   }
 };
 
+export const handleSignup = async ({
+  username,
+  password,
+}: {
+  username: string;
+  password: string;
+}) => {
+  const response = await fetch("http://localhost:4000/api/v1/register", {
+    method: "post",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ username, password }),
+  });
+  const data = await response.json();
+
+  console.log("Login Successful", data);
+
+  return setUser({
+    username: data.username,
+    id: data._id,
+    token: data.token,
+  });
+};
+
 export const isLoggedIn = () => {
   const user = getUser();
   if (!user) {
