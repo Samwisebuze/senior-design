@@ -10,7 +10,7 @@
 
 ```sh
 $ git clone --recurse-submodules git@github.com:Samwisebuze/senior-design.git
-$ cd senior-design
+$ cd senior-design/services
 $ docker-compose up # or `docker-compose up --build` if you need to build in changes
 # (use ^c to stop)
 ```
