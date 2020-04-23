@@ -1,10 +1,17 @@
 import React from "react";
-import { Link } from "gatsby";
+import { Link, navigate } from "gatsby";
 
 import SEO from "../components/seo";
 import BaseLayout from "../components/BaseLayout";
+import { isLoggedIn } from "../util/auth";
 
 const IndexPage = () => {
+  if (isLoggedIn()) {
+    navigate(`/app`);
+  } else {
+    navigate(`/login`);
+  }
+
   return (
     <BaseLayout>
       <SEO title="Home" />
