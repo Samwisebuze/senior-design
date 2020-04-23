@@ -4,11 +4,11 @@ import styled from "@emotion/styled";
 import { useReducer } from "react";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
+import Button from "@material-ui/core/Button";
 import TrayWidget from "./TrayWidget";
 import Application from "./application";
 import TrayItemWidget from "./TrayItemWidget";
 import Canvas from "./Canvas";
-import Button from "@material-ui/core/Button";
 
 const Body = styled.div`
   flex-grow: 1;
@@ -54,8 +54,97 @@ interface Props {
   app: Application;
 }
 
+interface Machine {
+  id: string;
+  type: string;
+  connectedSwitches: string[];
+  connectedRouters: string[];
+  image?: string;
+}
+
 const BodyWidget: React.FC<Props> = ({ app }) => {
   const [_, forceUpdate] = useReducer(x => x + 1, 0);
+
+  const handleCreateNetwork = async () => {
+    const model = app.getDiagramEngine().getModel();
+    const nodes = model.getNodes();
+
+    // Initialize all machines
+    const machines = nodes.map(node => {
+      const { id, name } = node.getOptions();
+      const type = name.toLowerCase();
+
+      const connectedSwitches: string[] = [];
+      const connectedRouters: string[] = [];
+
+      let machine: Machine = {
+        id: id || "",
+        type,
+        connectedSwitches,
+        connectedRouters,
+      };
+
+      if (type === "host") {
+        machine = { image: "virtuoso", ...machine };
+      }
+
+      return machine;
+    });
+
+    // Add all connected routers and switches to each machine
+    const links = model.getLinks();
+    links.forEach(link => {
+      const sourcePort = link.getSourcePort();
+      const targetPort = link.getTargetPort();
+
+      // Make sure the link connects two nodes
+      if (!sourcePort || !targetPort) {
+        return;
+      }
+
+      const sOpts = sourcePort.getParent().getOptions();
+      const tOpts = targetPort.getParent().getOptions();
+
+      if (sOpts.name.toLowerCase() === "switch") {
+        const idex = machines.findIndex(machine => machine.id === tOpts.id);
+        machines[idex].connectedSwitches.push(sOpts.id);
+      }
+
+      if (sOpts.name.toLowerCase() === "router") {
+        const idex = machines.findIndex(machine => machine.id === tOpts.id);
+        machines[idex].connectedRouters.push(sOpts.id);
+      }
+
+      if (tOpts.name.toLowerCase() === "switch") {
+        const idex = machines.findIndex(machine => machine.id === sOpts.id);
+        machines[idex].connectedSwitches.push(tOpts.id);
+      }
+
+      if (tOpts.name.toLowerCase() === "router") {
+        const idex = machines.findIndex(machine => machine.id === sOpts.id);
+        machines[idex].connectedRouters.push(tOpts.id);
+      }
+    });
+
+    console.log(machines);
+
+    const response = await fetch("http://localhost:5000/api/create-network", {
+      method: "post",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        networkId: 3,
+        machines,
+      }),
+    });
+
+    if (!response.ok) {
+      console.log(
+        "Network creation Failed. Response came back with code other than 200"
+      );
+    }
+
+    console.log("response", response);
+  };
 
   // ["Host", "Server", "Router", "Switch", "Firewall"]
   return (
@@ -125,8 +214,12 @@ const BodyWidget: React.FC<Props> = ({ app }) => {
         >
           <Canvas engine={app.getDiagramEngine()} />
         </Layer>
-        <StyledFab color="primary" variant="extended">
-          <AddIcon style={{ "margin-right": "4px" }} />
+        <StyledFab
+          color="primary"
+          variant="extended"
+          onClick={handleCreateNetwork}
+        >
+          <AddIcon style={{ marginRight: "4px" }} />
           Create Network
         </StyledFab>
       </Content>
