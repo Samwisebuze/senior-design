@@ -86,7 +86,7 @@ Expected Outputs: HTTP responses and runtime information
 |Test Identifier | Normal / Abnormal | Blackbox / Whitebox | Functional / Performance | Unit / Integration |
 | --- | --- | --- | --- | --- | 
 |NDUT| Normal|Whitebox|Functional|Unit|
-|NDPT|Normal|Blackbox|Functional| Unite|
+|NDPT|Normal|Blackbox|Functional| Unit|
 |NSACT|Normal|Blackbox|Functional|Integration|
 |CSACT|Normal|Blackbox|Functional|Integration|
 |CDCT|Normal|Blackbox|Functional|Integration|
