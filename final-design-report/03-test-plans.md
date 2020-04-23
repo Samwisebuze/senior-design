@@ -56,6 +56,22 @@ Expected Outputs: HTTP responses and runtime information
 - **Expected Outputs**: Pass/Fail based on test assertions
 
 
+### Frontend Web Service Tests
+
+- **ID**: FWSUT - Frontend Web Service Unit Tests
+- **Purpose**: Validate individual web components and their functionality/display
+- **Description**: Validate each React component with different states and input props. Validate both expected and unexpected props to ensure that code behaves in a consistent and intended way.
+- **Inputs**: Javascript objects representing potential props
+- **Expected Outputs**: Pass/Fail based on test assertions
+
+---------
+
+- **ID**: FWSIT - Frontend Web Service Integration Tests
+- **Purpose**: Validate high level web components and pages and their integrated performance
+- **Description**: Validate each web page renders properly and responds to user interaction. Nothing should be mocked out aside from API calls as this is the most valuable test case.
+- **Inputs**: Mock API responses
+- **Expected Outputs**: Pass/Fail based on test assertions. Successful render of page
+
 ### General Tests
 
 - **ID**: FSST - Full System Startup Test
@@ -75,5 +91,7 @@ Expected Outputs: HTTP responses and runtime information
 |CSACT|Normal|Blackbox|Functional|Integration|
 |CDCT|Normal|Blackbox|Functional|Integration|
 |WSUT|Normal|Blackbox|Functional|Unit|
+|FWSUT|Normal|Blackbox|Functional|Unit|
+|FWSIT|Normal|Blackbox|Functional|Integration|
 |FSST|Normal|Blackbox|Functional|Integration|
 
