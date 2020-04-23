@@ -82,9 +82,9 @@ const SignUp: React.FC = () => {
                   required
                   fullWidth
                   id="username"
-                  label="Username"
+                  label="Email"
                   name="username"
-                  autoComplete="username"
+                  autoComplete="email"
                   autoFocus
                   onChange={handleUpdate}
                 />

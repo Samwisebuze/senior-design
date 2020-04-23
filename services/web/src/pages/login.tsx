@@ -48,7 +48,12 @@ const Login: React.FC = () => {
 
   const handleSubmit: FormEventHandler = async event => {
     event.preventDefault();
-    await handleLogin(state);
+    try {
+      await handleLogin(state);
+      navigate(`/app`);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   if (isLoggedIn()) {

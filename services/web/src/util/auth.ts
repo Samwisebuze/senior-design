@@ -24,26 +24,27 @@ export const handleLogin = async ({
   username: string;
   password: string;
 }) => {
-  try {
-    const response = await fetch("http://localhost:4000/api/v1/authenticate", {
-      method: "post",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, password }),
-    });
-    const data = await response.json();
+  const response = await fetch("http://localhost:4000/api/v1/authenticate", {
+    method: "post",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ username, password }),
+  });
 
-    console.log("Login Successful", data);
-
-    return setUser({
-      username: data.username,
-      id: data._id,
-      token: data.token,
-    });
-  } catch (error) {
-    console.error(error);
-
-    return false;
+  if (!response.ok) {
+    throw new Error(
+      "Login Failed. Response came back with code other than 200"
+    );
   }
+
+  const data = await response.json();
+
+  console.log("Login Response", data);
+
+  return setUser({
+    username: data.username,
+    id: data._id,
+    token: data.token,
+  });
 };
 
 export const handleSignup = async ({
@@ -60,7 +61,12 @@ export const handleSignup = async ({
   });
   const data = await response.json();
 
-  console.log("Login Successful", data);
+  if (data.errors) {
+    console.error("Error Signing Up", data);
+    throw data.errors[0].msg;
+  }
+
+  console.log("Signup Successful", data);
 
   return setUser({
     username: data.username,
