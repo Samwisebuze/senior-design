@@ -24,15 +24,25 @@ export const handleLogin = ({
   username: string;
   password: string;
 }) => {
-  if (username === `john@gmail.com` && password === `pass`) {
+  if (username === `john` && password === `pass`) {
     return setUser({
-      username: `john@gmail.com`,
+      username: `john`,
       id: `Johnny`,
       token: `e893089j8fe9apjf3ocj8efoj839fpj83f3a`,
     });
   }
 
   return false;
+};
+
+export const handleSignup = async ({
+  username,
+  password,
+}: {
+  username: string;
+  password: string;
+}) => {
+  return true;
 };
 
 export const isLoggedIn = () => {

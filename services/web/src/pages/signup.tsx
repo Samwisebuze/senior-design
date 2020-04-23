@@ -1,5 +1,4 @@
-import React, { useState, ChangeEventHandler, FormEventHandler } from "react";
-import { navigate, Link as GatsbyLink } from "gatsby";
+import React, { FormEventHandler, useState, ChangeEventHandler } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -10,9 +9,10 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import { handleLogin, isLoggedIn } from "../util/auth";
+import { navigate, Link as GatsbyLink } from "gatsby";
 import BaseLayout from "../components/BaseLayout";
 import SEO from "../components/seo";
+import { handleSignup } from "../util/auth";
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -27,14 +27,14 @@ const useStyles = makeStyles(theme => ({
   },
   form: {
     width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(1),
+    marginTop: theme.spacing(3),
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
 }));
 
-const Login: React.FC = () => {
+const SignUp: React.FC = () => {
   const classes = useStyles();
   const [state, setState] = useState({ username: ``, password: `` });
 
@@ -49,20 +49,16 @@ const Login: React.FC = () => {
   const handleSubmit: FormEventHandler = async event => {
     event.preventDefault();
     try {
-      await handleLogin(state);
-      navigate(`/app`);
-    } catch (error) {
-      console.error(error);
+      await handleSignup(state);
+      navigate(`/login`);
+    } catch (e) {
+      console.error(e);
     }
   };
 
-  if (isLoggedIn()) {
-    navigate(`/app`);
-  }
-
   return (
     <BaseLayout>
-      <SEO title="Login" />
+      <SEO title="Sign Up" />
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <div className={classes.paper}>
@@ -70,41 +66,43 @@ const Login: React.FC = () => {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            Sign up
           </Typography>
           <form
             className={classes.form}
             noValidate
-            method="post"
             onSubmit={event => {
               handleSubmit(event);
-              navigate(`/app`);
             }}
           >
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              id="username"
-              label="Username"
-              name="username"
-              autoComplete="username"
-              autoFocus
-              onChange={handleUpdate}
-            />
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-              onChange={handleUpdate}
-            />
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <TextField
+                  variant="outlined"
+                  required
+                  fullWidth
+                  id="username"
+                  label="Email"
+                  name="username"
+                  autoComplete="email"
+                  autoFocus
+                  onChange={handleUpdate}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  variant="outlined"
+                  required
+                  fullWidth
+                  name="password"
+                  label="Password"
+                  type="password"
+                  id="password"
+                  autoComplete="current-password"
+                  onChange={handleUpdate}
+                />
+              </Grid>
+            </Grid>
             <Button
               type="submit"
               fullWidth
@@ -112,21 +110,13 @@ const Login: React.FC = () => {
               color="primary"
               className={classes.submit}
             >
-              Sign In
+              Sign Up
             </Button>
-            <Grid container>
-              <Grid item xs>
-                <Link
-                  href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-                  variant="body2"
-                >
-                  Forgot password?
-                </Link>
-              </Grid>
+            <Grid container justify="flex-end">
               <Grid item>
-                <GatsbyLink to="/signup/" style={{ textDecoration: "none" }}>
+                <GatsbyLink to="/login/" style={{ textDecoration: "none" }}>
                   <Link href="#" variant="body2">
-                    Don&apos;t have an account? Sign Up
+                    Already have an account? Sign in
                   </Link>
                 </GatsbyLink>
               </Grid>
@@ -138,4 +128,4 @@ const Login: React.FC = () => {
   );
 };
 
-export default Login;
+export default SignUp;
