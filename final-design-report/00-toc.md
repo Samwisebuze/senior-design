@@ -12,4 +12,4 @@
 |6. Final Expo Poster | [06-final-expo-poster.md](06-final-expo-poster.md) |
 |7a. Assessments: Initial Self-Assessments (Fall) | [07a-initial-self-assessments.md](07a-initial-self-assessments.md) |
 |7b. Assessments: Final Self-Assessments (Spring) | [07b-final-self-assessments.md](07b-final-self-assessments.md) |
-|8. Summary of Hours and Justification | TODO |
+|8. Summary of Hours and Justification | [09-summary-of-hours.md](09-summary-of-hours.md) |
