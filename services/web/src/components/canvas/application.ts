@@ -16,6 +16,11 @@ class Application {
     this.diagramEngine.setModel(this.activeModel);
   }
 
+  public newModel() {
+    this.activeModel = new SRD.DiagramModel();
+    this.diagramEngine.setModel(this.activeModel);
+  }
+
   public getActiveDiagram(): SRD.DiagramModel {
     return this.activeModel;
   }

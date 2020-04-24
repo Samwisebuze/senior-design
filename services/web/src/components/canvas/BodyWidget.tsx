@@ -179,6 +179,8 @@ const BodyWidget: React.FC<Props> = ({ app }) => {
     }
 
     window.localStorage.removeItem("diagramModel");
+    app.newModel();
+    forceUpdate();
   };
 
   // ["Host", "Server", "Router", "Switch", "Firewall"]
