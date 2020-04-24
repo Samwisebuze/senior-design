@@ -57,7 +57,7 @@ const FormDialog: React.FC<Props> = ({ options = [], onClose, ...rest }) => {
         <Button onClick={onClose} color="primary">
           Cancel
         </Button>
-        <Button onClick={handleSsh} color="primary">
+        <Button onClick={handleSsh} color="primary" disabled={!value}>
           Go
         </Button>
       </DialogActions>

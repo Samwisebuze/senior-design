@@ -133,6 +133,9 @@ const BodyWidget: React.FC<Props> = ({ app }) => {
   const [snackbarText, setSnackbarText] = React.useState(SUCCESSCREATE);
   const [inspectOpen, setInspectOpen] = React.useState(false);
   const [options, setOptions] = React.useState([""]);
+  const [networkCreated, setNetworkCreated] = React.useState(
+    !!window.localStorage.getItem("diagramModel")
+  );
 
   const handleOpenInspect = () => {
     const machines = getMachines(app.getDiagramEngine().getModel());
@@ -184,6 +187,7 @@ const BodyWidget: React.FC<Props> = ({ app }) => {
 
     setSnackbarOpen(true);
     setSnackbarText(SUCCESSCREATE);
+    setNetworkCreated(true);
 
     window.localStorage.setItem(
       "diagramModel",
@@ -218,6 +222,7 @@ const BodyWidget: React.FC<Props> = ({ app }) => {
 
     setSnackbarOpen(true);
     setSnackbarText(SUCCESSDELETE);
+    setNetworkCreated(false);
   };
 
   // ["Host", "Server", "Router", "Switch", "Firewall"]
@@ -244,6 +249,7 @@ const BodyWidget: React.FC<Props> = ({ app }) => {
             variant="contained"
             color="secondary"
             onClick={handleOpenInspect}
+            disabled={!networkCreated}
           >
             Inspect Host
           </StyledButton2>
@@ -299,6 +305,7 @@ const BodyWidget: React.FC<Props> = ({ app }) => {
           color="primary"
           variant="extended"
           onClick={handleCreateNetwork}
+          disabled={networkCreated}
         >
           <AddIcon style={{ marginRight: "4px" }} />
           Create Network
