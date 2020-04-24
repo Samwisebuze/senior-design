@@ -19,7 +19,14 @@ I'm content with what we have created with our project. I know that it's not com
 
 ## Nick Rook
 
-TODO
+My main contribution was to design and implement the frontend of Virtuoso. The first skill I built to do this was learning a design tool called Figma. This allowed me to create visual mockups of the user interface I would later create in a time efficient manner. Being able to move quickly with designs made it easy to test and iterate designs with potential users. The second skill I built was how to create static and dynamic sites using Gatsby and React.js. Gatsby is a react framework which allows me to implement a fast frontend website with a small bundle size. 
+
+The main obstacles I faced were in getting a design settled and figuring out how to implement those designs. Designing a user interface requires a lot of back and forth between me and my potential users. I needed to gain a deep understanding of how both teachers and students would be using Virtuoso to create a design that was easy for them to understand and follow. Then once the design was finalized, building out the app had its own challenges. I struggled for a while to implement a drag and drop diagramming tool to model computer networks. Working past my obstacles, my successes were in acquiring the new skills I needed as well as building a fully functioning user interface.
+
+Our group managed to accomplish creating a prototype for an application that can be used by both educators and students to learn more about computer networking. This includes an integrated frontend user interface on top of a host of individual services to simulate computer networking actions. We learned that programming in a team can be difficult, but allows us to accomplish more than any one person could do alone. One of the successes we had was in splitting the work into different individual services. This allowed us to work together to build out a connected application without stepping on each other's toes. One of the failures we faced was in the initial communication between services. No one created documentation at first for how to use their services which made it difficult to integrate them.
+
+I believe that my efforts on the project were equal to those of my teammates. We each took a different feature of the final application and were able to build them out based on our individual skills. When it came to planning and each assignment, we all got together, either virtually or in person, to complete the tasks. I want to recognize Noah for helping to build out documentation for our services. Without that, integrating our services together would have been a nightmare.
+
 
 ## Noah Bass
 
