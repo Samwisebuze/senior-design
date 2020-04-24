@@ -50,6 +50,12 @@ const StyledButton = styled(Button)`
   position: absolute;
 `;
 
+const StyledButton2 = styled(Button)`
+  bottom: 64px;
+  left: 16px;
+  position: absolute;
+`;
+
 interface Props {
   app: Application;
 }
@@ -128,22 +134,51 @@ const BodyWidget: React.FC<Props> = ({ app }) => {
 
     console.log(machines);
 
+    const body = JSON.stringify({
+      networkId: 3,
+      machines,
+    });
+
     const response = await fetch("http://localhost:5000/api/create-network", {
       method: "post",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        networkId: 3,
-        machines,
-      }),
+      body,
     });
 
+    console.log("response", response);
     if (!response.ok) {
       console.log(
         "Network creation Failed. Response came back with code other than 200"
       );
+      return;
     }
 
+    window.localStorage.setItem(
+      "diagramModel",
+      JSON.stringify(model.serialize())
+    );
+  };
+
+  const handleDeleteNetwork = async () => {
+    const body = JSON.stringify({
+      networkId: 3,
+    });
+
+    const response = await fetch("http://localhost:5000/api/delete-network", {
+      method: "delete",
+      headers: { "Content-Type": "application/json" },
+      body,
+    });
+
     console.log("response", response);
+    if (!response.ok) {
+      console.log(
+        "Network Deletion Failed. Response came back with code other than 200"
+      );
+      return;
+    }
+
+    window.localStorage.removeItem("diagramModel");
   };
 
   // ["Host", "Server", "Router", "Switch", "Firewall"]
@@ -166,12 +201,19 @@ const BodyWidget: React.FC<Props> = ({ app }) => {
             name="Switch"
             color="rgb(255,192,0)"
           />
-          <StyledButton
+          <StyledButton2
             variant="contained"
             color="secondary"
             href="http://localhost:8888?hostname=1e7ca3482f5344be"
           >
             Inspect Node
+          </StyledButton2>
+          <StyledButton
+            variant="contained"
+            color="default"
+            onClick={handleDeleteNetwork}
+          >
+            Delete Network
           </StyledButton>
         </TrayWidget>
         <Layer

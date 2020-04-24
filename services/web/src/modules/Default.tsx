@@ -6,10 +6,16 @@ import BodyWidget from "../components/canvas/BodyWidget";
 interface Props extends RouteComponentProps {}
 
 const Default: React.FC<Props> = () => {
-  // TODO: Find a way to pass app in as a prop and store app in local storage or something
-  const app = new Application();
+  let app: Application;
 
-  console.log("Render");
+  const diagramModel = window.localStorage.getItem("diagramModel");
+  if (diagramModel) {
+    console.log(diagramModel);
+    app = new Application(diagramModel);
+  } else {
+    app = new Application();
+  }
+
   return <BodyWidget app={app} />;
 };
 
