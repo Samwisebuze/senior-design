@@ -5,6 +5,7 @@ import { useReducer } from "react";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
 import Button from "@material-ui/core/Button";
+import Snackbar from "@material-ui/core/Snackbar";
 import TrayWidget from "./TrayWidget";
 import Application from "./application";
 import TrayItemWidget from "./TrayItemWidget";
@@ -68,8 +69,23 @@ interface Machine {
   image?: string;
 }
 
+const SUCCESSCREATE = "Successfully created network";
+const ERRORCREATE = "Error creating network";
+const SUCCESSDELETE = "Successfully deleted network";
+const ERRORDELETE = "Error deleting network";
+
 const BodyWidget: React.FC<Props> = ({ app }) => {
   const [_, forceUpdate] = useReducer(x => x + 1, 0);
+  const [snackbarOpen, setSnackbarOpen] = React.useState(false);
+  const [snackbarText, setSnackbarText] = React.useState(SUCCESSCREATE);
+
+  const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setSnackbarOpen(false);
+  };
 
   const handleCreateNetwork = async () => {
     const model = app.getDiagramEngine().getModel();
@@ -150,8 +166,13 @@ const BodyWidget: React.FC<Props> = ({ app }) => {
       console.log(
         "Network creation Failed. Response came back with code other than 200"
       );
+      setSnackbarOpen(true);
+      setSnackbarText(ERRORCREATE);
       return;
     }
+
+    setSnackbarOpen(true);
+    setSnackbarText(SUCCESSCREATE);
 
     window.localStorage.setItem(
       "diagramModel",
@@ -175,12 +196,17 @@ const BodyWidget: React.FC<Props> = ({ app }) => {
       console.log(
         "Network Deletion Failed. Response came back with code other than 200"
       );
+      setSnackbarOpen(true);
+      setSnackbarText(ERRORDELETE);
       return;
     }
 
     window.localStorage.removeItem("diagramModel");
     app.newModel();
     forceUpdate();
+
+    setSnackbarOpen(true);
+    setSnackbarText(SUCCESSDELETE);
   };
 
   // ["Host", "Server", "Router", "Switch", "Firewall"]
@@ -267,6 +293,12 @@ const BodyWidget: React.FC<Props> = ({ app }) => {
           Create Network
         </StyledFab>
       </Content>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleClose}
+        message={snackbarText}
+      />
     </Body>
   );
 };
