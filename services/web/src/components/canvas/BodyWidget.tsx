@@ -1,5 +1,5 @@
 import * as React from "react";
-import { DefaultNodeModel } from "@projectstorm/react-diagrams";
+import { DefaultNodeModel, DiagramModel } from "@projectstorm/react-diagrams";
 import styled from "@emotion/styled";
 import { useReducer } from "react";
 import Fab from "@material-ui/core/Fab";
@@ -10,23 +10,13 @@ import TrayWidget from "./TrayWidget";
 import Application from "./application";
 import TrayItemWidget from "./TrayItemWidget";
 import Canvas from "./Canvas";
+import InspectDialog from "./InspectDialog";
 
 const Body = styled.div`
   flex-grow: 1;
   display: flex;
   flex-direction: column;
   min-height: 100%;
-`;
-
-const Header = styled.div`
-  display: flex;
-  background: rgb(30, 30, 30);
-  flex-grow: 0;
-  flex-shrink: 0;
-  color: white;
-  font-family: Helvetica, Arial, sans-serif;
-  padding: 10px;
-  align-items: center;
 `;
 
 const Content = styled.div`
@@ -57,10 +47,6 @@ const StyledButton2 = styled(Button)`
   position: absolute;
 `;
 
-interface Props {
-  app: Application;
-}
-
 interface Machine {
   id: string;
   type: string;
@@ -69,15 +55,97 @@ interface Machine {
   image?: string;
 }
 
+const getMachines: (model: DiagramModel) => Machine[] = model => {
+  const nodes = model.getNodes();
+
+  // Initialize all machines
+  const machines = nodes.map(node => {
+    const { id, name } = node.getOptions();
+    const type = name.toLowerCase();
+
+    const connectedSwitches: string[] = [];
+    const connectedRouters: string[] = [];
+
+    let machine: Machine = {
+      id: id || "",
+      type,
+      connectedSwitches,
+      connectedRouters,
+    };
+
+    if (type === "host") {
+      machine = { image: "virtuoso", ...machine };
+    }
+
+    return machine;
+  });
+
+  // Add all connected routers and switches to each machine
+  const links = model.getLinks();
+  links.forEach(link => {
+    const sourcePort = link.getSourcePort();
+    const targetPort = link.getTargetPort();
+
+    // Make sure the link connects two nodes
+    if (!sourcePort || !targetPort) {
+      return;
+    }
+
+    const sOpts = sourcePort.getParent().getOptions();
+    const tOpts = targetPort.getParent().getOptions();
+
+    if (sOpts.name.toLowerCase() === "switch") {
+      const idex = machines.findIndex(machine => machine.id === tOpts.id);
+      machines[idex].connectedSwitches.push(sOpts.id);
+    }
+
+    if (sOpts.name.toLowerCase() === "router") {
+      const idex = machines.findIndex(machine => machine.id === tOpts.id);
+      machines[idex].connectedRouters.push(sOpts.id);
+    }
+
+    if (tOpts.name.toLowerCase() === "switch") {
+      const idex = machines.findIndex(machine => machine.id === sOpts.id);
+      machines[idex].connectedSwitches.push(tOpts.id);
+    }
+
+    if (tOpts.name.toLowerCase() === "router") {
+      const idex = machines.findIndex(machine => machine.id === sOpts.id);
+      machines[idex].connectedRouters.push(tOpts.id);
+    }
+  });
+
+  return machines;
+};
+
 const SUCCESSCREATE = "Successfully created network";
 const ERRORCREATE = "Error creating network";
 const SUCCESSDELETE = "Successfully deleted network";
 const ERRORDELETE = "Error deleting network";
 
+interface Props {
+  app: Application;
+}
+
 const BodyWidget: React.FC<Props> = ({ app }) => {
   const [_, forceUpdate] = useReducer(x => x + 1, 0);
   const [snackbarOpen, setSnackbarOpen] = React.useState(false);
   const [snackbarText, setSnackbarText] = React.useState(SUCCESSCREATE);
+  const [inspectOpen, setInspectOpen] = React.useState(false);
+  const [options, setOptions] = React.useState([""]);
+
+  const handleOpenInspect = () => {
+    const machines = getMachines(app.getDiagramEngine().getModel());
+    const hostIds = machines
+      .filter(machine => machine.type === "host")
+      .map(machine => machine.id);
+    setOptions(hostIds);
+    setInspectOpen(true);
+  };
+
+  const handleCloseInspect = () => {
+    setInspectOpen(false);
+  };
 
   const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
     if (reason === "clickaway") {
@@ -89,64 +157,7 @@ const BodyWidget: React.FC<Props> = ({ app }) => {
 
   const handleCreateNetwork = async () => {
     const model = app.getDiagramEngine().getModel();
-    const nodes = model.getNodes();
-
-    // Initialize all machines
-    const machines = nodes.map(node => {
-      const { id, name } = node.getOptions();
-      const type = name.toLowerCase();
-
-      const connectedSwitches: string[] = [];
-      const connectedRouters: string[] = [];
-
-      let machine: Machine = {
-        id: id || "",
-        type,
-        connectedSwitches,
-        connectedRouters,
-      };
-
-      if (type === "host") {
-        machine = { image: "virtuoso", ...machine };
-      }
-
-      return machine;
-    });
-
-    // Add all connected routers and switches to each machine
-    const links = model.getLinks();
-    links.forEach(link => {
-      const sourcePort = link.getSourcePort();
-      const targetPort = link.getTargetPort();
-
-      // Make sure the link connects two nodes
-      if (!sourcePort || !targetPort) {
-        return;
-      }
-
-      const sOpts = sourcePort.getParent().getOptions();
-      const tOpts = targetPort.getParent().getOptions();
-
-      if (sOpts.name.toLowerCase() === "switch") {
-        const idex = machines.findIndex(machine => machine.id === tOpts.id);
-        machines[idex].connectedSwitches.push(sOpts.id);
-      }
-
-      if (sOpts.name.toLowerCase() === "router") {
-        const idex = machines.findIndex(machine => machine.id === tOpts.id);
-        machines[idex].connectedRouters.push(sOpts.id);
-      }
-
-      if (tOpts.name.toLowerCase() === "switch") {
-        const idex = machines.findIndex(machine => machine.id === sOpts.id);
-        machines[idex].connectedSwitches.push(tOpts.id);
-      }
-
-      if (tOpts.name.toLowerCase() === "router") {
-        const idex = machines.findIndex(machine => machine.id === sOpts.id);
-        machines[idex].connectedRouters.push(tOpts.id);
-      }
-    });
+    const machines = getMachines(model);
 
     console.log(machines);
 
@@ -232,9 +243,9 @@ const BodyWidget: React.FC<Props> = ({ app }) => {
           <StyledButton2
             variant="contained"
             color="secondary"
-            href="http://localhost:8888?hostname=1e7ca3482f5344be"
+            onClick={handleOpenInspect}
           >
-            Inspect Node
+            Inspect Host
           </StyledButton2>
           <StyledButton
             variant="contained"
@@ -298,6 +309,11 @@ const BodyWidget: React.FC<Props> = ({ app }) => {
         autoHideDuration={6000}
         onClose={handleClose}
         message={snackbarText}
+      />
+      <InspectDialog
+        open={inspectOpen}
+        onClose={handleCloseInspect}
+        options={options}
       />
     </Body>
   );
