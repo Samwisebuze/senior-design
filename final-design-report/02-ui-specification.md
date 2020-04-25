@@ -69,3 +69,7 @@
 [createNetwork]: img/UISpec_CreateNetwork.svg
 [inspectNode]: img/UISpec_SelectNodeSSH.svg
 [WebSSH]: img/UISpec_SSHTerminal.svg
+
+---
+
+[⭠ Previous Page](01-project-description.md) | [Next Page ⭢](03-test-plans.md)

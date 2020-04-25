@@ -98,4 +98,4 @@ Expected Outputs: HTTP responses and runtime information
 
 ---
 
-[⭠ Previous Page](01-project-description.md) | [Next Page ⭢](04-user-manual.md)
+[⭠ Previous Page](02-ui-specification.md) | [Next Page ⭢](04-user-manual.md)

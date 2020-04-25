@@ -4,4 +4,4 @@ Virtuoso is an interactive web platform for teaching high school students the fu
 
 ---
 
-[⭠ Previous Page](00-toc.md) | [Next Page ⭢](#)
+[⭠ Previous Page](00-toc.md) | [Next Page ⭢](02-ui-specification.md)
