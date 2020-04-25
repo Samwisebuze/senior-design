@@ -36,4 +36,4 @@ From my initial assessment last Fall, I applied my back-end software engineering
 
 ---
 
-[⭠ Previous Page](07a-initial-self-assessments.md) | [Next Page ⭢](#)
+[⭠ Previous Page](07a-initial-self-assessments.md) | [Next Page ⭢](09-summary-of-hours.md)
