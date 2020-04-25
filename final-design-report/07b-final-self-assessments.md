@@ -1,5 +1,7 @@
 # Assessments: Final Self-Assessments (Spring)
 
+Final self-assessments from Spring semester:
+
 ## Korey Huskonen
 
 My primary contribution to Virtuoso is the Virtual Network Creation Engine (VNCE), the component responsible for creating and configuring the actual “virtual devices” on the server. Developing the VNCE, which I dubbed Containeroso, provided ample opportunity to build upon the skills I mentioned in the fall, mainly applied networking and software containerization. Containeroso is ultimately a Python Flask app that manages the lifecycle of Docker containers and networks. Building it required drawing on my knowledge of graph theory (from classes like Discrete Structures), networking and iptables (from Cyber Defense), and API design (from Software Engineering). The major success of Containeroso is that it only uses Docker to emulate entire virtual networks, which makes the creation and teardown of these networks easy and artifact-free. However, it took a significant amount of research before I arrived at this Docker-only solution, because while Docker’s built-in networking features are robust, they are not suited for emulating networks of arbitrary complexity. For example, you cannot connect two “Docker networks” together, and route traffic across their domains. But Containeroso can. 

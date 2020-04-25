@@ -1,5 +1,7 @@
 # Assessments: Initial Self-Assessments (Fall)
 
+Self-assessments from Fall semester:
+
 ## Korey Huskonen
 
 Our project is about making it easier to set up virtual computer networks for testing and for teaching students the principles of networking and cybersecurity. We want to use software-defined networking to create a virtualization platform that enables students to create virtual machines with just a few clicks. Setting up virtual networks is not trivial, and existing solutions do not provide a graphical way to view and easily configure entire networks. Moreover, setting up virtual machines using traditional software like VirtualBox is time- and memory-intensive. Our senior design idea gives us a chance to try to solve these problems. In the process, we’ll learn more about containerization technologies and pair our scripting skills with front-end design. Our project should make it easy for future students to learn networking.
