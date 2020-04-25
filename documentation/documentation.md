@@ -4,9 +4,9 @@ A quick start guide for getting up and running with Virtuoso.
 
 ## Contents
 
-- Installation Guide
-- Usage Guide
-- FAQ
+- [Installation Guide](#installation-guide)
+- [Usage Guide](#usage-guide)
+- [FAQ](#faq)
 
 ## Installation Guide
 
@@ -21,7 +21,7 @@ Before installing Virtuoso on your machine or server, you'll need some basic req
 With those installed, clone the repository (with submodules) with Git:
 
 ```sh
-$ git clone --recurse-submodules git@github.com:Samwisebuze/senior-design.git virtuoso
+$ git clone --recurse-submodules git://github.com/Samwisebuze/senior-design.git virtuoso
 $ cd virtuoso
 ```
 
@@ -65,10 +65,31 @@ $ docker-compose up
 
 Open [http://localhost/](http://localhost/) in your web browser to see the front-end user interface.
 
-
 ## Usage Guide
 
-TODO
+To get started with the Virtuoso interface, open [http://localhost/login/](http://localhost/login/) in your web browser. You'll need to login to continue. If you don't have an account, click the Sign Up link.
+
+![Sign In Screen](00-sign-in.png)
+
+Once you're signed in, you're presented with a blank canvas. Drag and drop items from the left sidebar onto the canvas to start building your own network. Drag and drop between nodes to link them together however you like:
+
+![App After Sign In](01-app-after-signin.png)
+
+Once your happy with your network setup, click the Create Network button in the bottom right. Your new network is now created!
+
+![App After Create Network](02-create-network-success.png)
+
+To get full SSH access into a host node, click Inspect Host in the bottom left. Then, choose which host you want to connect to and click Go:
+
+![Inspect Host](03-inspect-host.png)
+
+A new window will appear with full SSH access over inside your web browser:
+
+![SSH Access](04-web-ssh.png)
+
+To exit the SSH session and return to the Virtuoso dashboard, just close the window.
+
+From here, you can access other nodes with the Inspect Host button, or click Delete Network to create a new network.
 
 ## FAQ
 
