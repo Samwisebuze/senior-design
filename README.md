@@ -5,6 +5,7 @@
 ## Important Links
 
 - [Final Design Report](final-design-report/00-toc.md)
+- [Documentation](documentation/documentation.md)
 - [Development guide](services/README.md)
 - [Fall Design Report](fall-design-report/00-toc.md)
 

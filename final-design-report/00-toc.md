@@ -7,7 +7,7 @@
 |1. Project Description | [01-project-description.md](01-project-description.md) |
 |2. User Interface Specification | TODO |
 |3. Test Plan and Results | [03-test-plans.md](03-test-plans.md) |
-|4. User Manual | TODO |
+|4. User Manual | [04-user-manual.md](04-user-manual.md) |
 |5. Spring Final PPT Presentation | [05-ppt-presentation.md](05-ppt-presentation.md) |
 |6. Final Expo Poster | [06-final-expo-poster.md](06-final-expo-poster.md) |
 |7a. Assessments: Initial Self-Assessments (Fall) | [07a-initial-self-assessments.md](07a-initial-self-assessments.md) |
