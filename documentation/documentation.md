@@ -16,16 +16,24 @@ Before installing Virtuoso on your machine or server, you'll need some basic req
     - [For Linux](https://docs.docker.com/engine/install/ubuntu/)
     - [For macOS](https://hub.docker.com/editions/community/docker-ce-desktop-mac)
     - Or [for Windows](https://hub.docker.com/editions/community/docker-ce-desktop-windows)
-- [Git](https://git-scm.com/downloads)
+- [Git](https://git-scm.com/downloads) or [wget](https://www.gnu.org/software/wget/)
 
-With those installed, clone the repository (with submodules) with Git:
+With those installed, choose either to install by cloing with Git or installing by downloading with wget. To clone the repository (with submodules) with Git:
 
 ```sh
 $ git clone --recurse-submodules git://github.com/Samwisebuze/senior-design.git virtuoso
 $ cd virtuoso
 ```
 
-Next, start Docker. On macOS and Windows, this entails starting the Docker application. On Linux, this entails starting the Docker daemon. More information can be found [here on the Docker documentation website]().
+To download with wget:
+
+```sh
+$ wget https://github.com/Samwisebuze/senior-design/releases/download/v1.0.0/virtuoso-v1.0.0.zip
+$ unzip virtuoso-v1.0.0.zip
+$ cd virtuoso
+```
+
+Next, start Docker. On macOS and Windows, this entails starting the Docker application. On Linux, this entails starting the Docker daemon. More information can be found [here on the Docker documentation website](https://docs.docker.com/config/daemon/systemd/).
 
 Then, once Docker is running, quickly test that Docker is working:
 
